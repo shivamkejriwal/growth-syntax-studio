@@ -4,95 +4,95 @@
 
 @layer base {
   :root {
-    --background: 230 75% 45%; /* Persian Blue */
-    --foreground: 45 70% 95%; /* Light Cream */
+    --background: 210 60% 97%; /* Very light cool gray-blue */
+    --foreground: 210 30% 25%; /* Dark slate blue */
 
-    --card: 230 75% 40%; /* Slightly darker Persian Blue */
-    --card-foreground: 45 70% 95%;
+    --card: 210 50% 93%; /* Slightly darker than background, still very light */
+    --card-foreground: 210 30% 25%;
 
-    --popover: 230 75% 40%;
-    --popover-foreground: 45 70% 95%;
+    --popover: 210 50% 93%;
+    --popover-foreground: 210 30% 25%;
 
-    --primary: 15 90% 60%; /* Vibrant Coral/Orange */
-    --primary-foreground: 15 90% 15%; /* Dark for contrast on Coral */
+    --primary: 190 75% 45%; /* Vibrant cyan/teal */
+    --primary-foreground: 190 75% 95%; /* Very light for contrast on primary */
 
-    --secondary: 220 40% 55%; /* Desaturated Blue */
-    --secondary-foreground: 45 70% 95%;
+    --secondary: 210 40% 60%; /* Muted mid-tone blue */
+    --secondary-foreground: 210 40% 95%;
 
-    --muted: 220 40% 50%; /* Slightly darker desaturated blue */
-    --muted-foreground: 45 50% 80%; /* Dimmer Cream */
+    --muted: 210 40% 85%; /* Lighter muted blue */
+    --muted-foreground: 210 30% 55%; /* Darker muted text */
 
-    --accent: 15 90% 60%; /* Vibrant Coral/Orange */
-    --accent-foreground: 15 90% 15%;
+    --accent: 190 75% 45%; /* Vibrant cyan/teal */
+    --accent-foreground: 190 75% 95%;
 
-    --destructive: 0 85% 65%; /* Clear Red */
-    --destructive-foreground: 0 85% 15%; 
+    --destructive: 0 70% 55%; /* Clear Red */
+    --destructive-foreground: 0 70% 95%; 
 
-    --border: 230 70% 50%; /* Lighter Persian Blue */
-    --input: 230 70% 50%;
-    --ring: 15 90% 60%; /* Vibrant Coral/Orange for focus rings */
+    --border: 210 40% 80%; /* Subtle light blue border */
+    --input: 210 40% 80%;
+    --ring: 190 75% 50%; /* Vibrant cyan/teal for focus rings */
 
     --radius: 0.5rem;
 
-    --chart-1: 15 90% 60%;   /* Vibrant Coral/Orange */
-    --chart-2: 200 80% 65%;  /* Bright Cyan/Sky Blue */
-    --chart-3: 50 90% 60%;   /* Bright Yellow/Gold */
-    --chart-4: 0 85% 65%;    /* Clear Red */
-    --chart-5: 230 30% 70%;  /* Lighter, muted Persian Blue */
+    --chart-1: 190 70% 50%;   /* Primary accent - Vibrant cyan/teal */
+    --chart-2: 30 80% 60%;    /* Contrasting orange/yellow */
+    --chart-3: 270 70% 65%;   /* Contrasting purple */
+    --chart-4: 120 50% 55%;   /* Contrasting green */
+    --chart-5: 210 30% 65%;   /* Lighter shade of base blue */
 
-    --sidebar-background: 230 75% 38%; /* Darker Persian Blue variant for sidebar */
-    --sidebar-foreground: 45 70% 90%; /* Dimmer Cream for sidebar text */
-    --sidebar-primary: 15 90% 60%; /* Vibrant Coral/Orange for active items */
-    --sidebar-primary-foreground: 15 90% 15%; /* Dark for text on Coral */
-    --sidebar-accent: 230 75% 42%; /* Persian Blue variant for hover/accent */
-    --sidebar-accent-foreground: 45 70% 95%; /* Light Cream */
-    --sidebar-border: 230 70% 48%; /* Subtle border for sidebar elements */
-    --sidebar-ring: 15 90% 60%; /* Vibrant Coral/Orange for focus */
+    --sidebar-background: 210 45% 90%; /* Slightly darker than main card, light */
+    --sidebar-foreground: 210 30% 20%; /* Dark for readability */
+    --sidebar-primary: 190 75% 45%; /* Vibrant cyan/teal */
+    --sidebar-primary-foreground: 190 75% 95%;
+    --sidebar-accent: 210 45% 85%; /* Hover state for sidebar */
+    --sidebar-accent-foreground: 210 30% 20%;
+    --sidebar-border: 210 40% 75%;
+    --sidebar-ring: 190 75% 50%;
   }
 
   .dark {
-    --background: 230 70% 20%; /* Dark Persian Blue */
-    --foreground: 45 60% 90%; /* Slightly Dimmer Cream */
+    --background: 210 42% 19%; /* #1C3144 - Dark Desaturated Blue */
+    --foreground: 210 30% 88%; /* Light grayish blue for text */
 
-    --card: 230 70% 25%; /* Darker Persian Blue variant */
-    --card-foreground: 45 60% 90%;
+    --card: 210 40% 23%; /* Slightly lighter than background */
+    --card-foreground: 210 30% 88%;
 
-    --popover: 230 70% 25%;
-    --popover-foreground: 45 60% 90%;
+    --popover: 210 40% 23%;
+    --popover-foreground: 210 30% 88%;
 
-    --primary: 15 80% 55%; /* Less vibrant Coral/Orange */
-    --primary-foreground: 15 80% 10%; /* Very Dark for contrast */
+    --primary: 190 70% 50%; /* Vibrant cyan/teal */
+    --primary-foreground: 190 70% 15%; /* Dark for contrast on primary */
 
-    --secondary: 220 35% 40%; /* Darker Desaturated Blue */
-    --secondary-foreground: 45 60% 90%;
+    --secondary: 210 35% 40%; /* Muted dark blue */
+    --secondary-foreground: 210 30% 88%;
 
-    --muted: 220 35% 35%; 
-    --muted-foreground: 45 40% 70%; /* Dimmer Cream */
+    --muted: 210 35% 30%; 
+    --muted-foreground: 210 25% 70%; /* Dimmer text */
 
-    --accent: 15 80% 55%; /* Less vibrant Coral/Orange */
-    --accent-foreground: 15 80% 10%;
+    --accent: 190 70% 50%; /* Vibrant cyan/teal */
+    --accent-foreground: 190 70% 15%;
 
-    --destructive: 0 75% 60%; /* Red */
-    --destructive-foreground: 0 75% 10%;
+    --destructive: 0 60% 50%; /* Red */
+    --destructive-foreground: 0 60% 90%;
 
-    --border: 230 65% 30%; /* Muted Persian Blue */
-    --input: 230 65% 30%;
-    --ring: 15 80% 55%; /* Less vibrant Coral/Orange */
+    --border: 210 35% 35%; /* Subtle border for dark theme */
+    --input: 210 35% 35%;
+    --ring: 190 70% 55%; /* Vibrant cyan/teal for focus rings */
 
-    --chart-1: 15 80% 55%;   
-    --chart-2: 200 70% 55%;  
-    --chart-3: 50 80% 50%;   
-    --chart-4: 0 75% 60%;    
-    --chart-5: 230 25% 60%;
+    --chart-1: 190 70% 50%;   
+    --chart-2: 30 80% 60%;  
+    --chart-3: 270 70% 65%;   
+    --chart-4: 120 50% 55%;    
+    --chart-5: 210 30% 65%;
 
-    --sidebar-background: 230 70% 18%; /* Very Dark Persian Blue for sidebar */
-    --sidebar-foreground: 45 60% 85%; /* Dim Cream for sidebar text */
-    --sidebar-primary: 15 80% 55%; /* Less vibrant Coral/Orange */
-    --sidebar-primary-foreground: 15 80% 10%; 
-    --sidebar-accent: 230 70% 22%; /* Dark Persian Blue for hover/accent */
-    --sidebar-accent-foreground: 45 60% 90%; 
-    --sidebar-border: 230 65% 28%; 
-    --sidebar-ring: 15 80% 55%;
+    --sidebar-background: 210 42% 16%; /* Slightly darker than main dark background */
+    --sidebar-foreground: 210 30% 85%; /* Readable light text */
+    --sidebar-primary: 190 70% 50%; /* Vibrant cyan/teal */
+    --sidebar-primary-foreground: 190 70% 15%; 
+    --sidebar-accent: 210 40% 21%; /* Hover state for sidebar */
+    --sidebar-accent-foreground: 210 30% 90%; 
+    --sidebar-border: 210 35% 30%; 
+    --sidebar-ring: 190 70% 55%;
   }
 }
 
