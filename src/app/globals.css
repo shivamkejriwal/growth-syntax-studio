@@ -4,95 +4,95 @@
 
 @layer base {
   :root {
-    --background: 195 33% 25%; /* Deep Teal */
-    --foreground: 60 56% 94%; /* Light Beige */
+    --background: 230 75% 45%; /* Persian Blue */
+    --foreground: 45 70% 95%; /* Light Cream */
 
-    --card: 195 33% 28%;
-    --card-foreground: 60 56% 94%;
+    --card: 230 75% 40%; /* Slightly darker Persian Blue */
+    --card-foreground: 45 70% 95%;
 
-    --popover: 195 33% 28%;
-    --popover-foreground: 60 56% 94%;
+    --popover: 230 75% 40%;
+    --popover-foreground: 45 70% 95%;
 
-    --primary: 120 73% 75%; /* Soft Green */
-    --primary-foreground: 195 33% 15%; /* Darker Teal for text on green buttons */
+    --primary: 15 90% 60%; /* Vibrant Coral/Orange */
+    --primary-foreground: 15 90% 15%; /* Dark for contrast on Coral */
 
-    --secondary: 195 33% 30%;
-    --secondary-foreground: 60 56% 94%;
+    --secondary: 220 40% 55%; /* Desaturated Blue */
+    --secondary-foreground: 45 70% 95%;
 
-    --muted: 195 33% 30%;
-    --muted-foreground: 60 56% 80%; /* Slightly dimmer beige for muted text */
+    --muted: 220 40% 50%; /* Slightly darker desaturated blue */
+    --muted-foreground: 45 50% 80%; /* Dimmer Cream */
 
-    --accent: 120 73% 75%; /* Soft Green */
-    --accent-foreground: 195 33% 15%;
+    --accent: 15 90% 60%; /* Vibrant Coral/Orange */
+    --accent-foreground: 15 90% 15%;
 
-    --destructive: 0 79% 75%; /* Gentle Red */
-    --destructive-foreground: 195 33% 15%; /* Darker Teal for text on red */
+    --destructive: 0 85% 65%; /* Clear Red */
+    --destructive-foreground: 0 85% 15%; 
 
-    --border: 195 33% 35%;
-    --input: 195 33% 35%;
-    --ring: 120 73% 75%; /* Soft Green for focus rings */
+    --border: 230 70% 50%; /* Lighter Persian Blue */
+    --input: 230 70% 50%;
+    --ring: 15 90% 60%; /* Vibrant Coral/Orange for focus rings */
 
     --radius: 0.5rem;
 
-    --chart-1: 120 73% 75%; /* Soft Green */
-    --chart-2: 210 60% 65%; /* A complementary blue */
-    --chart-3: 30 80% 70%;  /* A soft orange */
-    --chart-4: 0 79% 75%;   /* Gentle Red */
-    --chart-5: 195 33% 50%; /* Medium Teal */
+    --chart-1: 15 90% 60%;   /* Vibrant Coral/Orange */
+    --chart-2: 200 80% 65%;  /* Bright Cyan/Sky Blue */
+    --chart-3: 50 90% 60%;   /* Bright Yellow/Gold */
+    --chart-4: 0 85% 65%;    /* Clear Red */
+    --chart-5: 230 30% 70%;  /* Lighter, muted Persian Blue */
 
-    --sidebar-background: 195 33% 22%;
-    --sidebar-foreground: 60 56% 90%;
-    --sidebar-primary: 120 73% 75%;
-    --sidebar-primary-foreground: 195 33% 15%;
-    --sidebar-accent: 195 33% 28%;
-    --sidebar-accent-foreground: 60 56% 94%;
-    --sidebar-border: 195 33% 30%;
-    --sidebar-ring: 120 73% 75%;
+    --sidebar-background: 230 75% 38%; /* Darker Persian Blue variant for sidebar */
+    --sidebar-foreground: 45 70% 90%; /* Dimmer Cream for sidebar text */
+    --sidebar-primary: 15 90% 60%; /* Vibrant Coral/Orange for active items */
+    --sidebar-primary-foreground: 15 90% 15%; /* Dark for text on Coral */
+    --sidebar-accent: 230 75% 42%; /* Persian Blue variant for hover/accent */
+    --sidebar-accent-foreground: 45 70% 95%; /* Light Cream */
+    --sidebar-border: 230 70% 48%; /* Subtle border for sidebar elements */
+    --sidebar-ring: 15 90% 60%; /* Vibrant Coral/Orange for focus */
   }
 
   .dark {
-    --background: 195 33% 10%; /* Very Dark Teal */
-    --foreground: 60 56% 90%; /* Slightly dimmer Light Beige */
+    --background: 230 70% 20%; /* Dark Persian Blue */
+    --foreground: 45 60% 90%; /* Slightly Dimmer Cream */
 
-    --card: 195 33% 13%;
-    --card-foreground: 60 56% 90%;
+    --card: 230 70% 25%; /* Darker Persian Blue variant */
+    --card-foreground: 45 60% 90%;
 
-    --popover: 195 33% 13%;
-    --popover-foreground: 60 56% 90%;
+    --popover: 230 70% 25%;
+    --popover-foreground: 45 60% 90%;
 
-    --primary: 120 65% 65%; /* Slightly desaturated green */
-    --primary-foreground: 195 33% 5%; /* Very dark teal for text on green */
+    --primary: 15 80% 55%; /* Less vibrant Coral/Orange */
+    --primary-foreground: 15 80% 10%; /* Very Dark for contrast */
 
-    --secondary: 195 33% 18%;
-    --secondary-foreground: 60 56% 90%;
+    --secondary: 220 35% 40%; /* Darker Desaturated Blue */
+    --secondary-foreground: 45 60% 90%;
 
-    --muted: 195 33% 18%;
-    --muted-foreground: 60 56% 70%;
+    --muted: 220 35% 35%; 
+    --muted-foreground: 45 40% 70%; /* Dimmer Cream */
 
-    --accent: 120 65% 65%;
-    --accent-foreground: 195 33% 5%;
+    --accent: 15 80% 55%; /* Less vibrant Coral/Orange */
+    --accent-foreground: 15 80% 10%;
 
-    --destructive: 0 70% 65%; /* Slightly desaturated red */
-    --destructive-foreground: 195 33% 5%;
+    --destructive: 0 75% 60%; /* Red */
+    --destructive-foreground: 0 75% 10%;
 
-    --border: 195 33% 20%;
-    --input: 195 33% 20%;
-    --ring: 120 65% 65%;
+    --border: 230 65% 30%; /* Muted Persian Blue */
+    --input: 230 65% 30%;
+    --ring: 15 80% 55%; /* Less vibrant Coral/Orange */
 
-    --chart-1: 120 65% 65%;
-    --chart-2: 210 50% 55%;
-    --chart-3: 30 70% 60%;
-    --chart-4: 0 70% 65%;
-    --chart-5: 195 33% 40%;
+    --chart-1: 15 80% 55%;   
+    --chart-2: 200 70% 55%;  
+    --chart-3: 50 80% 50%;   
+    --chart-4: 0 75% 60%;    
+    --chart-5: 230 25% 60%;
 
-    --sidebar-background: 195 33% 8%;
-    --sidebar-foreground: 60 56% 85%;
-    --sidebar-primary: 120 65% 65%;
-    --sidebar-primary-foreground: 195 33% 5%;
-    --sidebar-accent: 195 33% 12%;
-    --sidebar-accent-foreground: 60 56% 90%;
-    --sidebar-border: 195 33% 15%;
-    --sidebar-ring: 120 65% 65%;
+    --sidebar-background: 230 70% 18%; /* Very Dark Persian Blue for sidebar */
+    --sidebar-foreground: 45 60% 85%; /* Dim Cream for sidebar text */
+    --sidebar-primary: 15 80% 55%; /* Less vibrant Coral/Orange */
+    --sidebar-primary-foreground: 15 80% 10%; 
+    --sidebar-accent: 230 70% 22%; /* Dark Persian Blue for hover/accent */
+    --sidebar-accent-foreground: 45 60% 90%; 
+    --sidebar-border: 230 65% 28%; 
+    --sidebar-ring: 15 80% 55%;
   }
 }
 
