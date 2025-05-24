@@ -9,7 +9,7 @@ import { Logo } from "@/components/logo";
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-custom-header-bg backdrop-blur supports-[backdrop-filter]:bg-custom-header-bg/90">
         <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
           <Logo />
           <nav className="flex items-center space-x-4">
