@@ -25,12 +25,12 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 bg-background">
+        <section className="py-20 md:py-32 bg-custom-hero-bg">
           <div className="container mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-neutral-900">
               Unlock Financial Insights with <span className="text-primary">GrowthSyntax</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-neutral-700 mb-10 max-w-3xl mx-auto">
               Dive deep into equity analysis and market trends. Make informed investment decisions with our comprehensive suite of tools.
             </p>
             <div className="space-x-4">
@@ -47,7 +47,7 @@ export default function HomePage() {
         {/* Features Section */}
         <section className="py-16 md:py-24 bg-custom-feature-bg">
           <div className="container mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Powerful Features at Your Fingertips</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Powerful Features at Your Fingertips</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 { icon: <LineChart className="h-10 w-10 text-primary mb-4" />, title: "Detailed Equity Analysis", description: "Valuation, financial health, performance forecasts, and dividend history." },
@@ -70,7 +70,7 @@ export default function HomePage() {
         {/* Call to Action Section */}
         <section className="py-16 md:py-24 bg-background">
           <div className="container mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Elevate Your Investment Strategy?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">Ready to Elevate Your Investment Strategy?</h2>
             <p className="text-lg text-muted-foreground mb-8">
               Join GrowthSyntax today and gain the clarity you need to navigate the markets.
             </p>
