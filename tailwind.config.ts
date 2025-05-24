@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,8 +62,6 @@ export default {
   				ring: 'hsl(var(--sidebar-ring))'
   			},
         'custom-feature-bg': '#596F62',
-        'custom-section-bg-light-green': '#C3D898',
-        'custom-header-bg': '#7EA16B', // Added new custom color for header
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

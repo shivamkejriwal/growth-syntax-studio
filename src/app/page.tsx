@@ -9,7 +9,7 @@ import { Logo } from "@/components/logo";
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-custom-header-bg backdrop-blur supports-[backdrop-filter]:bg-custom-header-bg/90">
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
           <Logo />
           <nav className="flex items-center space-x-4">
@@ -45,9 +45,9 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-custom-section-bg-light-green">
+        <section className="py-16 md:py-24 bg-custom-feature-bg">
           <div className="container mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-neutral-800">Powerful Features at Your Fingertips</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Powerful Features at Your Fingertips</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 { icon: <LineChart className="h-10 w-10 text-primary mb-4" />, title: "Detailed Equity Analysis", description: "Valuation, financial health, performance forecasts, and dividend history." },
