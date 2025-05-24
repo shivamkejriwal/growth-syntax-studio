@@ -1,7 +1,8 @@
+
 "use client"
 
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
-import { ChartTooltipContent } from "@/components/ui/chart"
+import { CartesianGrid, Line, LineChart, XAxis, YAxis, Tooltip } from "recharts"
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart"
 
 
 const chartData = [
@@ -28,8 +29,8 @@ interface SampleLineChartProps {
 
 export function SampleLineChart({ data = chartData, title = "Sample Line Chart" }: SampleLineChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={350}>
-      <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+    <ChartContainer config={chartConfig} className="h-[350px] w-full">
+      <LineChart accessibilityLayer data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
         <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border))" />
         <XAxis
           dataKey="date"
@@ -63,6 +64,6 @@ export function SampleLineChart({ data = chartData, title = "Sample Line Chart" 
           }}
         />
       </LineChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   )
 }

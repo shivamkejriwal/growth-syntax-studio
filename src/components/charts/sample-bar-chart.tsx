@@ -1,7 +1,8 @@
+
 "use client"
 
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
-import { ChartTooltipContent } from "@/components/ui/chart"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart"
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -30,8 +31,8 @@ interface SampleBarChartProps {
 
 export function SampleBarChart({ data = chartData, title = "Sample Bar Chart" }: SampleBarChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data}>
+    <ChartContainer config={chartConfig} className="h-[350px] w-full">
+      <BarChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border))" />
         <XAxis
           dataKey="month"
@@ -51,6 +52,6 @@ export function SampleBarChart({ data = chartData, title = "Sample Bar Chart" }:
         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
         <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
       </BarChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   )
 }
