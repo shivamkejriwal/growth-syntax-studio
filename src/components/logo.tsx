@@ -3,7 +3,7 @@ import { Briefcase } from 'lucide-react'; // Using Briefcase as a placeholder fo
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link href="/" className={`flex items-center space-x-2 text-2xl font-bold text-primary-foreground ${className}`}>
+    <Link href="/" className={`flex items-center space-x-2 text-2xl font-bold text-primary ${className}`}>
       <Briefcase className="h-8 w-8" />
       <span>GrowthSyntax</span>
     </Link>
