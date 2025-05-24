@@ -25,12 +25,12 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 bg-custom-hero-bg">
+        <section className="py-20 md:py-32 bg-background">
           <div className="container mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-neutral-900">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-foreground">
               Unlock Financial Insights with <span className="text-primary">GrowthSyntax</span>
             </h1>
-            <p className="text-lg md:text-xl text-neutral-700 mb-10 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
               Dive deep into equity analysis and market trends. Make informed investment decisions with our comprehensive suite of tools.
             </p>
             <div className="space-x-4">

@@ -62,7 +62,6 @@ export default {
   				ring: 'hsl(var(--sidebar-ring))'
   			},
         'custom-feature-bg': '#596F62',
-        'custom-hero-bg': '#7EA16B',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
