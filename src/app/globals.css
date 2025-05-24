@@ -5,51 +5,51 @@
 
 @layer base {
   :root {
-    --background: 210 40% 10%; /* Very Dark Blue */
-    --foreground: 210 25% 88%; /* Light Grayish Blue */
+    --background: 239 43% 27%; /* #272863 */
+    --foreground: 210 25% 90%; /* Light grayish-blue */
 
-    --card: 210 40% 15%; /* Darker card, slightly lighter than bg */
-    --card-foreground: 210 25% 88%;
+    --card: 239 43% 32%; /* Slightly lighter than background */
+    --card-foreground: 210 25% 90%;
 
-    --popover: 210 40% 12%; /* Even darker popover */
-    --popover-foreground: 210 25% 88%;
+    --popover: 239 43% 22%; /* Darker than background for pop-out effect */
+    --popover-foreground: 210 25% 90%;
 
-    --primary: 210 50% 50%; /* A distinct, brighter blue for primary actions */
-    --primary-foreground: 210 20% 95%; /* Very light text on primary */
+    --primary: 169 45% 38%; /* #388C7B */
+    --primary-foreground: 170 30% 96%; /* Very light teal/white */
 
-    --secondary: 94 20% 55%; /* #7EA16B - Muted Green */
-    --secondary-foreground: 94 20% 15%; /* Dark green for contrast on secondary */
+    --secondary: 39 89% 56%; /* #F2A92E */
+    --secondary-foreground: 39 90% 15%; /* Dark brown/black for high contrast */
 
-    --muted: 210 35% 20%; /* Muted elements, darker */
-    --muted-foreground: 210 20% 70%; /* Lighter text for muted */
+    --muted: 239 40% 35%; /* For subtle elements */
+    --muted-foreground: 210 25% 75%; /* Dimmer than main foreground */
 
-    --accent: 210 50% 60%; /* Even brighter blue for hover/accent states */
-    --accent-foreground: 210 15% 95%; /* Almost white text on accent */
+    --accent: 169 45% 48%; /* Brighter version of primary for hover/accent states */
+    --accent-foreground: 170 30% 98%; /* Light text on accent */
 
-    --destructive: 350 70% 55%; /* A clear, visible red */
-    --destructive-foreground: 350 70% 95%; /* Light text on destructive */
+    --destructive: 13 78% 56%; /* #E55B3C */
+    --destructive-foreground: 13 70% 96%; /* Light text on destructive */
 
-    --border: 210 30% 25%; /* Subtle border */
-    --input: 210 30% 22%; /* Input background */
-    --ring: 210 50% 55%; /* Ring color matching primary/accent focus */
+    --border: 239 40% 40%; /* Subtle border */
+    --input: 239 40% 38%; /* Input background */
+    --ring: 169 45% 52%; /* Ring color matching primary/accent focus */
 
     --radius: 0.5rem;
 
-    --chart-1: 210 50% 50%;   /* Primary Blue */
-    --chart-2: 94 20% 55%;    /* Secondary Green */
-    --chart-3: 210 50% 70%;   /* Lighter Accent Blue */
-    --chart-4: 350 70% 55%;   /* Destructive Red */
-    --chart-5: 210 15% 75%;   /* Light Neutral Gray for axes/text */
+    --chart-1: 169 45% 38%;   /* #388C7B - Primary Teal/Green */
+    --chart-2: 39 89% 56%;    /* #F2A92E - Secondary Orange/Yellow */
+    --chart-3: 13 78% 56%;   /* #E55B3C - Destructive Reddish-Orange */
+    --chart-4: 320 63% 29%;   /* #7A1B56 - Deep Magenta/Purple */
+    --chart-5: 210 25% 85%;   /* Light Neutral Gray for axes/text */
 
     /* Sidebar colors */
-    --sidebar-background: 210 42% 19%; /* #1C3144 - Original dark blue for sidebar */
-    --sidebar-foreground: 210 30% 85%;    /* Light text for sidebar */
-    --sidebar-primary: 210 50% 60%;    /* Brighter blue for active sidebar items */
-    --sidebar-primary-foreground: 210 20% 10%; /* Dark text on active sidebar items */
-    --sidebar-accent: 210 40% 25%;   /* Hover on sidebar items */
-    --sidebar-accent-foreground: 210 30% 90%;
-    --sidebar-border: 210 40% 12%;   /* Darker border for sidebar */
-    --sidebar-ring: 210 50% 60%;
+    --sidebar-background: 169 45% 30%; /* Darker shade of primary #388C7B */
+    --sidebar-foreground: 170 25% 88%;    /* Light teal/gray text for sidebar */
+    --sidebar-primary: 39 89% 56%;    /* #F2A92E - secondary color for active sidebar items */
+    --sidebar-primary-foreground: 39 90% 15%; /* Dark text on active sidebar items (orange) */
+    --sidebar-accent: 169 45% 35%;   /* Hover on sidebar items - slightly lighter than sidebar-bg */
+    --sidebar-accent-foreground: 170 25% 92%;
+    --sidebar-border: 169 45% 25%;   /* Darker border for sidebar */
+    --sidebar-ring: 39 89% 60%; /* Ring for focus, brighter orange */
   }
 }
 
