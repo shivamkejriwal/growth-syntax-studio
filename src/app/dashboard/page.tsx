@@ -18,7 +18,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"> {/* Adjusted grid columns */}
           <Card className="shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Portfolio Value</CardTitle>
@@ -39,16 +39,6 @@ export default function DashboardPage() {
             <CardContent>
               <div className="text-2xl font-bold">+3 Stocks Up</div>
               <p className="text-xs text-muted-foreground">AAPL +2.5%, MSFT +1.8%</p>
-            </CardContent>
-          </Card>
-          <Card className="shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Market Sentiment</CardTitle>
-              <Smile className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">Neutral (55)</div>
-              <p className="text-xs text-muted-foreground">Slightly leaning towards greed</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
@@ -117,17 +107,6 @@ function Star({ className }: { className?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className={className}>
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  );
-}
-
-function Smile({ className }: { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className={className}>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-      <line x1="9" y1="9" x2="9.01" y2="9" />
-      <line x1="15" y1="9" x2="15.01" y2="9" />
     </svg>
   );
 }

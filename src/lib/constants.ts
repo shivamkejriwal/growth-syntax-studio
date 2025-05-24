@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, TrendingUp, PieChart, Brain, Smile, Star, UserCircle, LogOut } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, PieChart, Brain, Star, UserCircle, LogOut } from 'lucide-react';
 
 export type NavItem = {
   href: string;
@@ -13,7 +13,6 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/equity-analysis', label: 'Equity Analysis', icon: TrendingUp },
   { href: '/market-overview', label: 'Market Overview', icon: PieChart },
   { href: '/swot-analysis', label: 'SWOT Analysis', icon: Brain },
-  { href: '/sentiment-tracker', label: 'Sentiment Tracker', icon: Smile },
   { href: '/watchlist', label: 'Watchlist', icon: Star },
 ];
 

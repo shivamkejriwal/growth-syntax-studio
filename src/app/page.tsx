@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BarChartBig, Brain, LineChart, Search } from "lucide-react";
+import { ArrowRight, BarChartBig, Brain, LineChart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
@@ -52,7 +52,6 @@ export default function HomePage() {
                 { icon: <LineChart className="h-10 w-10 text-primary mb-4" />, title: "Detailed Equity Analysis", description: "Valuation, financial health, performance forecasts, and dividend history." },
                 { icon: <BarChartBig className="h-10 w-10 text-primary mb-4" />, title: "Market Overview", description: "Sector, industry, and economic indicator analysis with intuitive charts." },
                 { icon: <Brain className="h-10 w-10 text-primary mb-4" />, title: "AI SWOT Generator", description: "Evaluate company strengths, weaknesses, opportunities, and threats." },
-                { icon: <Search className="h-10 w-10 text-primary mb-4" />, title: "Sentiment Tracker", description: "Monitor market sentiment with indices like fear & greed." },
               ].map((feature, index) => (
                 <Card key={index} className="bg-card/80 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                   <CardHeader>
