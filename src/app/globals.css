@@ -4,53 +4,6 @@
 
 @layer base {
   :root {
-    --background: 210 60% 97%; /* Very light cool gray-blue */
-    --foreground: 210 30% 25%; /* Dark slate blue */
-
-    --card: 210 50% 93%; /* Slightly darker than background, still very light */
-    --card-foreground: 210 30% 25%;
-
-    --popover: 210 50% 93%;
-    --popover-foreground: 210 30% 25%;
-
-    --primary: 190 75% 45%; /* Vibrant cyan/teal */
-    --primary-foreground: 190 75% 95%; /* Very light for contrast on primary */
-
-    --secondary: 210 40% 60%; /* Muted mid-tone blue */
-    --secondary-foreground: 210 40% 95%;
-
-    --muted: 210 40% 85%; /* Lighter muted blue */
-    --muted-foreground: 210 30% 55%; /* Darker muted text */
-
-    --accent: 190 75% 45%; /* Vibrant cyan/teal */
-    --accent-foreground: 190 75% 95%;
-
-    --destructive: 0 70% 55%; /* Clear Red */
-    --destructive-foreground: 0 70% 95%; 
-
-    --border: 210 40% 80%; /* Subtle light blue border */
-    --input: 210 40% 80%;
-    --ring: 190 75% 50%; /* Vibrant cyan/teal for focus rings */
-
-    --radius: 0.5rem;
-
-    --chart-1: 190 70% 50%;   /* Primary accent - Vibrant cyan/teal */
-    --chart-2: 30 80% 60%;    /* Contrasting orange/yellow */
-    --chart-3: 270 70% 65%;   /* Contrasting purple */
-    --chart-4: 120 50% 55%;   /* Contrasting green */
-    --chart-5: 210 30% 65%;   /* Lighter shade of base blue */
-
-    --sidebar-background: 210 45% 90%; /* Slightly darker than main card, light */
-    --sidebar-foreground: 210 30% 20%; /* Dark for readability */
-    --sidebar-primary: 190 75% 45%; /* Vibrant cyan/teal */
-    --sidebar-primary-foreground: 190 75% 95%;
-    --sidebar-accent: 210 45% 85%; /* Hover state for sidebar */
-    --sidebar-accent-foreground: 210 30% 20%;
-    --sidebar-border: 210 40% 75%;
-    --sidebar-ring: 190 75% 50%;
-  }
-
-  .dark {
     --background: 210 42% 19%; /* #1C3144 - Dark Desaturated Blue */
     --foreground: 210 30% 88%; /* Light grayish blue for text */
 
@@ -78,6 +31,8 @@
     --border: 210 35% 35%; /* Subtle border for dark theme */
     --input: 210 35% 35%;
     --ring: 190 70% 55%; /* Vibrant cyan/teal for focus rings */
+
+    --radius: 0.5rem;
 
     --chart-1: 190 70% 50%;   
     --chart-2: 30 80% 60%;  
