@@ -1,53 +1,55 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 42% 19%; /* #1C3144 - Dark Desaturated Blue */
-    --foreground: 210 30% 88%; /* Light grayish blue for text */
+    --background: 80 42% 72%; /* #C3D898 - Light yellowish green */
+    --foreground: 30 10% 25%; /* Dark Brownish Gray for text */
 
-    --card: 210 40% 23%; /* Slightly lighter than background */
-    --card-foreground: 210 30% 88%;
+    --card: 80 40% 68%; /* Slightly darker/desaturated version of background */
+    --card-foreground: 30 10% 25%; /* Same as main foreground */
 
-    --popover: 210 40% 23%;
-    --popover-foreground: 210 30% 88%;
+    --popover: 80 40% 68%; /* Similar to card */
+    --popover-foreground: 30 10% 25%; /* Same as main foreground */
 
-    --primary: 190 70% 50%; /* Vibrant cyan/teal */
-    --primary-foreground: 190 70% 15%; /* Dark for contrast on primary */
+    --primary: 100 20% 53%; /* #7EA16B - Muted green */
+    --primary-foreground: 100 20% 95%; /* Very light green/white for contrast */
 
-    --secondary: 210 35% 40%; /* Muted dark blue */
-    --secondary-foreground: 210 30% 88%;
+    --secondary: 354 66% 36%; /* #70161E - Dark maroon (adjusted slightly for secondary use) */
+    --secondary-foreground: 354 60% 88%; /* Light pinkish/cream for contrast */
 
-    --muted: 210 35% 30%; 
-    --muted-foreground: 210 25% 70%; /* Dimmer text */
+    --muted: 80 30% 85%; /* Very light version of background for muted elements */
+    --muted-foreground: 80 20% 45%; /* Darker version of background for muted text */
 
-    --accent: 190 70% 50%; /* Vibrant cyan/teal */
-    --accent-foreground: 190 70% 15%;
+    --accent: 100 20% 53%; /* #7EA16B - Muted green (same as primary) */
+    --accent-foreground: 100 20% 95%; /* Very light green/white */
 
-    --destructive: 0 60% 50%; /* Red */
-    --destructive-foreground: 0 60% 90%;
+    --destructive: 354 66% 26%; /* #70161E - Dark maroon */
+    --destructive-foreground: 354 60% 85%; /* Light pinkish/cream */
 
-    --border: 210 35% 35%; /* Subtle border for dark theme */
-    --input: 210 35% 35%;
-    --ring: 190 70% 55%; /* Vibrant cyan/teal for focus rings */
+    --border: 80 35% 60%; /* Slightly darker shade of background for borders */
+    --input: 80 35% 60%; /* Similar to border */
+    --ring: 100 20% 53%; /* Primary green for focus rings */
 
     --radius: 0.5rem;
 
-    --chart-1: 190 70% 50%;   
-    --chart-2: 30 80% 60%;  
-    --chart-3: 270 70% 65%;   
-    --chart-4: 120 50% 55%;    
-    --chart-5: 210 30% 65%;
+    --chart-1: 100 20% 53%;   /* Primary Green */
+    --chart-2: 354 60% 45%;  /* Maroon (slightly lighter for charts) */
+    --chart-3: 90 30% 60%;   /* A slightly more yellow-green */
+    --chart-4: 40 25% 55%;    /* Muted Brown/Tan */
+    --chart-5: 80 25% 65%;   /* Lighter, desaturated background green */
 
-    --sidebar-background: 210 42% 16%; /* Slightly darker than main dark background */
-    --sidebar-foreground: 210 30% 85%; /* Readable light text */
-    --sidebar-primary: 190 70% 50%; /* Vibrant cyan/teal */
-    --sidebar-primary-foreground: 190 70% 15%; 
-    --sidebar-accent: 210 40% 21%; /* Hover state for sidebar */
-    --sidebar-accent-foreground: 210 30% 90%; 
-    --sidebar-border: 210 35% 30%; 
-    --sidebar-ring: 190 70% 55%;
+    /* Sidebar colors - Using the muted green as base */
+    --sidebar-background: 100 20% 48%; /* Slightly darker green than primary */
+    --sidebar-foreground: 100 20% 90%; /* Light text for readability */
+    --sidebar-primary: 80 42% 72%;    /* Main background color as accent within sidebar */
+    --sidebar-primary-foreground: 80 30% 20%; /* Dark text on light green accent */
+    --sidebar-accent: 100 20% 43%;   /* Darker green for hover */
+    --sidebar-accent-foreground: 100 20% 95%; 
+    --sidebar-border: 100 20% 40%;   /* Darker green border */
+    --sidebar-ring: 80 42% 72%;      /* Main background color for ring */
   }
 }
 
