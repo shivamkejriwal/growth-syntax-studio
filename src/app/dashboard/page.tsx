@@ -18,7 +18,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"> {/* Adjusted grid columns */}
+        <div className="grid gap-4 md:grid-cols-2">
           <Card className="shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Portfolio Value</CardTitle>
@@ -39,16 +39,6 @@ export default function DashboardPage() {
             <CardContent>
               <div className="text-2xl font-bold">+3 Stocks Up</div>
               <p className="text-xs text-muted-foreground">AAPL +2.5%, MSFT +1.8%</p>
-            </CardContent>
-          </Card>
-          <Card className="shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Recent Analyses</CardTitle>
-              <Brain className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">2 New SWOTs</div>
-              <p className="text-xs text-muted-foreground">For GOOGL, AMZN</p>
             </CardContent>
           </Card>
         </div>
@@ -108,11 +98,5 @@ function Star({ className }: { className?: string }) {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className={className}>
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
-  );
-}
-
-function Brain({ className }: { className?: string }) {
-  return (
-     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v1.13a1 1 0 0 0 .5.87A4.502 4.502 0 0 1 16 9.13a1 1 0 0 0 .5.87V11h-.38a1 1 0 0 0-.9.56A3.502 3.502 0 0 1 12.5 14H12a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1.5a2.5 2.5 0 0 1 2.5 2.5v0A2.5 2.5 0 0 1 12.5 22h-1A2.5 2.5 0 0 1 9 19.5v0A2.5 2.5 0 0 1 11.5 17H12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1h-.38a4.502 4.502 0 0 1-3.12-1.37A1 1 0 0 0 8 9.13V7.5a1 1 0 0 0-.5-.87A4.502 4.502 0 0 1 4 2.87A1 1 0 0 0 3.5 2H3"/><path d="M12.5 14a2.489 2.489 0 0 0 0-4.978"/></svg>
   );
 }

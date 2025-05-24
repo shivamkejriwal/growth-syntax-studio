@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BarChartBig, Brain, LineChart } from "lucide-react";
+import { ArrowRight, BarChartBig, LineChart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
@@ -30,7 +30,7 @@ export default function HomePage() {
               Unlock Financial Insights with <span className="text-primary">GrowthSyntax</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-              Dive deep into equity analysis, market trends, and AI-powered SWOT assessments. Make informed investment decisions with our comprehensive suite of tools.
+              Dive deep into equity analysis and market trends. Make informed investment decisions with our comprehensive suite of tools.
             </p>
             <div className="space-x-4">
               <Button size="lg" asChild className="shadow-lg hover:shadow-primary/50 transition-shadow">
@@ -47,11 +47,10 @@ export default function HomePage() {
         <section className="py-16 md:py-24">
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Powerful Features at Your Fingertips</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 { icon: <LineChart className="h-10 w-10 text-primary mb-4" />, title: "Detailed Equity Analysis", description: "Valuation, financial health, performance forecasts, and dividend history." },
                 { icon: <BarChartBig className="h-10 w-10 text-primary mb-4" />, title: "Market Overview", description: "Sector, industry, and economic indicator analysis with intuitive charts." },
-                { icon: <Brain className="h-10 w-10 text-primary mb-4" />, title: "AI SWOT Generator", description: "Evaluate company strengths, weaknesses, opportunities, and threats." },
               ].map((feature, index) => (
                 <Card key={index} className="bg-card/80 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                   <CardHeader>
