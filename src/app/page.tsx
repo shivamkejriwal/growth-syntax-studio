@@ -25,7 +25,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 bg-gradient-to-b from-background to-custom-feature-bg">
+        <section className="py-20 md:py-32 bg-background">
           <div className="container mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Unlock Financial Insights with <span className="text-primary">GrowthSyntax</span>
@@ -68,7 +68,7 @@ export default function HomePage() {
         </section>
         
         {/* Call to Action Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-custom-feature-bg to-background">
+        <section className="py-16 md:py-24 bg-background">
           <div className="container mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Elevate Your Investment Strategy?</h2>
             <p className="text-lg text-muted-foreground mb-8">
