@@ -5,51 +5,51 @@
 
 @layer base {
   :root {
-    --background: 80 42% 72%; /* #C3D898 - Light yellowish green */
-    --foreground: 30 10% 25%; /* Dark Brownish Gray for text */
+    --background: 210 30% 97%; /* Very light cool gray-blue */
+    --foreground: 210 25% 20%; /* Dark desaturated blue/gray for text */
 
-    --card: 80 40% 68%; /* Slightly darker/desaturated version of background */
-    --card-foreground: 30 10% 25%; /* Same as main foreground */
+    --card: 210 30% 94%; /* Slightly darker than background */
+    --card-foreground: 210 25% 20%; /* Same as main foreground */
 
-    --popover: 80 40% 68%; /* Similar to card */
-    --popover-foreground: 30 10% 25%; /* Same as main foreground */
+    --popover: 210 30% 92%; /* Similar to card, bit darker */
+    --popover-foreground: 210 25% 20%; /* Same as main foreground */
 
-    --primary: 100 20% 53%; /* #7EA16B - Muted green */
-    --primary-foreground: 100 20% 95%; /* Very light green/white for contrast */
+    --primary: 210 42% 19%; /* #1C3144 - Dark Desaturated Blue */
+    --primary-foreground: 210 40% 95%; /* Very light, almost white for contrast */
 
-    --secondary: 354 66% 36%; /* #70161E - Dark maroon (adjusted slightly for secondary use) */
-    --secondary-foreground: 354 60% 88%; /* Light pinkish/cream for contrast */
+    --secondary: 94 20% 55%; /* #7EA16B - Muted Green */
+    --secondary-foreground: 94 20% 15%; /* Dark green for contrast on secondary */
 
-    --muted: 80 30% 85%; /* Very light version of background for muted elements */
-    --muted-foreground: 80 20% 45%; /* Darker version of background for muted text */
+    --muted: 210 30% 90%; /* Lighter version of background elements */
+    --muted-foreground: 210 20% 45%; /* Darker text for muted elements */
 
-    --accent: 100 20% 53%; /* #7EA16B - Muted green (same as primary) */
-    --accent-foreground: 100 20% 95%; /* Very light green/white */
+    --accent: 210 50% 45%; /* Brighter blue than primary for accents/hover */
+    --accent-foreground: 210 40% 95%; /* Very light for contrast on accent */
 
-    --destructive: 354 66% 26%; /* #70161E - Dark maroon */
-    --destructive-foreground: 354 60% 85%; /* Light pinkish/cream */
+    --destructive: 354 66% 26%; /* #70161E - Dark Maroon */
+    --destructive-foreground: 354 60% 90%; /* Light pinkish/cream for contrast */
 
-    --border: 80 35% 60%; /* Slightly darker shade of background for borders */
-    --input: 80 35% 60%; /* Similar to border */
-    --ring: 100 20% 53%; /* Primary green for focus rings */
+    --border: 210 30% 85%; /* Subtle border color */
+    --input: 210 30% 88%; /* Slightly lighter than border for input fields */
+    --ring: 210 50% 55%; /* Brighter blue for focus rings (matches accent) */
 
     --radius: 0.5rem;
 
-    --chart-1: 100 20% 53%;   /* Primary Green */
-    --chart-2: 354 60% 45%;  /* Maroon (slightly lighter for charts) */
-    --chart-3: 90 30% 60%;   /* A slightly more yellow-green */
-    --chart-4: 40 25% 55%;    /* Muted Brown/Tan */
-    --chart-5: 80 25% 65%;   /* Lighter, desaturated background green */
+    --chart-1: 210 42% 19%;   /* Primary - Dark Blue */
+    --chart-2: 94 20% 55%;    /* Secondary - Muted Green */
+    --chart-3: 210 50% 45%;   /* Accent - Brighter Blue */
+    --chart-4: 354 60% 45%;   /* Maroon (slightly lighter for charts) */
+    --chart-5: 210 20% 70%;   /* Neutral Gray */
 
-    /* Sidebar colors - Using the muted green as base */
-    --sidebar-background: 100 20% 48%; /* Slightly darker green than primary */
-    --sidebar-foreground: 100 20% 90%; /* Light text for readability */
-    --sidebar-primary: 80 42% 72%;    /* Main background color as accent within sidebar */
-    --sidebar-primary-foreground: 80 30% 20%; /* Dark text on light green accent */
-    --sidebar-accent: 100 20% 43%;   /* Darker green for hover */
-    --sidebar-accent-foreground: 100 20% 95%; 
-    --sidebar-border: 100 20% 40%;   /* Darker green border */
-    --sidebar-ring: 80 42% 72%;      /* Main background color for ring */
+    /* Sidebar colors - Using the primary color #1C3144 as base */
+    --sidebar-background: 210 42% 19%; /* #1C3144 */
+    --sidebar-foreground: 210 30% 80%;    /* Light grayish blue for text */
+    --sidebar-primary: 210 60% 60%;    /* Brighter blue for active items */
+    --sidebar-primary-foreground: 210 20% 15%; /* Dark text on active items */
+    --sidebar-accent: 210 40% 25%;   /* Hover on sidebar items - slightly lighter than sidebar bg */
+    --sidebar-accent-foreground: 210 30% 85%; 
+    --sidebar-border: 210 40% 15%;   /* Darker border */
+    --sidebar-ring: 210 60% 60%;      /* Brighter blue for ring */
   }
 }
 
@@ -59,6 +59,5 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Removed explicit font-family to allow Geist from layout.tsx to take precedence */
   }
 }
