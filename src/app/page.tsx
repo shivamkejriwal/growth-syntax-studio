@@ -45,9 +45,9 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-custom-feature-bg">
+        <section className="py-16 md:py-24 bg-custom-section-bg-light-green">
           <div className="container mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Powerful Features at Your Fingertips</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-neutral-800">Powerful Features at Your Fingertips</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 { icon: <LineChart className="h-10 w-10 text-primary mb-4" />, title: "Detailed Equity Analysis", description: "Valuation, financial health, performance forecasts, and dividend history." },

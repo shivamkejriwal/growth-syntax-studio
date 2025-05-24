@@ -60,7 +60,8 @@ export default {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			},
-        'custom-feature-bg': '#596F62', // Added custom color
+        'custom-feature-bg': '#596F62',
+        'custom-section-bg-light-green': '#C3D898', // Added new custom color
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
