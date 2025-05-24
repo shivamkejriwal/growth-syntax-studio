@@ -8,7 +8,7 @@ import { Logo } from "@/components/logo";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-background to-muted text-foreground">
+    <div className="flex flex-col min-h-screen text-foreground">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
           <Logo />
@@ -25,7 +25,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 bg-background/30">
+        <section className="py-20 md:py-32 bg-gradient-to-b from-background to-custom-feature-bg">
           <div className="container mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Unlock Financial Insights with <span className="text-primary">GrowthSyntax</span>
@@ -68,7 +68,7 @@ export default function HomePage() {
         </section>
         
         {/* Call to Action Section */}
-        <section className="py-16 md:py-24 bg-background/30">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-custom-feature-bg to-background">
           <div className="container mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Elevate Your Investment Strategy?</h2>
             <p className="text-lg text-muted-foreground mb-8">
@@ -81,7 +81,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="py-8 border-t border-border/40">
+      <footer className="py-8 border-t border-border/40 bg-background">
         <div className="container mx-auto text-center text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} GrowthSyntax. All rights reserved.</p>
         </div>
