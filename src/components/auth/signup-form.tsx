@@ -1,9 +1,12 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,16 +42,42 @@ export function SignupForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Placeholder for signup logic
-    console.log("Signup attempt with:", values);
-    toast({
-      title: "Signup Submitted (Placeholder)",
-      description: "Account creation placeholder. Redirecting to dashboard...",
-    });
-    // Simulate successful signup & login
-    setTimeout(() => {
+    try {
+      // Note: Firebase's createUserWithEmailAndPassword doesn't directly use the 'name' field.
+      // You would typically update the user's profile (displayName) after successful creation.
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      // Example: updateProfile(userCredential.user, { displayName: values.name });
+
+      toast({
+        title: "Account Created",
+        description: "Welcome! Redirecting to your dashboard...",
+      });
       router.push("/dashboard");
-    }, 1000);
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorMessage = "This email address is already registered.";
+          form.setError("email", { type: "manual", message: errorMessage });
+          break;
+        case "auth/weak-password":
+          errorMessage = "Password is too weak. It should be at least 6 characters long.";
+          form.setError("password", { type: "manual", message: errorMessage });
+          break;
+        case "auth/invalid-email":
+          errorMessage = "The email address is not valid.";
+          form.setError("email", { type: "manual", message: errorMessage });
+          break;
+        default:
+          errorMessage = error.message || errorMessage;
+      }
+      toast({
+        title: "Signup Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -93,8 +122,8 @@ export function SignupForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Create Account
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? "Creating account..." : "Create Account"}
         </Button>
         <Separator className="my-6" />
         <OAuthButtons />

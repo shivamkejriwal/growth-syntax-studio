@@ -1,10 +1,13 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // Use next/navigation for App Router
+import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -38,16 +41,40 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Placeholder for login logic
-    console.log("Login attempt with:", values);
-    toast({
-      title: "Login Submitted (Placeholder)",
-      description: "This is a placeholder login. Redirecting to dashboard...",
-    });
-    // Simulate successful login
-    setTimeout(() => {
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: "Login Successful",
+        description: "Welcome back! Redirecting to dashboard...",
+      });
       router.push("/dashboard");
-    }, 1000);
+    } catch (error: any) {
+      console.error("Login error:", error);
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      switch (error.code) {
+        case "auth/invalid-credential":
+          errorMessage = "Invalid email or password. Please check your credentials.";
+          break;
+        case "auth/user-disabled":
+          errorMessage = "This account has been disabled.";
+          break;
+        case "auth/too-many-requests":
+          errorMessage = "Too many login attempts. Please try again later or reset your password.";
+          break;
+        default:
+          errorMessage = error.message || errorMessage;
+      }
+      toast({
+        title: "Login Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      // Optionally set form errors if you want to highlight specific fields
+      // if (error.code === "auth/invalid-credential") {
+      //   form.setError("email", { type: "manual", message: " " });
+      //   form.setError("password", { type: "manual", message: "Invalid email or password." });
+      // }
+    }
   }
 
   return (
@@ -79,8 +106,8 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? "Logging in..." : "Login"}
         </Button>
         <div className="text-sm text-right">
           <Link href="#" className="font-medium text-primary hover:underline">

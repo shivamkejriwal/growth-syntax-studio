@@ -2,8 +2,8 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getAuth, Auth } from 'firebase/auth';
 // To enable other Firebase services, import them here
-// import { getAuth } from 'firebase/auth';
 // import { getStorage } from 'firebase/storage';
 // import { getFunctions } from 'firebase/functions';
 
@@ -27,8 +27,8 @@ if (!getApps().length) {
 }
 
 const db: Firestore = getFirestore(app);
-// const auth = getAuth(app); // Example: Initialize Firebase Authentication
+const auth: Auth = getAuth(app); // Initialize Firebase Authentication
 // const storage = getStorage(app); // Example: Initialize Firebase Storage
 // const functions = getFunctions(app); // Example: Initialize Firebase Functions
 
-export { app, db /*, auth, storage, functions */ };
+export { app, db, auth /*, storage, functions */ };
