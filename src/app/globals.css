@@ -5,51 +5,53 @@
 
 @layer base {
   :root {
-    --background: 239 43% 27%; /* #272863 */
+    --background: 210 40% 9%; /* Very dark desaturated blue */
     --foreground: 210 25% 90%; /* Light grayish-blue */
 
-    --card: 239 43% 32%; /* Slightly lighter than background */
+    --card: 210 40% 12%; /* Slightly lighter than background */
     --card-foreground: 210 25% 90%;
 
-    --popover: 239 43% 22%; /* Darker than background for pop-out effect */
+    --popover: 210 40% 7%; /* Darker for pop-out effect */
     --popover-foreground: 210 25% 90%;
 
-    --primary: 169 45% 38%; /* #388C7B */
-    --primary-foreground: 170 30% 96%; /* Very light teal/white */
+    --primary: 195 60% 55%; /* Brighter, distinct blue */
+    --primary-foreground: 210 40% 98%; /* Very light blue/white */
 
-    --secondary: 39 89% 56%; /* #F2A92E */
-    --secondary-foreground: 39 90% 15%; /* Dark brown/black for high contrast */
+    --secondary: 94 20% 65%; /* Muted Green from previous, lightened for dark theme */
+    --secondary-foreground: 94 25% 15%; /* Dark green text */
 
-    --muted: 239 40% 35%; /* For subtle elements */
+    --muted: 210 40% 15%; /* For subtle elements */
     --muted-foreground: 210 25% 75%; /* Dimmer than main foreground */
 
-    --accent: 169 45% 48%; /* Brighter version of primary for hover/accent states */
-    --accent-foreground: 170 30% 98%; /* Light text on accent */
+    --accent: 195 55% 65%; /* Brighter version of primary for hover/accent states */
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 13 78% 56%; /* #E55B3C */
-    --destructive-foreground: 13 70% 96%; /* Light text on destructive */
+    --destructive: 354 70% 55%; /* Maroon from previous, brightened for dark theme */
+    --destructive-foreground: 354 70% 96%;
 
-    --border: 239 40% 40%; /* Subtle border */
-    --input: 239 40% 38%; /* Input background */
-    --ring: 169 45% 52%; /* Ring color matching primary/accent focus */
+    --border: 210 40% 20%; /* Subtle border */
+    --input: 210 40% 18%; /* Input background */
+    --ring: 195 60% 60%; /* Ring color matching primary focus */
 
     --radius: 0.5rem;
 
-    --chart-1: 169 45% 38%;   /* #388C7B - Primary Teal/Green */
-    --chart-2: 39 89% 56%;    /* #F2A92E - Secondary Orange/Yellow */
-    --chart-3: 13 78% 56%;   /* #E55B3C - Destructive Reddish-Orange */
-    --chart-4: 320 63% 29%;   /* #7A1B56 - Deep Magenta/Purple */
-    --chart-5: 210 25% 85%;   /* Light Neutral Gray for axes/text */
+    /* Chart Colors for Dark Theme */
+    --chart-1: 195 60% 55%;   /* Primary Blue */
+    --chart-2: 94 25% 60%;    /* Muted Green */
+    --chart-3: 354 65% 60%;   /* Destructive Maroon/Red */
+    --chart-4: 45 90% 55%;    /* A contrasting vibrant yellow/orange */
+    --chart-5: 210 20% 75%;   /* Light Neutral Gray for axes/text */
 
-    /* Sidebar colors */
-    --sidebar-background: 169 45% 30%; /* Darker shade of primary #388C7B */
-    --sidebar-foreground: 170 25% 88%;    /* Light teal/gray text for sidebar */
-    --sidebar-primary: 39 89% 56%;    /* #F2A92E - secondary color for active sidebar items */
-    --sidebar-primary-foreground: 39 90% 15%; /* Dark text on active sidebar items (orange) */
-    --sidebar-accent: 169 45% 35%;   /* Hover on sidebar items - slightly lighter than sidebar-bg */
-    --sidebar-accent-foreground: 170 25% 92%;
-    --sidebar-border: 169 45% 25%;   /* Darker border for sidebar */
-    --sidebar-ring: 39 89% 60%; /* Ring for focus, brighter orange */
+
+    /* Sidebar colors - using #1C3144 as base (approx HSL 210 42% 19%) */
+    --sidebar-background: 210 42% 19%; /* #1C3144 */
+    --sidebar-foreground: 210 25% 88%;    /* Light text for sidebar */
+    --sidebar-primary: 195 55% 65%;    /* Accent blue for active sidebar items */
+    --sidebar-primary-foreground: 210 40% 98%; /* Light text on active items */
+    --sidebar-accent: 210 40% 24%;   /* Hover on sidebar items - slightly lighter */
+    --sidebar-accent-foreground: 210 25% 92%;
+    --sidebar-border: 210 40% 15%;   /* Darker border for sidebar */
+    --sidebar-ring: 195 55% 70%; /* Ring for focus, brighter blue */
   }
 }
 
