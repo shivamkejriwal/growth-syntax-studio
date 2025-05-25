@@ -2,8 +2,8 @@
 import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
-import { readCsvFile, parseCsvData } from './csvReader.js';
-import { addCompany, getCompanyByTicker } from '../lib/db/companies.js'; // Adjusted path for TS
+import { readCsvFile, parseCsvData } from './csvUtils.js'; // Using .js extension for Node ESM compatibility, tsx handles .ts
+import { addCompany, getCompanyByTicker } from '../lib/db/companies.js';
 
 // --- IMPORTANT: CONFIGURE THIS ---
 // Set the absolute path to your CSV file
@@ -21,6 +21,9 @@ const toBoolean = (value) => {
 
 // Helper function to convert string values to number, returns undefined if not a valid number
 const toNumber = (value) => {
+  if (value === null || value === undefined || value.trim() === '') {
+    return undefined;
+  }
   const num = parseFloat(value);
   return isNaN(num) ? undefined : num;
 };
