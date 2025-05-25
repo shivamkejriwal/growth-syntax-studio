@@ -26,6 +26,12 @@ export interface Company {
   sector?: string;
   industry?: string;
   marketCap?: number;
+  mostBought?: boolean;
+  mostSold?: boolean;
+  mostTraded?: boolean;
+  closingPrice?: number;
+  openingPrice?: number;
+  volume?: number;
   // Add other relevant fields
   lastRefreshed?: Timestamp | Date; // When this data was last updated from a source
   createdAt: Timestamp | Date;
@@ -112,7 +118,7 @@ export async function getAllCompanies(): Promise<Company[]> {
  * @param companyId - The Firestore document ID of the company.
  * @param updatedData - The partial data to update.
  */
-export async function updateCompany(companyId: string, updatedData: Partial<Company>): Promise<void> {
+export async function updateCompany(companyId: string, updatedData: Partial<Omit<Company, 'id' | 'createdAt'>>): Promise<void> {
   try {
     const companyDocRef = doc(companiesCollection, companyId);
     await updateDoc(companyDocRef, {
