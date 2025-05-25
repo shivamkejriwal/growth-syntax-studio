@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "import-companies": "tsx src/services/importCompaniesFromCsv.js"
+    "import-companies": "tsx src/services/importCompaniesFromCsv.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",
