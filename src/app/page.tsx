@@ -17,8 +17,8 @@ export default function HomePage() {
     {
       icon: <BarChartBig className="h-10 w-10 text-primary mb-4" />,
       title: "Market Overview",
-      description: "Sector, industry, and economic indicator analysis with intuitive charts."
-      // This one remains non-clickable as per the specific request for the equity card
+      description: "Sector, industry, and economic indicator analysis with intuitive charts.",
+      href: "/market-overview" // Added href here
     },
   ];
 
