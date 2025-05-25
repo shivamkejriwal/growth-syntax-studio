@@ -1,4 +1,4 @@
-import { readCsvFile, parseCsvData } from './csvReader'; // Assuming this file is in the same directory
+import { readCsvFile, parseCsvData } from './csvReader.js'; // Assuming this file is in the same directory
 
 const csvFilePath = '/Users/shivam/Downloads/GrowthSyntax/SHARADAR_TICKERS_sample1.csv';
 
