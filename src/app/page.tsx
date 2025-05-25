@@ -7,6 +7,21 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 
 export default function HomePage() {
+  const features = [
+    {
+      icon: <LineChart className="h-10 w-10 text-primary mb-4" />,
+      title: "Detailed Equity Analysis",
+      description: "Valuation, financial health, performance forecasts, and dividend history.",
+      href: "/equity-analysis"
+    },
+    {
+      icon: <BarChartBig className="h-10 w-10 text-primary mb-4" />,
+      title: "Market Overview",
+      description: "Sector, industry, and economic indicator analysis with intuitive charts."
+      // This one remains non-clickable as per the specific request for the equity card
+    },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen text-foreground">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -49,19 +64,30 @@ export default function HomePage() {
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">Powerful Features at Your Fingertips</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                { icon: <LineChart className="h-10 w-10 text-primary mb-4" />, title: "Detailed Equity Analysis", description: "Valuation, financial health, performance forecasts, and dividend history." },
-                { icon: <BarChartBig className="h-10 w-10 text-primary mb-4" />, title: "Market Overview", description: "Sector, industry, and economic indicator analysis with intuitive charts." },
-              ].map((feature, index) => (
-                <Card key={index} className="bg-card/80 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                  <CardHeader>
-                    {feature.icon}
-                    <CardTitle className="text-2xl">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription>{feature.description}</CardDescription>
-                  </CardContent>
-                </Card>
+              {features.map((feature) => (
+                feature.href ? (
+                  <Link key={feature.title} href={feature.href} className="block h-full">
+                    <Card className="bg-card/80 shadow-xl hover:shadow-2xl transition-shadow duration-300 h-full flex flex-col">
+                      <CardHeader>
+                        {feature.icon}
+                        <CardTitle className="text-2xl">{feature.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex-grow">
+                        <CardDescription>{feature.description}</CardDescription>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ) : (
+                  <Card key={feature.title} className="bg-card/80 shadow-xl hover:shadow-2xl transition-shadow duration-300 h-full flex flex-col">
+                    <CardHeader>
+                      {feature.icon}
+                      <CardTitle className="text-2xl">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <CardDescription>{feature.description}</CardDescription>
+                    </CardContent>
+                  </Card>
+                )
               ))}
             </div>
           </div>
