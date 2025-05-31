@@ -4,7 +4,6 @@ config(); // Load environment variables from .env
 
 import { readCsvFile, parseCsvData, type CompanyCsvRecord } from './csvUtils';
 import { addCompany, getCompanyByTicker, type Company } from '../lib/db/companies';
-// Removed redundant: export type { Company };
 import tickerList from './tickerList.json';
 
 // --- IMPORTANT: CONFIGURE THIS ---
@@ -32,115 +31,92 @@ const toNumber = (value: string | undefined | null): number | undefined => {
   return isNaN(num) ? undefined : num;
 };
 
-const isValidCompany = (company: Partial<Company>): boolean => {
-  if (!company.ticker || !company.name) {
-    return false; // Ensure ticker and name are present
-  }
-  if (!tickerList.includes(company.ticker)) {
-    return false;
-  }
-  if(company.industry?.includes('Shell Companies')) {
-    return false; // Skip shell companies
-  }
-  return true;
-}
-
-// Ensure this function is exported for testing
 export async function importCompanies(filePath?: string) {
   const csvPathToUse = filePath || CSV_FILE_PATH;
   if (!csvPathToUse) {
-    console.error('CSV file path is not set. Please configure the CSV_FILE_PATH variable.');
-    process.exit(1); // This will be caught by the mock in tests
+    console.error('CSV file path is not set. Please configure the CSV_FILE_PATH variable or provide a filePath argument.');
+    // Throw an error instead of exiting, so the calling context can handle it.
+    throw new Error('CSV_FILE_PATH is not configured.');
   }
 
   let companiesAdded = 0;
   let companiesSkipped = 0;
   let errorsEncountered = 0;
 
-  try {
-    console.log(`Reading CSV file from: ${csvPathToUse}`);
-    const csvData = await readCsvFile(csvPathToUse); // Use corrected path
-    const records: CompanyCsvRecord[] = await parseCsvData(csvData);
+  console.log(`Reading CSV file from: ${csvPathToUse}`);
+  const csvData = await readCsvFile(csvPathToUse);
+  const records: CompanyCsvRecord[] = await parseCsvData(csvData);
 
-    console.log(`Found ${records.length} records in the CSV file.`);
+  console.log(`Found ${records.length} records in the CSV file.`);
 
-    for (const record of records) {
-      try {
-        const companyData: Omit<Company, 'id' | 'createdAt' | 'updatedAt'> = {
-          ticker: record.ticker || record.Ticker || '',
-          name: record.name || record.Name || '',
-          sector: record.sector || record.Sector,
-          industry: record.industry || record.Industry,
-          marketCap: toNumber(record.marketCap || record.MarketCap),
-          mostBought: toBoolean(record.mostBought || record.MostBought),
-          mostSold: toBoolean(record.mostSold || record.MostSold),
-          mostTraded: toBoolean(record.mostTraded || record.MostTraded),
-          closingPrice: toNumber(record.closingPrice || record.ClosingPrice),
-          openingPrice: toNumber(record.openingPrice || record.OpeningPrice),
-          volume: toNumber(record.volume || record.Volume),
-        };
+  for (const record of records) {
+    try {
+      const companyData: Omit<Company, 'id' | 'createdAt' | 'updatedAt'> = {
+        ticker: record.ticker || record.Ticker || '',
+        name: record.name || record.Name || '',
+        sector: record.sector || record.Sector,
+        industry: record.industry || record.Industry,
+        marketCap: toNumber(record.marketCap || record.MarketCap),
+        mostBought: toBoolean(record.mostBought || record.MostBought),
+        mostSold: toBoolean(record.mostSold || record.MostSold),
+        mostTraded: toBoolean(record.mostTraded || record.MostTraded),
+        closingPrice: toNumber(record.closingPrice || record.ClosingPrice),
+        openingPrice: toNumber(record.openingPrice || record.OpeningPrice),
+        volume: toNumber(record.volume || record.Volume),
+      };
 
-        if (!isValidCompany(companyData)) {
-          // This log message is a bit misleading if failure is not due to missing ticker/name
-          console.warn('Skipping record due to missing ticker or name:', record);
-          companiesSkipped++;
-          continue;
-        }
-
-        // The script currently hardcodes existingCompany to false, bypassing getCompanyByTicker
-        const existingCompany = false; // await getCompanyByTicker(companyData.ticker);
-        if (existingCompany) {
-          console.log(`Company with ticker ${companyData.ticker} already exists. Skipping.`);
-          companiesSkipped++;
-          continue;
-        }
-        console.log(`[MOCK]Adding new company: ${companyData.name} (${companyData.ticker})`, companyData);
-        // await addCompany(companyData); // This line is commented in the original script
-        companiesAdded++; // Assuming the intent is to count this if addCompany were called
-        console.log(`Successfully added company: ${companyData.name} (${companyData.ticker})`);
-      } catch (error) {
-        errorsEncountered++;
-        console.error(`Error processing record: ${JSON.stringify(record)}`, error);
+      if (!companyData.ticker || !companyData.name) {
+        console.warn(`Skipping record due to missing ticker or name. Record: ${JSON.stringify(record)}`);
+        companiesSkipped++;
+        continue;
       }
+
+      if (companyData.industry?.toLowerCase().includes('shell companies')) {
+        console.warn(`Skipping shell company: ${companyData.name} (${companyData.ticker}). Record: ${JSON.stringify(record)}`);
+        companiesSkipped++;
+        continue;
+      }
+
+      if (!tickerList.includes(companyData.ticker)) {
+        console.warn(`Skipping company ${companyData.name} (${companyData.ticker}) as its ticker is not in the approved list. Record: ${JSON.stringify(record)}`);
+        companiesSkipped++;
+        continue;
+      }
+
+      const existingCompany = await getCompanyByTicker(companyData.ticker);
+      if (existingCompany) {
+        console.log(`Company with ticker ${companyData.ticker} already exists. Skipping.`);
+        companiesSkipped++;
+        continue;
+      }
+
+      console.log(`Adding new company: ${companyData.name} (${companyData.ticker})`);
+      await addCompany(companyData);
+      companiesAdded++;
+      console.log(`Successfully added company: ${companyData.name} (${companyData.ticker})`);
+
+    } catch (error) {
+      errorsEncountered++;
+      console.error(`Error processing record: ${JSON.stringify(record)}`, error);
     }
-
-    console.log('\n--- Import Summary ---');
-    console.log(`Successfully added ${companiesAdded} new companies.`);
-    console.log(`Skipped ${companiesSkipped} companies (e.g., missing data or duplicates).`);
-    console.log(`Encountered ${errorsEncountered} errors during processing.`);
-    console.log('---------------------\n');
-    
-    process.exit(0); // This will be caught by the mock in tests
-
-  } catch (error) {
-    console.error('Failed to import companies:', error);
-    process.exit(1); // This will be caught by the mock in tests
   }
+
+  console.log('\n--- Import Summary ---');
+  console.log(`Successfully added ${companiesAdded} new companies.`);
+  console.log(`Skipped ${companiesSkipped} companies (e.g., missing data, duplicates, not in ticker list, or shell company).`);
+  console.log(`Encountered ${errorsEncountered} errors during processing.`);
+  console.log('---------------------\n');
 }
 
-// If this file is run directly using "tsx src/services/importCompaniesFromCsv.ts"
-// this will execute the import. For testing, we import the function.
-// To prevent auto-execution when imported, you might wrap this call.
-// However, for typical `tsx` script usage, top-level await or a simple call is common.
-// For the purpose of this fix, assuming `package.json` calls this file as a script,
-// and tests import the EXPORTED function.
-// If this script is meant to be run via `npm run import-companies-from-csv`,
-// and that command is `tsx src/services/importCompaniesFromCsv.ts`,
-// then `importCompanies()` needs to be called at the top level of this file.
-// To make it runnable AND testable, one option:
-// if (process.env.NODE_ENV !== 'test') { // Or a more explicit script running check
-//    importCompanies().catch(err => {
-//      console.error("Script run failed", err);
-//      process.exit(1);
-//    });
-// }
-// For now, I'm keeping the structure focused on the exported function being tested.
-// The original script implies it's run and calls process.exit itself.
-// The package.json entry `tsx src/services/importCompaniesFromCsv.ts` will execute the file.
-// If `importCompanies()` is not called in the global scope of the file, the definition alone does nothing.
-// Let's assume the user will call `importCompanies()` at the end of this file if it's meant to be run as a script.
-// For now, the test focuses on the exported function.
-// The original provided script *does not* call `importCompanies()` itself.
-// It defines it, and then `process.exit(0)` is inside the function.
-// The test file IMPORTS `importCompanies`.
-// This implies `importCompanies()` is the unit under test.
+// This block ensures the importCompanies function is called only when the script is run directly
+if (require.main === module) {
+  importCompanies()
+    .then(() => {
+      console.log('Company import script finished successfully.');
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('Company import script failed:', error);
+      process.exit(1);
+    });
+}
