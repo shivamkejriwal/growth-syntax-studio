@@ -5,15 +5,9 @@ import { importEquityPrices, type EquityPriceData } from './importEquityPricesFr
 import { importCompanies } from './importCompaniesFromCsv';
 import type { Company } from '../lib/db/companies';
 import { COMPANY_CSV_FILE_PATH, EQUITY_PRICE_CSV_FILE_PATH, TARGET_DATE } from './constants';
+import { toNumber } from './parseUtils';
 
-// Helper function to convert string values to number, returns undefined if not a valid number
-const toNumber = (value: string | undefined | null): number | undefined => {
-  if (value === null || value === undefined || value.trim() === '') {
-    return undefined;
-  }
-  const num = parseFloat(value);
-  return isNaN(num) ? undefined : num;
-};
+// Removed local toNumber helper, now using shared utility
 
 async function updateCompanyPrices(companyCsvPath?: string, equityPriceCsvPath?: string, targetDate?: string) {
   const resolvedCompanyCsvPath = companyCsvPath || COMPANY_CSV_FILE_PATH;

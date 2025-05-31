@@ -1,11 +1,12 @@
 import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
-import { readCsvFile, parseCsvData, type CsvRecord } from './csvUtils';
+import { parseCsvData, type CsvRecord, createCsvTransform, processCsvWithTransform } from './csvUtils';
 import { addCompany, getCompanyByTicker } from '../lib/db/companies';
 import type { Company } from '../lib/db/companies';
 import tickerList from './tickerList.json';
 import { COMPANY_CSV_FILE_PATH } from './constants';
+import { toBoolean, toNumber } from './parseUtils';
 
 interface CompanyCsvRecord extends CsvRecord {
   ticker?: string;
@@ -31,25 +32,6 @@ interface CompanyCsvRecord extends CsvRecord {
   OpeningPrice?: string;
   Volume?: string;
 }
-
-// Helper function to convert string values to boolean
-const toBoolean = (value: string | undefined | null): boolean | undefined => {
-  if (typeof value === 'string') {
-    const lowerValue = value.toLowerCase();
-    if (lowerValue === 'true' || lowerValue === '1') return true;
-    if (lowerValue === 'false' || lowerValue === '0') return false;
-  }
-  return undefined; // Or false by default if preferred
-};
-
-// Helper function to convert string values to number, returns undefined if not a valid number
-const toNumber = (value: string | undefined | null): number | undefined => {
-  if (value === null || value === undefined || value.trim() === '') {
-    return undefined;
-  }
-  const num = parseFloat(value);
-  return isNaN(num) ? undefined : num;
-};
 
 const isValidCompanyRecord = (companyData: Company): boolean => {
   if (!companyData.ticker || !companyData.name) {
@@ -79,56 +61,52 @@ export async function importCompanies(filePath?: string): Promise<Company[]> {
   let companiesAdded = 0;
   let companiesSkipped = 0;
   let errorsEncountered = 0;
-  const importedCompanies: Company[] = [];
 
-  console.log(`Reading CSV file from: ${csvPathToUse}`);
-  const csvData = await readCsvFile(csvPathToUse);
-  const records: CompanyCsvRecord[] = await parseCsvData<CompanyCsvRecord>(csvData);
+  const dataTransformer = createCsvTransform<CompanyCsvRecord, Company>((chunk, push, callback) => {
+    const companyData: Company = {
+      ticker: chunk.ticker || chunk.Ticker || '',
+      name: chunk.name || chunk.Name || '',
+      sector: chunk.sector || chunk.Sector,
+      industry: chunk.industry || chunk.Industry,
+      marketCap: toNumber(chunk.marketCap || chunk.MarketCap),
+      mostBought: toBoolean(chunk.mostBought || chunk.MostBought),
+      mostSold: toBoolean(chunk.mostSold || chunk.MostSold),
+      mostTraded: toBoolean(chunk.mostTraded || chunk.MostTraded),
+      closingPrice: toNumber(chunk.closingPrice || chunk.ClosingPrice),
+      openingPrice: toNumber(chunk.openingPrice || chunk.OpeningPrice),
+      volume: toNumber(chunk.volume || chunk.Volume),
+    };
 
-  console.log(`Found ${records.length} records in the CSV file.`);
-
-  for (const record of records) {
-    try {
-      const companyData: Company = {
-        ticker: record.ticker || record.Ticker || '',
-        name: record.name || record.Name || '',
-        sector: record.sector || record.Sector,
-        industry: record.industry || record.Industry,
-        marketCap: toNumber(record.marketCap || record.MarketCap),
-        mostBought: toBoolean(record.mostBought || record.MostBought),
-        mostSold: toBoolean(record.mostSold || record.MostSold),
-        mostTraded: toBoolean(record.mostTraded || record.MostTraded),
-        closingPrice: toNumber(record.closingPrice || record.ClosingPrice),
-        openingPrice: toNumber(record.openingPrice || record.OpeningPrice),
-        volume: toNumber(record.volume || record.Volume),
-      };
-
-      if (!isValidCompanyRecord(companyData)) {
-        companiesSkipped++;
-        continue; // Skip this record if it's not valid
-      }
-
-      // const existingCompany = await getCompanyByTicker(companyData.ticker);
-      const existingCompany = null; // Mocking as if company doesn't exist to proceed to "add" logic
-      console.log(`[MOCK] Checking if company with ticker ${companyData.ticker} exists (DB call skipped).`);
-
-      if (existingCompany) {
-        console.log(`[MOCK] Company with ticker ${companyData.ticker} already exists. Skipping.`);
-        companiesSkipped++;
-        continue;
-      }
-
-      console.log(`[MOCK] Adding new company: ${companyData.name} (${companyData.ticker}) (DB call skipped).`);
-      // await addCompany(companyData);
-      companiesAdded++;
-      importedCompanies.push(companyData);
-      console.log(`Successfully processed (mocked add) company: ${companyData.name} (${companyData.ticker})`);
-
-    } catch (error) {
-      errorsEncountered++;
-      console.error(`Error processing record: ${JSON.stringify(record)}`, error);
+    if (!isValidCompanyRecord(companyData)) {
+      companiesSkipped++;
+      callback();
+      return;
     }
-  }
+
+    // const existingCompany = await getCompanyByTicker(companyData.ticker);
+    const existingCompany = null; // Mocking as if company doesn't exist to proceed to "add" logic
+    console.log(`[MOCK] Checking if company with ticker ${companyData.ticker} exists (DB call skipped).`);
+
+    if (existingCompany) {
+      console.log(`[MOCK] Company with ticker ${companyData.ticker} already exists. Skipping.`);
+      companiesSkipped++;
+      callback();
+      return;
+    }
+
+    console.log(`[MOCK] Adding new company: ${companyData.name} (${companyData.ticker}) (DB call skipped).`);
+    // await addCompany(companyData);
+    companiesAdded++;
+    push(companyData);
+    console.log(`Successfully processed (mocked add) company: ${companyData.name} (${companyData.ticker})`);
+    callback();
+  });
+
+  const importedCompanies = await processCsvWithTransform<CompanyCsvRecord, Company>(
+    csvPathToUse,
+    parseCsvData,
+    dataTransformer
+  );
 
   console.log('\n--- Import Summary ---');
   console.log(`Successfully processed (mocked add) ${companiesAdded} new companies.`);

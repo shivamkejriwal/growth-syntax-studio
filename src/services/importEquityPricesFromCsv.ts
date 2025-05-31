@@ -1,5 +1,4 @@
-import { Transform, TransformCallback } from 'stream';
-import { readCsvFile, parseCsvData, type CsvRecord } from './csvUtils';
+import { parseCsvData, type CsvRecord, createCsvTransform, processCsvWithTransform } from './csvUtils';
 import { EQUITY_PRICE_CSV_FILE_PATH, TARGET_DATE } from './constants';
 
 interface EquityPriceCsvRecord extends CsvRecord {
@@ -29,76 +28,67 @@ export interface EquityPriceData {
 }
 
 export async function importEquityPrices(filePath?: string, targetDate?: string): Promise<EquityPriceData[]> {
-  const results: EquityPriceData[] = [];
   const pathToRead = filePath || EQUITY_PRICE_CSV_FILE_PATH;
   const dateToUse = targetDate || TARGET_DATE;
 
-  return new Promise((resolve, reject) => {
-    const dataTransformer = new Transform({
-      objectMode: true,
-      transform(chunk: EquityPriceCsvRecord, encoding: BufferEncoding, callback: TransformCallback) {
+  const dataTransformer = createCsvTransform<EquityPriceCsvRecord, EquityPriceData>((chunk, push, callback) => {
+    if (
+      chunk.ticker &&
+      chunk.date &&
+      chunk.close &&
+      chunk.volume !== undefined &&
+      chunk.date === dateToUse
+    ) {
+      try {
+        const openPrice = parseFloat(chunk.open || '0');
+        const highPrice = parseFloat(chunk.high || '0');
+        const lowPrice = parseFloat(chunk.low || '0');
+        const closePrice = parseFloat(chunk.close);
+        const volumeVal = parseInt(chunk.volume || '0', 10);
+        const closeAdjPrice = parseFloat(chunk.closeadj || chunk.close);
+        const closeUnadjPrice = parseFloat(chunk.closeunadj || chunk.close);
+
         if (
-          chunk.ticker &&
-          chunk.date &&
-          chunk.close &&
-          chunk.volume !== undefined &&
-          chunk.date === dateToUse
+          isNaN(openPrice) ||
+          isNaN(highPrice) ||
+          isNaN(lowPrice) ||
+          isNaN(closePrice) ||
+          isNaN(volumeVal) ||
+          isNaN(closeAdjPrice) ||
+          isNaN(closeUnadjPrice)
         ) {
-          try {
-            const openPrice = parseFloat(chunk.open || '0');
-            const highPrice = parseFloat(chunk.high || '0');
-            const lowPrice = parseFloat(chunk.low || '0');
-            const closePrice = parseFloat(chunk.close); // close is mandatory based on check above
-            const volumeVal = parseInt(chunk.volume || '0', 10);
-            const closeAdjPrice = parseFloat(chunk.closeadj || chunk.close); // Fallback to close if closeadj is missing/invalid
-            const closeUnadjPrice = parseFloat(chunk.closeunadj || chunk.close); // Fallback to close if closeunadj is missing/invalid
-
-            // Check for NaN after parsing critical fields
-            if (isNaN(openPrice) || isNaN(highPrice) || isNaN(lowPrice) || isNaN(closePrice) || isNaN(volumeVal) || isNaN(closeAdjPrice) || isNaN(closeUnadjPrice)) {
-              console.warn(`Skipping record due to NaN value after parsing for ticker ${chunk.ticker} on date ${chunk.date}. Record:`, chunk);
-              callback();
-              return;
-            }
-
-            const equityPrice: EquityPriceData = {
-              ticker: chunk.ticker,
-              date: chunk.date,
-              open: openPrice,
-              high: highPrice,
-              low: lowPrice,
-              close: closePrice,
-              volume: volumeVal,
-              closeadj: closeAdjPrice,
-              closeunadj: closeUnadjPrice,
-              lastupdated: chunk.lastupdated || new Date().toISOString(), // Provide a default if lastupdated is missing
-            };
-            this.push(equityPrice);
-          } catch (error) {
-            console.error(`Error processing data for ticker ${chunk.ticker} on date ${chunk.date}:`, error);
-            // Decide if this error should stop the callback or just be logged.
-            // For now, we log and continue.
-          }
-        } else if (chunk.date === dateToUse && (!chunk.ticker || !chunk.close || chunk.volume === undefined)) {
-            // Log records that match the date but are missing essential fields
-            console.warn(`Skipping record for date ${dateToUse} due to missing ticker, close price, or volume. Record:`, chunk);
+          console.warn(`Skipping record due to NaN value after parsing for ticker ${chunk.ticker} on date ${chunk.date}. Record:`, chunk);
+          callback();
+          return;
         }
-        callback();
-      },
-    });
 
-    readCsvFile(pathToRead)
-      .then(csvData => parseCsvData<EquityPriceCsvRecord>(csvData))
-      .then(records => {
-        records.forEach(chunk => dataTransformer.write(chunk));
-        dataTransformer.end();
-      })
-      .catch(reject);
-
-    dataTransformer
-      .on('data', (data: EquityPriceData) => results.push(data))
-      .on('end', () => resolve(results))
-      .on('error', reject);
+        const equityPrice: EquityPriceData = {
+          ticker: chunk.ticker,
+          date: chunk.date,
+          open: openPrice,
+          high: highPrice,
+          low: lowPrice,
+          close: closePrice,
+          volume: volumeVal,
+          closeadj: closeAdjPrice,
+          closeunadj: closeUnadjPrice,
+          lastupdated: chunk.lastupdated || new Date().toISOString(),
+        };
+        push(equityPrice);
+      } catch (error) {
+        console.error(`Error processing data for ticker ${chunk.ticker} on date ${chunk.date}:`, error);
+      }
+    } else if (chunk.date === dateToUse && (!chunk.ticker || !chunk.close || chunk.volume === undefined)) {
+      console.warn(`Skipping record for date ${dateToUse} due to missing ticker, close price, or volume. Record:`, chunk);
+    }
+    callback();
   });
+
+  return processCsvWithTransform<EquityPriceCsvRecord, EquityPriceData>(
+    pathToRead,
+    parseCsvData,
+    dataTransformer
+  );
 }
 
 // This block ensures the importEquityPrices function is called only when the script is run directly

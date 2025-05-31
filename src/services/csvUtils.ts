@@ -1,6 +1,7 @@
 // src/services/csvUtils.ts
 import { promises as fs } from 'fs';
 import { parse, Parser } from 'csv-parse';
+import { Transform, TransformCallback } from 'stream';
 
 /**
  * CsvRecord serves as a generic base interface for CSV records.
@@ -55,5 +56,48 @@ export function parseCsvData<T extends CsvRecord = CsvRecord>(csvData: string): 
     parser.on('end', () => {
       resolve(records);
     });
+  });
+}
+
+/**
+ * Utility to create a streaming transformer for CSV records.
+ * @param processFn - Function to process each parsed record. Should call callback() when done.
+ * @returns Transform stream instance.
+ */
+export function createCsvTransform<T, U>(processFn: (chunk: T, push: (data: U) => void, callback: TransformCallback) => void): Transform {
+  return new Transform({
+    objectMode: true,
+    transform(chunk: T, _encoding: BufferEncoding, callback: TransformCallback) {
+      processFn(chunk, this.push.bind(this), callback);
+    },
+  });
+}
+
+/**
+ * Utility to process a CSV file with a streaming transformer.
+ * Reads the file, parses the CSV, and streams records through the provided transform.
+ * @param filePath - Path to the CSV file
+ * @param parseType - Type for parseCsvData
+ * @param transformer - Transform stream to process records
+ * @returns Promise that resolves with the collected results
+ */
+export async function processCsvWithTransform<T extends CsvRecord, U>(
+  filePath: string,
+  parseType: (csvData: string) => Promise<T[]>,
+  transformer: Transform
+): Promise<U[]> {
+  const results: U[] = [];
+  return new Promise((resolve, reject) => {
+    readCsvFile(filePath)
+      .then(csvData => parseType(csvData))
+      .then(records => {
+        records.forEach(chunk => transformer.write(chunk));
+        transformer.end();
+      })
+      .catch(reject);
+    transformer
+      .on('data', (data: U) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
   });
 }
