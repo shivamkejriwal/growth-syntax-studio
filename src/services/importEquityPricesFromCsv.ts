@@ -1,6 +1,6 @@
 import fs from 'fs';
-import csv from 'csv-parser';
 import { Transform, TransformCallback } from 'stream';
+import { parse } from 'csv-parse';
 
 interface EquityPriceCsvRecord {
   ticker?: string;
@@ -70,7 +70,7 @@ export async function importEquityPrices(filePath: string, targetDate: string): 
     });
 
     fs.createReadStream(filePath)
-      .pipe(csv())
+      .pipe(parse({ columns: true })) // Use csv-parse with columns: true
       .pipe(dataTransformer)
       .on('data', (data: EquityPriceData) => results.push(data))
       .on('end', () => {
