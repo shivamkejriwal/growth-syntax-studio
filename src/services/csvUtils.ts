@@ -7,7 +7,7 @@ import { parse, Parser } from 'csv-parse';
  * Adjust this interface to match the actual columns in your CSV file.
  */
 export interface CompanyCsvRecord {
-  [key: string]: string; // Allows for arbitrary columns, but define known ones for type safety
+  [key: string]: string | undefined; // Allows for arbitrary columns, but define known ones for type safety
   ticker?: string;
   name?: string;
   sector?: string;

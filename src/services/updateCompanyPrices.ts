@@ -2,7 +2,8 @@ import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
 import { importEquityPrices, type EquityPriceData } from './importEquityPricesFromCsv'; // Assuming you have this function
-import { importCompanies, type Company } from './importCompaniesFromCsv'; // Import the importCompanies function
+import { importCompanies } from './importCompaniesFromCsv'; // Import the importCompanies function
+import type { Company } from '../lib/db/companies';
 
 // --- IMPORTANT: CONFIGURE THESE ---
 // Set the absolute path to your Company CSV file
@@ -40,10 +41,10 @@ async function updateCompanyPrices(companyCsvPath?: string, equityPriceCsvPath?:
     let errorsEncountered = 0;
 
   try {
-    const companies = await importCompanies(resolvedCompanyCsvPath);
+    const companies: Company[] = await importCompanies(resolvedCompanyCsvPath);
 
     for (const companyRecord of companies) {
-      const ticker = companyRecord.ticker || companyRecord.Ticker;
+      const ticker = companyRecord.ticker;
       if (!ticker) {
         console.warn('Skipping company record due to missing ticker:', companyRecord);
         companiesSkipped++;
@@ -66,10 +67,10 @@ async function updateCompanyPrices(companyCsvPath?: string, equityPriceCsvPath?:
         // In a real scenario, you would update the existingCompany object fetched from the DB
         const updatedCompanyData: Partial<Company> = {
            ticker: ticker,
-           name: companyRecord.name || companyRecord.Name,
-           sector: companyRecord.sector || companyRecord.Sector,
-           industry: companyRecord.industry || companyRecord.Industry,
-           marketCap: toNumber(companyRecord.marketCap || companyRecord.MarketCap),
+           name: companyRecord.name,
+           sector: companyRecord.sector,
+           industry: companyRecord.industry,
+           marketCap: toNumber(companyRecord.marketCap as string | null | undefined),
            // Keep other company fields as they are or map from companyRecord
            // ... (map other fields from companyRecord as needed)
         };

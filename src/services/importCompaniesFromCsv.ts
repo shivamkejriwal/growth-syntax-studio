@@ -1,4 +1,3 @@
-
 import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
@@ -32,17 +31,17 @@ const toNumber = (value: string | undefined | null): number | undefined => {
   return isNaN(num) ? undefined : num;
 };
 
-export async function importCompanies(filePath?: string) {
+export async function importCompanies(filePath?: string): Promise<Company[]> {
   const csvPathToUse = filePath || CSV_FILE_PATH;
   if (!csvPathToUse) {
     console.error('CSV file path is not set. Please configure the CSV_FILE_PATH variable or provide a filePath argument.');
-    // Throw an error instead of exiting, so the calling context can handle it.
     throw new Error('CSV_FILE_PATH is not configured.');
   }
 
   let companiesAdded = 0;
   let companiesSkipped = 0;
   let errorsEncountered = 0;
+  const importedCompanies: Company[] = [];
 
   console.log(`Reading CSV file from: ${csvPathToUse}`);
   const csvData = await readCsvFile(csvPathToUse);
@@ -52,7 +51,7 @@ export async function importCompanies(filePath?: string) {
 
   for (const record of records) {
     try {
-      const companyData: Omit<Company, 'id' | 'createdAt' | 'updatedAt'> = {
+      const companyData: Company = {
         ticker: record.ticker || record.Ticker || '',
         name: record.name || record.Name || '',
         sector: record.sector || record.Sector,
@@ -88,7 +87,6 @@ export async function importCompanies(filePath?: string) {
       const existingCompany = null; // Mocking as if company doesn't exist to proceed to "add" logic
       console.log(`[MOCK] Checking if company with ticker ${companyData.ticker} exists (DB call skipped).`);
 
-
       if (existingCompany) {
         console.log(`[MOCK] Company with ticker ${companyData.ticker} already exists. Skipping.`);
         companiesSkipped++;
@@ -98,6 +96,7 @@ export async function importCompanies(filePath?: string) {
       console.log(`[MOCK] Adding new company: ${companyData.name} (${companyData.ticker}) (DB call skipped).`);
       // await addCompany(companyData);
       companiesAdded++;
+      importedCompanies.push(companyData);
       console.log(`Successfully processed (mocked add) company: ${companyData.name} (${companyData.ticker})`);
 
     } catch (error) {
@@ -111,6 +110,8 @@ export async function importCompanies(filePath?: string) {
   console.log(`Skipped ${companiesSkipped} companies (e.g., missing data, duplicates, not in ticker list, or shell company).`);
   console.log(`Encountered ${errorsEncountered} errors during processing.`);
   console.log('---------------------\n');
+
+  return importedCompanies;
 }
 
 // This block ensures the importCompanies function is called only when the script is run directly

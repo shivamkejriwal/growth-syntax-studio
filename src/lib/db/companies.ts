@@ -34,7 +34,7 @@ export interface Company {
   volume?: number;
   // Add other relevant fields
   lastRefreshed?: Timestamp | Date; // When this data was last updated from a source
-  createdAt: Timestamp | Date;
+  createdAt?: Timestamp | Date;
   updatedAt?: Timestamp | Date;
 }
 
