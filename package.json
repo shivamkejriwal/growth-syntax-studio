@@ -9,11 +9,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "clean": "rm -rf .next",
+    "reset": "rm -rf node_modules package-lock.json && npm run clean",
     "typecheck": "tsc --noEmit",
     "update-companies": "tsx src/services/updateCompanyPrices.ts",
-    "import-companies-from-csv": "tsx src/services/importCompaniesFromCsv.ts",
-    "clean": "rm -rf .next",
-    "reset": "rm -rf node_modules package-lock.json && npm run clean"
+    "import-companies-from-csv": "tsx src/services/importCompaniesFromCsv.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",
