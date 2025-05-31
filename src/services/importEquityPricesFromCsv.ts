@@ -32,6 +32,8 @@ export interface EquityPriceData {
 // --- IMPORTANT: CONFIGURE THIS ---
 // Set the absolute path to your CSV file (used if no filePath is provided to the function, though typically filePath is provided)
 const CSV_FILE_PATH = '/Users/shivam/Downloads/GrowthSyntax/sample/SHARADAR-SEP.csv';
+// Set the target date for which to fetch equity prices (YYYY-MM-DD)
+const TARGET_DATE = '2018-12-31';
 // ---------------------------------
 
 export async function importEquityPrices(filePath: string, targetDate: string): Promise<EquityPriceData[]> {
@@ -110,14 +112,19 @@ export async function importEquityPrices(filePath: string, targetDate: string): 
   });
 }
 
-// Example usage (you would typically call this from another file):
-// const csvFilePathToUse = CSV_FILE_PATH; // Or pass a specific path
-// const dateToImport = '2018-12-31'; // Replace with the desired date
-// importEquityPrices(csvFilePathToUse, dateToImport)
-//   .then((equityPrices) => {
-//     console.log(`Imported ${equityPrices.length} equity price records for ${dateToImport}`);
-//     // console.log(equityPrices);
-//   })
-//   .catch((error) => {
-//     console.error('Error importing equity prices:', error);
-//   });
+// This block ensures the importEquityPrices function is called only when the script is run directly
+if (require.main === module) {
+  const csvFilePathToUse = CSV_FILE_PATH; 
+  const dateToImport = TARGET_DATE; 
+  console.log(`Executing importEquityPrices for date: ${dateToImport} from file: ${csvFilePathToUse}`);
+  importEquityPrices(csvFilePathToUse, dateToImport)
+    .then((equityPrices) => {
+      console.log(`Imported ${equityPrices.length} equity price records for ${dateToImport}`);
+      // console.log(equityPrices); // Uncomment to see the data
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('Error running importEquityPrices script:', error);
+      process.exit(1);
+    });
+}

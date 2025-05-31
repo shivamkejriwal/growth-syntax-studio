@@ -1,3 +1,4 @@
+
 {
   "name": "nextn",
   "version": "0.1.0",
@@ -12,8 +13,10 @@
     "clean": "rm -rf .next",
     "reset": "rm -rf node_modules package-lock.json && npm run clean",
     "typecheck": "tsc --noEmit",
-    "update-companies": "tsx src/services/updateCompanyPrices.ts",
-    "import-companies-from-csv": "tsx src/services/importCompaniesFromCsv.ts"
+    "import-companies-from-csv": "tsx src/services/importCompaniesFromCsv.ts",
+    "run:import-companies": "node scripts/runImportCompaniesFromCsv.js",
+    "run:import-equity-prices": "node scripts/runImportEquityPricesFromCsv.js",
+    "run:update-company-prices": "node scripts/runUpdateCompanyPrices.js"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",
