@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
 import { readCsvFile, parseCsvData, type CompanyCsvRecord } from './csvUtils';
-import { addCompany, getCompanyByTicker, type Company } from '../lib/db/companies';
+import { addCompany, getCompanyByTicker, type Company } from '../lib/db/companies'; export type { Company };
 import tickerList from './tickerList.json';
 
 // --- IMPORTANT: CONFIGURE THIS ---
