@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
-import { readCsvFile, parseCsvData, type CompanyCsvRecord } from './csvUtils';
 import { importEquityPrices, type EquityPriceData } from './importEquityPricesFromCsv'; // Assuming you have this function
 import { importCompanies, type Company } from './importCompaniesFromCsv'; // Import the importCompanies function
 
