@@ -15,7 +15,7 @@ interface EquityPriceCsvRecord {
   lastupdated: string;
 }
 
-interface EquityPriceData {
+export interface EquityPriceData {
   ticker: string; // Ensure ticker is always present in the final data
   date: string;
   open: number;
@@ -33,7 +33,7 @@ interface EquityPriceData {
 const CSV_FILE_PATH = '/Users/shivam/Downloads/GrowthSyntax/sample/SHARADAR-SEP.csv';
 // ---------------------------------
 
-export async function importEquityPricesFromCsv(filePath: string, targetDate: string): Promise<EquityPriceData[]> {
+export async function importEquityPrices(filePath: string, targetDate: string): Promise<EquityPriceData[]> {
   const results: EquityPriceData[] = [];
 
   return new Promise((resolve, reject) => {

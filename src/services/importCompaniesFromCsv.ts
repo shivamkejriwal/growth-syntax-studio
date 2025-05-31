@@ -44,14 +44,15 @@ const isValidCompany = (company: Company): boolean => {
   return true;
 }
 
-async function importCompanies() {
-  if (!CSV_FILE_PATH) {
+export async function importCompanies(filePath?: string) {
+  const csvPathToUse = filePath || CSV_FILE_PATH;
+  if (!csvPathToUse) {
     console.error('CSV file path is not set. Please configure the CSV_FILE_PATH variable.');
     process.exit(1);
   }
 
   try {
-    console.log(`Reading CSV file from: ${CSV_FILE_PATH}`);
+    console.log(`Reading CSV file from: ${csvPathToUse}`);
     const csvData = await readCsvFile(CSV_FILE_PATH);
     const records: CompanyCsvRecord[] = await parseCsvData(csvData);
 
@@ -120,5 +121,3 @@ async function importCompanies() {
     process.exit(1);
   }
 }
-
-importCompanies();
