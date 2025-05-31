@@ -31,6 +31,25 @@ const toNumber = (value: string | undefined | null): number | undefined => {
   return isNaN(num) ? undefined : num;
 };
 
+const isValidCompanyRecord = (companyData: Company): boolean => {
+  if (!companyData.ticker || !companyData.name) {
+    console.warn(`Skipping record due to missing ticker or name`);
+    return false;
+  }
+
+  if (!tickerList.includes(companyData.ticker)) {
+    console.warn(`Skipping company ${companyData.name} (${companyData.ticker}) as its ticker is not in the approved list.`);
+    return false;
+  }
+
+  if (companyData.industry?.toLowerCase().includes('shell companies')) {
+    console.warn(`Skipping shell company: ${companyData.name} (${companyData.ticker})`);
+    return false;
+  }
+  return true
+}
+
+
 export async function importCompanies(filePath?: string): Promise<Company[]> {
   const csvPathToUse = filePath || CSV_FILE_PATH;
   if (!csvPathToUse) {
@@ -65,22 +84,9 @@ export async function importCompanies(filePath?: string): Promise<Company[]> {
         volume: toNumber(record.volume || record.Volume),
       };
 
-      if (!companyData.ticker || !companyData.name) {
-        console.warn(`Skipping record due to missing ticker or name. Record: ${JSON.stringify(record)}`);
+      if (!isValidCompanyRecord(companyData)) {
         companiesSkipped++;
-        continue;
-      }
-
-      if (companyData.industry?.toLowerCase().includes('shell companies')) {
-        console.warn(`Skipping shell company: ${companyData.name} (${companyData.ticker}). Record: ${JSON.stringify(record)}`);
-        companiesSkipped++;
-        continue;
-      }
-
-      if (!tickerList.includes(companyData.ticker)) {
-        console.warn(`Skipping company ${companyData.name} (${companyData.ticker}) as its ticker is not in the approved list. Record: ${JSON.stringify(record)}`);
-        companiesSkipped++;
-        continue;
+        continue; // Skip this record if it's not valid
       }
 
       // const existingCompany = await getCompanyByTicker(companyData.ticker);
