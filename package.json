@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "import-companies": "tsx src/services/updateCompanyPrices.ts"
+    "update-companies": "tsx src/services/updateCompanyPrices.ts",
+    "import-companies-from-csv": "tsx src/services/importCompaniesFromCsv.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",
