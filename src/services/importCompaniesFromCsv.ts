@@ -4,10 +4,11 @@ config(); // Load environment variables from .env
 
 import { readCsvFile, parseCsvData, type CompanyCsvRecord } from './csvUtils';
 import { addCompany, getCompanyByTicker, type Company } from '../lib/db/companies';
+import tickerList from './tickerList.json';
 
 // --- IMPORTANT: CONFIGURE THIS ---
 // Set the absolute path to your CSV file
-const CSV_FILE_PATH = '/path/to/your/local/companies.csv';
+const CSV_FILE_PATH = '/Users/shivam/Downloads/GrowthSyntax/SHARADAR_TICKERS_sample1.csv';
 // Example: '/Users/yourname/Downloads/my_companies.csv'
 // ---------------------------------
 
@@ -30,11 +31,22 @@ const toNumber = (value: string | undefined | null): number | undefined => {
   return isNaN(num) ? undefined : num;
 };
 
+const isValidCompany = (company: Company): boolean => {
+  if (!company.ticker || !company.name) {
+    return false; // Ensure ticker and name are present
+  }
+  if (!tickerList.includes(company.ticker)) {
+    return false
+  }
+  if(company.industry?.includes('Shell Companies')) {
+    return false; // Skip shell companies
+  }
+  return true;
+}
+
 async function importCompanies() {
-  if (CSV_FILE_PATH === '/path/to/your/local/companies.csv') {
-    console.error(
-      '\nERROR: Please update the CSV_FILE_PATH in src/services/importCompaniesFromCsv.ts before running this script.\n'
-    );
+  if (!CSV_FILE_PATH) {
+    console.error('CSV file path is not set. Please configure the CSV_FILE_PATH variable.');
     process.exit(1);
   }
 
@@ -70,13 +82,13 @@ async function importCompanies() {
         };
         // -------------------------------------------
 
-        if (!companyData.ticker || !companyData.name) {
+        if (!isValidCompany(companyData)) {
           console.warn('Skipping record due to missing ticker or name:', record);
           companiesSkipped++;
           continue;
         }
 
-        const existingCompany = await getCompanyByTicker(companyData.ticker);
+        const existingCompany = false;//await getCompanyByTicker(companyData.ticker);
         if (existingCompany) {
           console.log(`Company with ticker ${companyData.ticker} already exists. Skipping.`);
           // Optionally, you could update the existing company here:
@@ -85,8 +97,8 @@ async function importCompanies() {
           companiesSkipped++;
           continue;
         }
-
-        await addCompany(companyData);
+        console.log(`[MOCK]Adding new company: ${companyData.name} (${companyData.ticker})`, companyData);
+        // await addCompany(companyData);
         companiesAdded++;
         console.log(`Successfully added company: ${companyData.name} (${companyData.ticker})`);
       } catch (error) {
