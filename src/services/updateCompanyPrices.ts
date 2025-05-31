@@ -1,18 +1,10 @@
 import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
-import { importEquityPrices, type EquityPriceData } from './importEquityPricesFromCsv'; // Assuming you have this function
-import { importCompanies } from './importCompaniesFromCsv'; // Import the importCompanies function
+import { importEquityPrices, type EquityPriceData } from './importEquityPricesFromCsv';
+import { importCompanies } from './importCompaniesFromCsv';
 import type { Company } from '../lib/db/companies';
-
-// --- IMPORTANT: CONFIGURE THESE ---
-// Set the absolute path to your Company CSV file
-const COMPANY_CSV_FILE_PATH = '/Users/shivam/Downloads/GrowthSyntax/SHARADAR_TICKERS_sample1.csv';
-// Set the absolute path to your Equity Price CSV file
-const EQUITY_PRICE_CSV_FILE_PATH = '/Users/shivam/Downloads/GrowthSyntax/sample/SHARADAR-SEP.csv';
-// Set the target date for which to fetch equity prices (YYYY-MM-DD)
-const TARGET_DATE = '2018-12-31';
-// ---------------------------------
+import { COMPANY_CSV_FILE_PATH, EQUITY_PRICE_CSV_FILE_PATH, TARGET_DATE } from './constants';
 
 // Helper function to convert string values to number, returns undefined if not a valid number
 const toNumber = (value: string | undefined | null): number | undefined => {
@@ -32,13 +24,13 @@ async function updateCompanyPrices(companyCsvPath?: string, equityPriceCsvPath?:
     process.exit(1);
   }
 
-    console.log(`Reading Equity Price CSV file from: ${EQUITY_PRICE_CSV_FILE_PATH} for date ${TARGET_DATE}`);
-    const equityPriceDataForDate = await importEquityPrices(EQUITY_PRICE_CSV_FILE_PATH, TARGET_DATE);
-    console.log(`Found ${equityPriceDataForDate.length} equity price records for ${TARGET_DATE}.`);
+  console.log(`Reading Equity Price CSV file from: ${resolvedEquityPriceCsvPath} for date ${resolvedTargetDate}`);
+  const equityPriceDataForDate = await importEquityPrices(resolvedEquityPriceCsvPath, resolvedTargetDate);
+  console.log(`Found ${equityPriceDataForDate.length} equity price records for ${resolvedTargetDate}.`);
 
-    let companiesUpdated = 0;
-    let companiesSkipped = 0;
-    let errorsEncountered = 0;
+  let companiesUpdated = 0;
+  let companiesSkipped = 0;
+  let errorsEncountered = 0;
 
   try {
     const companies: Company[] = await importCompanies(resolvedCompanyCsvPath);

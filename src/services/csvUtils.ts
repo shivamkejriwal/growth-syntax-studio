@@ -3,22 +3,11 @@ import { promises as fs } from 'fs';
 import { parse, Parser } from 'csv-parse';
 
 /**
- * Represents the structure of a single row of company data from the CSV.
- * Adjust this interface to match the actual columns in your CSV file.
+ * CsvRecord serves as a generic base interface for CSV records.
+ * It allows for arbitrary string-keyed properties, with values that are either strings or undefined.
  */
-export interface CompanyCsvRecord {
-  [key: string]: string | undefined; // Allows for arbitrary columns, but define known ones for type safety
-  ticker?: string;
-  name?: string;
-  sector?: string;
-  industry?: string;
-  marketCap?: string; // CSVs usually read numbers as strings initially
-  mostBought?: string;
-  mostSold?: string;
-  mostTraded?: string;
-  closingPrice?: string;
-  openingPrice?: string;
-  volume?: string;
+export interface CsvRecord {
+  [key: string]: string | undefined;
 }
 
 /**
@@ -38,10 +27,11 @@ export async function readCsvFile(filePath: string): Promise<string> {
 
 /**
  * Parses CSV data string into an array of objects.
+ * This function is generic and can parse CSV data into any shape that extends CsvRecord.
  * @param csvData - The string content of the CSV file.
- * @returns A Promise that resolves with an array of CompanyCsvRecord objects.
+ * @returns A Promise that resolves with an array of objects parsed from the CSV data.
  */
-export function parseCsvData(csvData: string): Promise<CompanyCsvRecord[]> {
+export function parseCsvData<T extends CsvRecord = CsvRecord>(csvData: string): Promise<T[]> {
   return new Promise((resolve, reject) => {
     const parser: Parser = parse(csvData, {
       columns: true, // Treat the first row as headers, creating objects
@@ -49,11 +39,11 @@ export function parseCsvData(csvData: string): Promise<CompanyCsvRecord[]> {
       trim: true,
     });
 
-    const records: CompanyCsvRecord[] = [];
+    const records: T[] = [];
     parser.on('readable', () => {
       let record;
       while ((record = parser.read()) !== null) {
-        records.push(record as CompanyCsvRecord);
+        records.push(record as T);
       }
     });
 

@@ -1,16 +1,36 @@
 import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
-import { readCsvFile, parseCsvData, type CompanyCsvRecord } from './csvUtils';
+import { readCsvFile, parseCsvData, type CsvRecord } from './csvUtils';
 import { addCompany, getCompanyByTicker } from '../lib/db/companies';
-import type { Company } from '../lib/db/companies'; // Ensure Company type is imported
+import type { Company } from '../lib/db/companies';
 import tickerList from './tickerList.json';
+import { COMPANY_CSV_FILE_PATH } from './constants';
 
-// --- IMPORTANT: CONFIGURE THIS ---
-// Set the absolute path to your CSV file
-const CSV_FILE_PATH = '/Users/shivam/Downloads/GrowthSyntax/SHARADAR_TICKERS_sample1.csv';
-// Example: '/Users/yourname/Downloads/my_companies.csv'
-// ---------------------------------
+interface CompanyCsvRecord extends CsvRecord {
+  ticker?: string;
+  name?: string;
+  sector?: string;
+  industry?: string;
+  marketCap?: string;
+  mostBought?: string;
+  mostSold?: string;
+  mostTraded?: string;
+  closingPrice?: string;
+  openingPrice?: string;
+  volume?: string;
+  Ticker?: string;
+  Name?: string;
+  Sector?: string;
+  Industry?: string;
+  MarketCap?: string;
+  MostBought?: string;
+  MostSold?: string;
+  MostTraded?: string;
+  ClosingPrice?: string;
+  OpeningPrice?: string;
+  Volume?: string;
+}
 
 // Helper function to convert string values to boolean
 const toBoolean = (value: string | undefined | null): boolean | undefined => {
@@ -49,9 +69,8 @@ const isValidCompanyRecord = (companyData: Company): boolean => {
   return true
 }
 
-
 export async function importCompanies(filePath?: string): Promise<Company[]> {
-  const csvPathToUse = filePath || CSV_FILE_PATH;
+  const csvPathToUse = filePath || COMPANY_CSV_FILE_PATH;
   if (!csvPathToUse) {
     console.error('CSV file path is not set. Please configure the CSV_FILE_PATH variable or provide a filePath argument.');
     throw new Error('CSV_FILE_PATH is not configured.');
@@ -64,7 +83,7 @@ export async function importCompanies(filePath?: string): Promise<Company[]> {
 
   console.log(`Reading CSV file from: ${csvPathToUse}`);
   const csvData = await readCsvFile(csvPathToUse);
-  const records: CompanyCsvRecord[] = await parseCsvData(csvData);
+  const records: CompanyCsvRecord[] = await parseCsvData<CompanyCsvRecord>(csvData);
 
   console.log(`Found ${records.length} records in the CSV file.`);
 
