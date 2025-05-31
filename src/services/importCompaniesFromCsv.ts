@@ -3,7 +3,8 @@ import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
 import { readCsvFile, parseCsvData, type CompanyCsvRecord } from './csvUtils';
-import { addCompany, getCompanyByTicker, type Company } from '../lib/db/companies';
+import { addCompany, getCompanyByTicker } from '../lib/db/companies';
+import type { Company } from '../lib/db/companies'; // Ensure Company type is imported
 import tickerList from './tickerList.json';
 
 // --- IMPORTANT: CONFIGURE THIS ---
@@ -83,17 +84,21 @@ export async function importCompanies(filePath?: string) {
         continue;
       }
 
-      const existingCompany = await getCompanyByTicker(companyData.ticker);
+      // const existingCompany = await getCompanyByTicker(companyData.ticker);
+      const existingCompany = null; // Mocking as if company doesn't exist to proceed to "add" logic
+      console.log(`[MOCK] Checking if company with ticker ${companyData.ticker} exists (DB call skipped).`);
+
+
       if (existingCompany) {
-        console.log(`Company with ticker ${companyData.ticker} already exists. Skipping.`);
+        console.log(`[MOCK] Company with ticker ${companyData.ticker} already exists. Skipping.`);
         companiesSkipped++;
         continue;
       }
 
-      console.log(`Adding new company: ${companyData.name} (${companyData.ticker})`);
-      await addCompany(companyData);
+      console.log(`[MOCK] Adding new company: ${companyData.name} (${companyData.ticker}) (DB call skipped).`);
+      // await addCompany(companyData);
       companiesAdded++;
-      console.log(`Successfully added company: ${companyData.name} (${companyData.ticker})`);
+      console.log(`Successfully processed (mocked add) company: ${companyData.name} (${companyData.ticker})`);
 
     } catch (error) {
       errorsEncountered++;
@@ -102,7 +107,7 @@ export async function importCompanies(filePath?: string) {
   }
 
   console.log('\n--- Import Summary ---');
-  console.log(`Successfully added ${companiesAdded} new companies.`);
+  console.log(`Successfully processed (mocked add) ${companiesAdded} new companies.`);
   console.log(`Skipped ${companiesSkipped} companies (e.g., missing data, duplicates, not in ticker list, or shell company).`);
   console.log(`Encountered ${errorsEncountered} errors during processing.`);
   console.log('---------------------\n');
@@ -112,7 +117,7 @@ export async function importCompanies(filePath?: string) {
 if (require.main === module) {
   importCompanies()
     .then(() => {
-      console.log('Company import script finished successfully.');
+      console.log('Company import script finished (DB interactions were mocked).');
       process.exit(0);
     })
     .catch((error) => {
