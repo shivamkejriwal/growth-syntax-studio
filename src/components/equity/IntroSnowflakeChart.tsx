@@ -56,7 +56,7 @@ const IntroSnowflakeChart: React.FC = () => {
   return (
     <Card className="shadow-lg w-full">
       <CardHeader>
-        <CardTitle>Intro</CardTitle>
+        <CardTitle>Overview</CardTitle>
       </CardHeader>
       <CardContent className="pb-4">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -65,7 +65,7 @@ const IntroSnowflakeChart: React.FC = () => {
             {sampleData.map((item) => (
               <div key={item.name} className="flex items-center">
                 <span
-                  className="h-4 w-4 rounded-sm mr-2 border border-border" // Added border for better visibility against card bg
+                  className="h-4 w-4 rounded-sm mr-2 border border-border" 
                   style={{ backgroundColor: item.color }}
                 />
                 <span className="text-sm text-muted-foreground">{item.name}</span>
@@ -87,8 +87,8 @@ const IntroSnowflakeChart: React.FC = () => {
                     key={item.name}
                     d={pathData}
                     fill={item.color}
-                    stroke="hsl(var(--card))" // Stroke with card background for slight separation
-                    strokeWidth="1" // Adjusted stroke width
+                    stroke="hsl(var(--card))" 
+                    strokeWidth="1" 
                   />
                 );
               })}

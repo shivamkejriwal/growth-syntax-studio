@@ -80,8 +80,6 @@ export default function EquityAnalysisPage() {
           </CardContent>
         </Card>
 
-        <IntroSnowflakeChart />
-
         <SharePriceVsFairValueChart
           currentPrice={sharePriceVsFairValueData.currentPrice}
           fairValue={sharePriceVsFairValueData.fairValue}
@@ -93,6 +91,7 @@ export default function EquityAnalysisPage() {
         />
 
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+          <IntroSnowflakeChart />
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Stock Price History</CardTitle>
