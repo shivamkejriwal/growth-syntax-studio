@@ -175,41 +175,43 @@ export default function MarketOverviewPage() {
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-lg">Sectors & Industries</CardTitle>
-               <Separator className="my-2" />
-                 <Tabs value={activeSegmentsTab} onValueChange={setActiveSegmentsTab} className="w-full pt-2">
-                <TabsList className="grid w-full grid-cols-2">
+              <Separator className="my-2" />
+            </CardHeader>
+            <CardContent className="pt-0"> {/* Adjusted CardContent padding */}
+              <Tabs value={activeSegmentsTab} onValueChange={setActiveSegmentsTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-3">
                   <TabsTrigger value="sectors">Sectors</TabsTrigger>
                   <TabsTrigger value="industries">Industries</TabsTrigger>
                 </TabsList>
+                <div className="max-h-[300px] overflow-y-auto"> {/* Scrollable content area */}
+                  <TabsContent value="sectors" className="mt-0">
+                    {sectorData.map((sector) => (
+                      <div key={sector.name} className="flex items-center justify-between text-sm py-1.5">
+                        <div className="flex items-center gap-2">
+                          {sector.icon}
+                          <span>{sector.name}</span>
+                        </div>
+                        <span className={parseFloat(sector.change) >= 0 ? "text-primary" : "text-destructive"}>
+                          {sector.change}
+                        </span>
+                      </div>
+                    ))}
+                  </TabsContent>
+                  <TabsContent value="industries" className="mt-0">
+                    {industryData.map((industry) => (
+                      <div key={industry.name} className="flex items-center justify-between text-sm py-1.5">
+                        <div className="flex items-center gap-2">
+                          {industry.icon}
+                          <span>{industry.name}</span>
+                        </div>
+                        <span className={parseFloat(industry.change) >= 0 ? "text-primary" : "text-destructive"}>
+                          {industry.change}
+                        </span>
+                      </div>
+                    ))}
+                  </TabsContent>
+                </div>
               </Tabs>
-            </CardHeader>
-            <CardContent className="space-y-3 max-h-[340px] overflow-y-auto">
-              <TabsContent value="sectors" className="mt-0">
-                {sectorData.map((sector) => (
-                  <div key={sector.name} className="flex items-center justify-between text-sm py-1.5">
-                    <div className="flex items-center gap-2">
-                      {sector.icon}
-                      <span>{sector.name}</span>
-                    </div>
-                    <span className={parseFloat(sector.change) >= 0 ? "text-primary" : "text-destructive"}>
-                      {sector.change}
-                    </span>
-                  </div>
-                ))}
-              </TabsContent>
-              <TabsContent value="industries" className="mt-0">
-                {industryData.map((industry) => (
-                  <div key={industry.name} className="flex items-center justify-between text-sm py-1.5">
-                    <div className="flex items-center gap-2">
-                      {industry.icon}
-                      <span>{industry.name}</span>
-                    </div>
-                    <span className={parseFloat(industry.change) >= 0 ? "text-primary" : "text-destructive"}>
-                      {industry.change}
-                    </span>
-                  </div>
-                ))}
-              </TabsContent>
             </CardContent>
           </Card>
         </div>
@@ -316,3 +318,6 @@ function StatCard({ icon, title, value, change, changeType }: StatCardProps) {
     </Card>
   );
 }
+
+
+    
