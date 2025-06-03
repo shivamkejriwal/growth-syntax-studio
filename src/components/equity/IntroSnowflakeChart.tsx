@@ -13,11 +13,11 @@ interface SnowflakeDataPoint {
 }
 
 const sampleData: SnowflakeDataPoint[] = [
-  { name: "Health", value: 7, color: "#FFCCCB" }, // Light Coral
-  { name: "Value", value: 5, color: "#D5F5E3" },  // Pale Mint Green
-  { name: "Performance", value: 8, color: "#E6E6FA" }, // Lavender
-  { name: "Dividend", value: 9, color: "#FFE4E1" }, // Misty Rose / Light Pink
-  { name: "Management", value: 6, color: "#ADD8E6" }, // Light Blue
+  { name: "Health", value: 7, color: "hsl(var(--chart-2))" },
+  { name: "Value", value: 5, color: "hsl(var(--chart-1))" },
+  { name: "Performance", value: 8, color: "hsl(var(--chart-4))" },
+  { name: "Dividend", value: 9, color: "hsl(var(--chart-5))" },
+  { name: "Management", value: 6, color: "hsl(var(--chart-3))" },
 ];
 
 const MAX_SCORE = 10; // Max possible score for any category
@@ -49,7 +49,6 @@ const IntroSnowflakeChart: React.FC = () => {
     return d;
   };
 
-  const totalValue = sampleData.reduce((sum, item) => sum + item.value, 0);
   // If using fixed angles per segment (snowflake style)
   const anglePerSegment = 360 / sampleData.length;
   let currentAngle = 0;
@@ -66,7 +65,7 @@ const IntroSnowflakeChart: React.FC = () => {
             {sampleData.map((item) => (
               <div key={item.name} className="flex items-center">
                 <span
-                  className="h-4 w-4 rounded-sm mr-2"
+                  className="h-4 w-4 rounded-sm mr-2 border border-border" // Added border for better visibility against card bg
                   style={{ backgroundColor: item.color }}
                 />
                 <span className="text-sm text-muted-foreground">{item.name}</span>
@@ -77,7 +76,7 @@ const IntroSnowflakeChart: React.FC = () => {
           {/* SVG Chart */}
           <div className="w-full sm:w-2/3 flex justify-center items-center">
             <svg width={chartSize} height={chartSize} viewBox={`0 0 ${chartSize} ${chartSize}`}>
-              {sampleData.map((item, index) => {
+              {sampleData.map((item) => {
                 const radius = (item.value / MAX_SCORE) * maxRadius;
                 const startAngle = currentAngle;
                 const endAngle = currentAngle + anglePerSegment;
@@ -88,8 +87,8 @@ const IntroSnowflakeChart: React.FC = () => {
                     key={item.name}
                     d={pathData}
                     fill={item.color}
-                    stroke="#FFFFFF" // White stroke for separation
-                    strokeWidth="2"
+                    stroke="hsl(var(--card))" // Stroke with card background for slight separation
+                    strokeWidth="1" // Adjusted stroke width
                   />
                 );
               })}
