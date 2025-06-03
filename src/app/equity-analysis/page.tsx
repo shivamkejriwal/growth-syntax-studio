@@ -1,3 +1,4 @@
+
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,7 @@ import { Search, Briefcase, Activity, DollarSign, Zap } from "lucide-react";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
+import ValueGaugeChart from "@/components/equity/value-gauge-chart";
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -18,6 +20,14 @@ export default function EquityAnalysisPage() {
     analystRating: "Buy (4.2/5)",
     pastDividends: "$1.20/share (Annual)",
     yield: "2.1%",
+  };
+
+  const valueGaugeData = {
+    fairValue: 623.95,
+    sharePrice: 324.00,
+    undervaluedZoneMax: 350, 
+    aboutRightZoneMax: 650,  
+    chartDisplayMaxY: 850,   
   };
 
   return (
@@ -50,7 +60,6 @@ export default function EquityAnalysisPage() {
             <InfoCard icon={<Zap />} title="Future Performance" value={companyData.futurePerformance} subValue={`Analyst Rating: ${companyData.analystRating}`} />
             <InfoCard icon={<Activity />} title="Past Dividends" value={companyData.pastDividends} subValue={`Yield: ${companyData.yield}`} />
             
-            {/* Placeholder for more specific data points */}
              <Card className="p-4 bg-card/70">
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Earnings Per Share (EPS)</h3>
               <p className="text-xl font-semibold">$5.67</p>
@@ -64,7 +73,7 @@ export default function EquityAnalysisPage() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Stock Price History</CardTitle>
@@ -81,6 +90,13 @@ export default function EquityAnalysisPage() {
               <SampleBarChart title="EXMPL Quarterly Revenue & Profit" />
             </CardContent>
           </Card>
+           <ValueGaugeChart
+            fairValue={valueGaugeData.fairValue}
+            sharePrice={valueGaugeData.sharePrice}
+            undervaluedZoneMax={valueGaugeData.undervaluedZoneMax}
+            aboutRightZoneMax={valueGaugeData.aboutRightZoneMax}
+            chartDisplayMaxY={valueGaugeData.chartDisplayMaxY}
+          />
         </div>
       </div>
     </AppShell>
