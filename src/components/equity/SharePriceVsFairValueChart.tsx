@@ -65,7 +65,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
     <Card className="shadow-lg w-full">
       <CardHeader>
         <CardTitle className="text-xl">
-          <span className="text-muted-foreground mr-1">1.1</span>Share Price vs Fair Value
+          Share Price vs Fair Value
         </CardTitle>
         <CardDescription>
           What is the Fair Price of {companyTicker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
