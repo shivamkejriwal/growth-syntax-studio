@@ -10,6 +10,7 @@ import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
 import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; 
 import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
+import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineChart";
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -106,6 +107,9 @@ export default function EquityAnalysisPage() {
           </Card>
           <ManagementStackedAreaChart />
         </div>
+        
+        <FinancialHealthLineChart />
+
       </div>
     </AppShell>
   );
