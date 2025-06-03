@@ -24,30 +24,32 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
   companyName = "Example Corp"
 }) => {
   let valuationStatus = "Fairly Valued";
-  let percentageDiff = 0;
   let statusColor = "text-foreground"; // Default color
 
-  if (fairValue > 0) {
-    const diff = fairValue - currentPrice;
-    percentageDiff = Math.abs((diff / fairValue) * 100);
+  // Positive diff means currentPrice > fairValue (Overvalued by X%)
+  // Negative diff means currentPrice < fairValue (Undervalued by X%)
+  const actualPercentageDiff = fairValue > 0 ? ((currentPrice - fairValue) / fairValue) * 100 : 0;
 
-    if (currentPrice < fairValue * (1 - undervaluedThresholdPercent / 200)) { // Using half threshold for "Fairly Valued" band
+  if (actualPercentageDiff < -undervaluedThresholdPercent) { // e.g. currentPrice is more than 20% below fairValue
       valuationStatus = "Undervalued";
-      statusColor = "text-emerald-500"; // Green for undervalued
-    } else if (currentPrice > fairValue * (1 + overvaluedThresholdPercent / 200)) { // Using half threshold
+      statusColor = "text-emerald-500";
+  } else if (actualPercentageDiff > overvaluedThresholdPercent) { // e.g. currentPrice is more than 20% above fairValue
       valuationStatus = "Overvalued";
-      statusColor = "text-red-500"; // Red for overvalued
-    }
+      statusColor = "text-red-500";
+  } else { // Within the thresholds, "Fairly Valued"
+      valuationStatus = "Fairly Valued";
+      if (actualPercentageDiff < 0) { // Still on the undervalued side of fair value
+        statusColor = "text-emerald-500";
+      } else if (actualPercentageDiff > 0) { // Still on the overvalued side of fair value
+        statusColor = "text-red-500";
+      }
+      // If actualPercentageDiff is 0, it remains text-foreground
   }
-  
-  const actualPercentageDiff = fairValue > 0 ? ((fairValue - currentPrice) / fairValue) * 100 : 0;
 
 
   // Define chart scale
-  const minValue = 0;
-  // Ensure chartMaxX is reasonably larger than the max of currentPrice and fairValue, and accounts for zones
   const upperFairValueLimit = fairValue * (1 + overvaluedThresholdPercent / 100);
-  const chartMaxX = Math.max(currentPrice, fairValue, upperFairValueLimit) * 1.3; // Add 30% padding
+  const chartMaxX = Math.max(currentPrice, fairValue, upperFairValueLimit) * 1.25; 
 
   const toPercentWidth = (value: number) => (value / chartMaxX) * 100;
 
@@ -59,8 +61,8 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
   const overvaluedZoneStart = fairValue * (1 + overvaluedThresholdPercent / 100);
 
   const undervaluedZoneWidth = toPercentWidth(undervaluedZoneEnd);
-  const aboutRightZoneWidth = toPercentWidth(overvaluedZoneStart - undervaluedZoneEnd);
-  const overvaluedZoneWidth = Math.max(0, 100 - undervaluedZoneWidth - aboutRightZoneWidth); // Remaining width
+  const aboutRightZoneWidth = toPercentWidth(Math.max(0, overvaluedZoneStart - undervaluedZoneEnd));
+  const overvaluedZoneWidth = Math.max(0, 100 - (undervaluedZoneWidth + aboutRightZoneWidth)); 
 
   const barHeight = "h-8"; // Height for current price and fair value bars
 
@@ -68,25 +70,25 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
     <Card className="shadow-lg w-full">
       <CardHeader>
         <CardTitle className="text-xl">
-          <span className="text-muted-foreground">1.1</span> Share Price vs Fair Value
+          <span className="text-muted-foreground mr-1">1.1</span>Share Price vs Fair Value
         </CardTitle>
         <CardDescription>
           What is the Fair Price of {companyTicker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className={`text-center mb-6 ${valuationStatus === "Fairly Valued" && actualPercentageDiff !== 0 ? (actualPercentageDiff > 0 ? "text-emerald-500" : "text-red-500") : statusColor}`}>
+        <div className={`text-center mb-6 ${statusColor}`}>
           <p className="text-3xl font-bold">
+            {/* Display absolute value for percentage, sign is indicated by status text */}
             {Math.abs(actualPercentageDiff).toFixed(1)}%
           </p>
           <p className="text-sm">
-            {actualPercentageDiff > 0 ? "Undervalued" : (actualPercentageDiff < 0 ? "Overvalued" : "Fairly Valued")}
+            {valuationStatus}
           </p>
         </div>
 
         <div className="w-full mb-4">
-          {/* Chart Background Zones */}
-          <div className="relative h-20 mb-2"> {/* Increased height to accommodate labels better */}
+          <div className="relative h-24 mb-2"> 
             <div className="absolute top-0 left-0 h-full flex w-full rounded">
               <div
                 style={{ width: `${undervaluedZoneWidth}%` }}
@@ -102,10 +104,9 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
               />
             </div>
 
-            {/* Current Price Bar and Label */}
-            <div className={`absolute top-3 left-0 ${barHeight} flex items-center`} style={{ width: '100%' }}>
-              <div 
-                className={`bg-emerald-400 ${barHeight} rounded-sm`} 
+            <div className={`absolute top-2 left-0 ${barHeight} flex items-center`} style={{ width: '100%' }}>
+              <div
+                className={`bg-emerald-400 ${barHeight} rounded-sm`}
                 style={{ width: `${currentPriceBarWidth}%` }}
               />
               <div className="ml-2 text-xs text-popover-foreground whitespace-nowrap">
@@ -114,9 +115,8 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
               </div>
             </div>
 
-            {/* Fair Value Bar and Label */}
-             <div className={`absolute bottom-3 left-0 ${barHeight} flex items-center`} style={{ width: '100%' }}>
-              <div 
+             <div className={`absolute bottom-2 left-0 ${barHeight} flex items-center`} style={{ width: '100%' }}>
+              <div
                 className={`bg-primary ${barHeight} rounded-sm`}
                 style={{ width: `${fairValueBarWidth}%` }}
               />
@@ -127,11 +127,11 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div className="flex justify-between text-xs text-muted-foreground px-1">
-          <span className="text-emerald-500 text-center" style={{ flexBasis: `${undervaluedThresholdPercent}%`}}>{undervaluedThresholdPercent}% Undervalued</span>
-          <span className="text-center" style={{ flexBasis: `${100 - undervaluedThresholdPercent - overvaluedThresholdPercent}%`}}>About Right</span>
-          <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedThresholdPercent}%`}}>{overvaluedThresholdPercent}% Overvalued</span>
+          <span className="text-emerald-500 text-center" style={{ flexBasis: `${undervaluedZoneWidth > 0 ? undervaluedThresholdPercent : 0}%`}}>{undervaluedThresholdPercent}% Undervalued</span>
+          <span className="text-center" style={{ flexBasis: `${aboutRightZoneWidth > 0 ? (100 - undervaluedThresholdPercent - overvaluedThresholdPercent) : 0}%`}}>About Right</span>
+          <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThresholdPercent : 0}%`}}>{overvaluedThresholdPercent}% Overvalued</span>
         </div>
       </CardContent>
     </Card>
@@ -139,3 +139,4 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
 };
 
 export default SharePriceVsFairValueChart;
+
