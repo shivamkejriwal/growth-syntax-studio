@@ -4,7 +4,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Group } from '@visx/group';
-import { Sankey } from '@visx/sankey'; // Corrected: Removed SankeyNode
+import { Sankey } from '@visx/sankey';
 import { Text } from '@visx/text';
 import { ParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal, defaultStyles as tooltipStyles } from '@visx/tooltip';
@@ -137,117 +137,125 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
 
         <div ref={containerRef} className="w-full" style={{ height: '500px', position: 'relative' }}>
           <ParentSize>
-            {({ width, height }) => (
-              <Sankey
-                data={sankeyGraph}
-                width={width}
-                height={height}
-                margin={margin}
-                nodeWidth={20} // Width of the node rectangles
-                nodePadding={25} // Vertical space between nodes in the same column
-                iterations={32} // Number of iterations for the layout algorithm
-                nodeSort={null} // To maintain the order of nodes as defined in nodeData
-              >
-                {({ data }) => (
-                  <Group>
-                    {/* Render Links */}
-                    {data.links.map((link, i) => {
-                      const d3Link = link as D3SankeyLink<NodeData, LinkData>;
-                      const sourceNodeColor = d3Link.source && typeof d3Link.source !== 'number' ? getNodeColor(d3Link.source as D3SankeyNode<NodeData, LinkData>) : defaultLinkColor;
-                      const linkColor = sourceNodeColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
+            {({ width, height }) => {
+              if (width <= 0 || height <= 0) {
+                return null; // Or a loading indicator/placeholder
+              }
+              return (
+                <Sankey
+                  data={sankeyGraph}
+                  width={width}
+                  height={height}
+                  margin={margin}
+                  nodeWidth={20} // Width of the node rectangles
+                  nodePadding={25} // Vertical space between nodes in the same column
+                  iterations={32} // Number of iterations for the layout algorithm
+                  nodeSort={null} // To maintain the order of nodes as defined in nodeData
+                >
+                  {({ data: processedData }) => {
+                     if (!processedData || !processedData.nodes || !processedData.links) {
+                        console.warn('VisX Sankey layout returned invalid data.');
+                        return null; 
+                      }
+                    return (
+                      <Group>
+                        {/* Render Links */}
+                        {processedData.links.map((link, i) => {
+                          const d3Link = link as D3SankeyLink<NodeData, LinkData>;
+                          const sourceNodeColor = d3Link.source && typeof d3Link.source !== 'number' ? getNodeColor(d3Link.source as D3SankeyNode<NodeData, LinkData>) : defaultLinkColor;
+                          const linkColor = sourceNodeColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
 
-                      return (
-                        <path
-                          key={`link-${i}`}
-                          d={sankeyLinkHorizontal()(d3Link) || ''}
-                          stroke={linkColor}
-                          strokeWidth={Math.max(1, d3Link.width || 0)}
-                          fill="none"
-                          opacity={0.7} // Keep some opacity
-                          onMouseEnter={(event) => {
-                            const point = localPoint(event.currentTarget.ownerSVGElement!, event) || { x: 0, y: 0 };
-                            showTooltip({
-                              tooltipData: `Value: ${formatCurrency(d3Link.value, 'b')}`,
-                              tooltipTop: point.y,
-                              tooltipLeft: point.x,
-                            });
-                          }}
-                          onMouseLeave={hideTooltip}
-                        />
-                      );
-                    })}
-
-                    {/* Render Nodes */}
-                    {data.nodes.map((node, i) => {
-                      const d3Node = node as D3SankeyNode<NodeData, LinkData>;
-                      const nodeWidth = (d3Node.x1 ?? 0) - (d3Node.x0 ?? 0);
-                      const nodeHeight = (d3Node.y1 ?? 0) - (d3Node.y0 ?? 0);
-                      return (
-                        <Group
-                          key={`node-${i}`}
-                          top={d3Node.y0}
-                          left={d3Node.x0}
-                          onMouseEnter={(event: React.MouseEvent<SVGGElement>) => {
-                             const point = localPoint(event.currentTarget.ownerSVGElement!, event) || { x: 0, y: 0 };
-                            showTooltip({
-                              tooltipData: `${d3Node.name}: ${formatCurrency(d3Node.value, 'b')}`,
-                              tooltipTop: point.y,
-                              tooltipLeft: point.x,
-                            });
-                          }}
-                          onMouseLeave={hideTooltip}
-                        >
-                          <rect
-                            width={nodeWidth}
-                            height={nodeHeight}
-                            fill={getNodeColor(d3Node)}
-                            stroke={nodeStrokeColor}
-                            strokeWidth={1}
-                            opacity={1} // Nodes should be fully opaque
-                          />
-                          {/* Node Label: Name */}
-                          <Text
-                            x={nodeWidth > 50 && nodeHeight > 20 ? 6 : nodeWidth + 6} // Position text inside if wide enough, else outside
-                            y={nodeHeight / 2}
-                            verticalAnchor="middle"
-                            textAnchor={(nodeWidth > 50 && nodeHeight > 20) ? "start" : "start"} // Adjust based on position
-                            style={{
-                              fill: 'hsl(var(--foreground))', // Ensure visibility on colored backgrounds
-                              fontSize: '10px',
-                              pointerEvents: 'none', // Prevent text from blocking mouse events on the rect
-                            }}
-                          >
-                            {d3Node.name}
-                          </Text>
-                          {/* Node Label: Value (if node is tall enough) */}
-                          {nodeHeight > 15 && ( // Only show value if there's enough space
-                            <Text
-                              x={nodeWidth > 50 && nodeHeight > 20 ? 6 : nodeWidth + 6}
-                              y={nodeHeight / 2 + 12} // Position below the name
-                              verticalAnchor="middle"
-                              textAnchor={(nodeWidth > 50 && nodeHeight > 20) ? "start" : "start"}
-                              style={{
-                                fill: 'hsl(var(--muted-foreground))',
-                                fontSize: '9px',
-                                fontWeight: 'bold',
-                                pointerEvents: 'none',
+                          return (
+                            <path
+                              key={`link-${i}`}
+                              d={sankeyLinkHorizontal()(d3Link) || ''}
+                              stroke={linkColor}
+                              strokeWidth={Math.max(1, d3Link.width || 0)}
+                              fill="none"
+                              opacity={0.7} 
+                              onMouseEnter={(event) => {
+                                const point = localPoint(event.currentTarget.ownerSVGElement!, event) || { x: 0, y: 0 };
+                                showTooltip({
+                                  tooltipData: `Value: ${formatCurrency(d3Link.value, 'b')}`,
+                                  tooltipTop: point.y,
+                                  tooltipLeft: point.x,
+                                });
                               }}
+                              onMouseLeave={hideTooltip}
+                            />
+                          );
+                        })}
+
+                        {/* Render Nodes */}
+                        {processedData.nodes.map((node, i) => {
+                          const d3Node = node as D3SankeyNode<NodeData, LinkData>;
+                          const nodeWidthVal = (d3Node.x1 ?? 0) - (d3Node.x0 ?? 0);
+                          const nodeHeightVal = (d3Node.y1 ?? 0) - (d3Node.y0 ?? 0);
+                          return (
+                            <Group
+                              key={`node-${i}`}
+                              top={d3Node.y0}
+                              left={d3Node.x0}
+                              onMouseEnter={(event: React.MouseEvent<SVGGElement>) => {
+                                 const point = localPoint(event.currentTarget.ownerSVGElement!, event) || { x: 0, y: 0 };
+                                showTooltip({
+                                  tooltipData: `${d3Node.name}: ${formatCurrency(d3Node.value, 'b')}`,
+                                  tooltipTop: point.y,
+                                  tooltipLeft: point.x,
+                                });
+                              }}
+                              onMouseLeave={hideTooltip}
                             >
-                              {formatCurrency(d3Node.value, 'b')}
-                            </Text>
-                          )}
-                        </Group>
-                      );
-                    })}
-                  </Group>
-                )}
-              </Sankey>
-            )}
+                              <rect
+                                width={nodeWidthVal}
+                                height={nodeHeightVal}
+                                fill={getNodeColor(d3Node)}
+                                stroke={nodeStrokeColor}
+                                strokeWidth={1}
+                                opacity={1}
+                              />
+                              <Text
+                                x={nodeWidthVal > 50 && nodeHeightVal > 20 ? 6 : nodeWidthVal + 6}
+                                y={nodeHeightVal / 2}
+                                verticalAnchor="middle"
+                                textAnchor={(nodeWidthVal > 50 && nodeHeightVal > 20) ? "start" : "start"}
+                                style={{
+                                  fill: 'hsl(var(--foreground))',
+                                  fontSize: '10px',
+                                  pointerEvents: 'none',
+                                }}
+                              >
+                                {d3Node.name}
+                              </Text>
+                              {nodeHeightVal > 15 && (
+                                <Text
+                                  x={nodeWidthVal > 50 && nodeHeightVal > 20 ? 6 : nodeWidthVal + 6}
+                                  y={nodeHeightVal / 2 + 12}
+                                  verticalAnchor="middle"
+                                  textAnchor={(nodeWidthVal > 50 && nodeHeightVal > 20) ? "start" : "start"}
+                                  style={{
+                                    fill: 'hsl(var(--muted-foreground))',
+                                    fontSize: '9px',
+                                    fontWeight: 'bold',
+                                    pointerEvents: 'none',
+                                  }}
+                                >
+                                  {formatCurrency(d3Node.value, 'b')}
+                                </Text>
+                              )}
+                            </Group>
+                          );
+                        })}
+                      </Group>
+                    );
+                  }}
+                </Sankey>
+              );
+            }}
           </ParentSize>
-           {/* Tooltip */}
            {tooltipOpen && tooltipData && (
             <TooltipInPortal
-              key={Math.random()} // To ensure re-render on content change
+              key={Math.random()} 
               top={tooltipTop}
               left={tooltipLeft}
               style={{
@@ -269,4 +277,3 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
 };
 
 export default RevenueExpensesBreakdownChart;
-
