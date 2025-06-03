@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SampleLineChart } from "@/components/charts/sample-line-chart"; // Placeholder for timeline
-import { cn } from "@/lib/utils"; // Added missing import
+import { cn } from "@/lib/utils";
 
 // Helper function to format currency (simplified)
 const formatCurrency = (value: number, unit: 'b' | 'm' | 'k' = 'b') => {
@@ -120,8 +120,8 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
 
           {/* Connector Arrow (Simplified) */}
           <div className="hidden md:flex md:col-span-1 items-center justify-center h-full">
-            <div className="w-px h-3/4 bg-border relative">
-              <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] border-l-border"></div>
+            <div className="w-1 h-3/4 bg-primary/75 relative">
+              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[10px] border-l-primary/75"></div>
             </div>
           </div>
 
@@ -136,8 +136,8 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
           
           {/* Connector Arrow (Simplified) */}
           <div className="hidden md:flex md:col-span-1 items-center justify-center h-full">
-             <div className="w-px h-1/2 bg-border relative">
-              <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] border-l-border"></div>
+             <div className="w-1 h-1/2 bg-primary/75 relative">
+              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[10px] border-l-primary/75"></div>
             </div>
           </div>
 
@@ -152,8 +152,8 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
 
           {/* Connector Arrow (Simplified) */}
            <div className="hidden md:flex md:col-span-1 items-center justify-center h-full">
-             <div className="w-px h-1/2 bg-border relative">
-              <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] border-l-border"></div>
+             <div className="w-1 h-1/2 bg-primary/75 relative">
+              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[10px] border-l-primary/75"></div>
             </div>
           </div>
 
@@ -172,3 +172,4 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
 };
 
 export default RevenueExpensesBreakdownChart;
+
