@@ -14,11 +14,10 @@ interface ValueGaugeChartProps {
   chartDisplayMaxY: number;
 }
 
-const COLOR_UNDERVALUED = "#90EE90"; // Soft Green from PRD
-const COLOR_ABOUT_RIGHT = "#FFD700"; // Gold/Yellow - better contrast than light beige on dark theme
-const COLOR_OVERVALUED = "#F08080";  // Gentle Red from PRD
-const COLOR_BAR_FILL = "hsl(215, 35%, 55%)"; // Muted blue for bars
-const COLOR_BAR_BORDER = "hsl(215, 30%, 35%)"; // Darker border for bars
+const COLOR_UNDERVALUED = "rgba(144, 238, 144, 0.6)"; // Soft Green with opacity from PRD
+const COLOR_ABOUT_RIGHT = "rgba(245, 245, 220, 0.6)"; // Light Beige with opacity from PRD
+const COLOR_OVERVALUED = "rgba(240, 128, 128, 0.6)";  // Gentle Red with opacity from PRD
+const COLOR_BAR_FILL = "hsl(var(--primary))"; // Use primary theme color for bars
 
 const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
   fairValue,
@@ -42,9 +41,9 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
 
 
   const legendItems = [
-    { label: "Undervalued", color: COLOR_UNDERVALUED },
-    { label: "About Right", color: COLOR_ABOUT_RIGHT },
-    { label: "Overvalued", color: COLOR_OVERVALUED },
+    { label: "Undervalued", color: COLOR_UNDERVALUED.replace(', 0.6)', ')') }, // Remove opacity for legend swatch
+    { label: "About Right", color: COLOR_ABOUT_RIGHT.replace(', 0.6)', ')') },
+    { label: "Overvalued", color: COLOR_OVERVALUED.replace(', 0.6)', ')') },
   ];
 
   return (
@@ -53,7 +52,7 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
         <CardTitle className="text-xl">Value</CardTitle>
       </CardHeader>
       <CardContent className="pb-4 flex-grow flex flex-col">
-        <div className="flex justify-start items-center space-x-3 sm:space-x-4 mb-4 text-xs pl-1">
+        <div className="flex justify-center items-center space-x-3 sm:space-x-4 mb-4 text-xs pl-1">
           {legendItems.map((item) => (
             <div key={item.label} className="flex items-center">
               <span
@@ -92,10 +91,6 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
                 style={{ 
                   height: `${fairValuePercentage}%`, 
                   backgroundColor: COLOR_BAR_FILL,
-                  borderLeft: `2px solid ${COLOR_BAR_BORDER}`,
-                  borderRight: `2px solid ${COLOR_BAR_BORDER}`,
-                  borderTop: `2px solid ${COLOR_BAR_BORDER}`,
-                  borderBottom: 'none', // Base of the bar sits on the x-axis
                 }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Fair Value</div>
@@ -111,10 +106,6 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
                 style={{ 
                   height: `${sharePricePercentage}%`, 
                   backgroundColor: COLOR_BAR_FILL,
-                  borderLeft: `2px solid ${COLOR_BAR_BORDER}`,
-                  borderRight: `2px solid ${COLOR_BAR_BORDER}`,
-                  borderTop: `2px solid ${COLOR_BAR_BORDER}`,
-                  borderBottom: 'none',
                  }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Share Price</div>
@@ -127,7 +118,7 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
           <ListChecks className="mr-1.5 h-3.5 w-3.5" />
           MORE DETAILS
         </Button>
-        <Button variant="ghost" size="sm" className="text-xs text-destructive hover:text-destructive-foreground hover:bg-destructive/90">
+        <Button variant="ghost" size="sm" className="text-xs">
           <Share2 className="mr-1.5 h-3.5 w-3.5" />
           SHARE
         </Button>
