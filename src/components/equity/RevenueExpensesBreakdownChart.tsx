@@ -1,9 +1,11 @@
+
 "use client";
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SampleLineChart } from "@/components/charts/sample-line-chart"; // Placeholder for timeline
+import { cn } from "@/lib/utils"; // Added missing import
 
 // Helper function to format currency (simplified)
 const formatCurrency = (value: number, unit: 'b' | 'm' | 'k' = 'b') => {
