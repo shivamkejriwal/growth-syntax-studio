@@ -7,7 +7,7 @@ import { Search, Briefcase, Activity, DollarSign, Zap } from "lucide-react";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
-import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; 
+import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart";
 import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
 import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineChart";
 import DividendAnalysisChart from "@/components/equity/DividendAnalysisChart";
@@ -107,11 +107,9 @@ export default function EquityAnalysisPage() {
             </CardContent>
           </Card>
           <ManagementStackedAreaChart />
+          <FinancialHealthLineChart />
+          <DividendAnalysisChart />
         </div>
-        
-        <FinancialHealthLineChart />
-        <DividendAnalysisChart />
-
       </div>
     </AppShell>
   );
