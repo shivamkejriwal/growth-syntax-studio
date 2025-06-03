@@ -1,3 +1,4 @@
+
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -99,6 +100,9 @@ export default function EquityAnalysisPage() {
               <SampleLineChart title={`${companyData.ticker} Stock Price (1Y)`} />
             </CardContent>
           </Card>
+          <ManagementStackedAreaChart />
+          <FinancialHealthLineChart />
+          <DividendAnalysisChart />
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Quarterly Earnings</CardTitle>
@@ -107,11 +111,8 @@ export default function EquityAnalysisPage() {
               <SampleBarChart title={`${companyData.ticker} Quarterly Revenue &amp; Profit`} />
             </CardContent>
           </Card>
-          <ManagementStackedAreaChart />
-          <FinancialHealthLineChart />
-          <DividendAnalysisChart />
+          <RevenueExpensesBreakdownChart />
         </div>
-        <RevenueExpensesBreakdownChart />
       </div>
     </AppShell>
   );
