@@ -9,7 +9,7 @@ import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent, Plane, FlaskConical, Shirt, Square, HeartPulse, Megaphone, Tv, Car, Building, Truck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Separator } from "@/components/ui/separator";
 
 const sampleGainers = [
@@ -93,6 +93,11 @@ const industryData = [
 export default function MarketOverviewPage() {
   const [activeMarketMoversTab, setActiveMarketMoversTab] = useState("gainers");
   const [activeSegmentsTab, setActiveSegmentsTab] = useState("sectors");
+  const [currentDate, setCurrentDate] = useState<string>("today");
+
+  useEffect(() => {
+    setCurrentDate(new Date().toLocaleDateString());
+  }, []);
 
 
   return (
@@ -136,7 +141,7 @@ export default function MarketOverviewPage() {
           <Card className="shadow-lg lg:col-span-2">
             <CardHeader>
               <CardTitle>Market Movers & Activity</CardTitle>
-              <CardDescription>Market data for {new Date().toLocaleDateString()}</CardDescription>
+              <CardDescription>Market data for {currentDate}</CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs value={activeMarketMoversTab} onValueChange={setActiveMarketMoversTab} className="w-full">
@@ -177,13 +182,13 @@ export default function MarketOverviewPage() {
               <CardTitle className="text-lg">Sectors & Industries</CardTitle>
               <Separator className="my-2" />
             </CardHeader>
-            <CardContent className="pt-0"> {/* Adjusted CardContent padding */}
+            <CardContent className="pt-0">
               <Tabs value={activeSegmentsTab} onValueChange={setActiveSegmentsTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-3">
                   <TabsTrigger value="sectors">Sectors</TabsTrigger>
                   <TabsTrigger value="industries">Industries</TabsTrigger>
                 </TabsList>
-                <div className="max-h-[300px] overflow-y-auto"> {/* Scrollable content area */}
+                <div className="max-h-[300px] overflow-y-auto">
                   <TabsContent value="sectors" className="mt-0">
                     {sectorData.map((sector) => (
                       <div key={sector.name} className="flex items-center justify-between text-sm py-1.5">
@@ -266,7 +271,7 @@ interface MarketDataTableProps {
 
 function MarketDataTable({ data, type }: MarketDataTableProps) {
   return (
-    <div className="max-h-[300px] overflow-y-auto"> {/* Adjusted max height */}
+    <div className="max-h-[300px] overflow-y-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -318,6 +323,3 @@ function StatCard({ icon, title, value, change, changeType }: StatCardProps) {
     </Card>
   );
 }
-
-
-    
