@@ -14,12 +14,13 @@ interface ValueGaugeChartProps {
   chartDisplayMaxY: number;
 }
 
-// Colors derived from the provided image for closer matching
-const COLOR_UNDERVALUED_ZONE = "#7EA17E"; // Muted Green
-const COLOR_ABOUT_RIGHT_ZONE = "#F0C882"; // Muted Gold/Yellow
-const COLOR_OVERVALUED_ZONE = "#C85050";  // Muted Red
-const COLOR_BAR_FILL_PRIMARY = "hsl(var(--primary))"; // Using theme primary color for definite visibility
-const COLOR_BAR_BORDER_IMG = "#000000";   // Black border for bars
+// Colors from the Angular example for closer matching
+const COLOR_UNDERVALUED_ZONE_ANGULAR = "rgba(126, 158, 123, 1)"; // Muted Green #7E9E7B
+const COLOR_ABOUT_RIGHT_ZONE_ANGULAR = "rgba(249, 201, 117, 1)"; // Muted Gold/Yellow #F9C975
+const COLOR_OVERVALUED_ZONE_ANGULAR = "rgba(216, 69, 74, 1)";   // Muted Red #D8454A
+const COLOR_BAR_FILL_ANGULAR = "rgba(132, 152, 191, 1)";    // Muted Blue-Grey #8498BF
+const COLOR_BAR_BORDER_ANGULAR = "black";
+const BAR_BORDER_WIDTH_ANGULAR = "1px";
 
 const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
   fairValue,
@@ -40,11 +41,10 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
   const aboutRightZoneDisplayHeight = calculatePercentageHeight(aboutRightZoneMax - undervaluedZoneMax);
   const overvaluedZoneDisplayHeight = Math.max(0, 100 - (undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight));
 
-
   const legendItems = [
-    { label: "Undervalued", color: COLOR_UNDERVALUED_ZONE },
-    { label: "About Right", color: COLOR_ABOUT_RIGHT_ZONE },
-    { label: "Overvalued", color: COLOR_OVERVALUED_ZONE },
+    { label: "Undervalued", color: COLOR_UNDERVALUED_ZONE_ANGULAR },
+    { label: "About Right", color: COLOR_ABOUT_RIGHT_ZONE_ANGULAR },
+    { label: "Overvalued", color: COLOR_OVERVALUED_ZONE_ANGULAR },
   ];
 
   return (
@@ -65,35 +65,34 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
           ))}
         </div>
 
-        {/* Ensure this container has explicit height and does not rely on flex-grow if children use % height */}
-        <div className="relative h-72 w-full max-w-xs mx-auto mt-4"> {/* Removed flex-grow */}
+        <div className="relative h-72 w-full max-w-xs mx-auto mt-4">
           {/* Background Zones: Rendered from bottom to top visually */}
           <div
             className="absolute bottom-0 left-0 w-full"
-            style={{ height: `${undervaluedZoneDisplayHeight}%`, backgroundColor: COLOR_UNDERVALUED_ZONE }}
+            style={{ height: `${undervaluedZoneDisplayHeight}%`, backgroundColor: COLOR_UNDERVALUED_ZONE_ANGULAR }}
           />
           <div
             className="absolute left-0 w-full"
-            style={{ bottom: `${undervaluedZoneDisplayHeight}%`, height: `${aboutRightZoneDisplayHeight}%`, backgroundColor: COLOR_ABOUT_RIGHT_ZONE }}
+            style={{ bottom: `${undervaluedZoneDisplayHeight}%`, height: `${aboutRightZoneDisplayHeight}%`, backgroundColor: COLOR_ABOUT_RIGHT_ZONE_ANGULAR }}
           />
           <div
             className="absolute left-0 w-full"
-            style={{ bottom: `${undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight}%`, height: `${overvaluedZoneDisplayHeight}%`, backgroundColor: COLOR_OVERVALUED_ZONE }}
+            style={{ bottom: `${undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight}%`, height: `${overvaluedZoneDisplayHeight}%`, backgroundColor: COLOR_OVERVALUED_ZONE_ANGULAR }}
           />
 
           {/* Bars Container */}
           <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-2 sm:px-4">
             {/* Fair Value Bar Item */}
             <div className="flex flex-col items-center w-2/5 sm:w-1/3">
-              <div className="text-sm font-semibold mb-1 text-foreground"> {/* Reverted to text-foreground */}
+              <div className="text-sm font-semibold mb-1 text-black"> {/* Text color black for contrast on light bar */}
                 ${fairValue.toFixed(2)}
               </div>
               <div
                 className="w-12 sm:w-14 rounded-t-sm"
                 style={{
                   height: `${fairValuePercentage}%`,
-                  backgroundColor: COLOR_BAR_FILL_PRIMARY, // Reverted to primary color
-                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`, // Kept border
+                  backgroundColor: COLOR_BAR_FILL_ANGULAR,
+                  border: `${BAR_BORDER_WIDTH_ANGULAR} solid ${COLOR_BAR_BORDER_ANGULAR}`,
                 }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Fair Value</div>
@@ -101,15 +100,15 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
 
             {/* Share Price Bar Item */}
             <div className="flex flex-col items-center w-2/5 sm:w-1/3">
-              <div className="text-sm font-semibold mb-1 text-foreground"> {/* Reverted to text-foreground */}
+              <div className="text-sm font-semibold mb-1 text-black"> {/* Text color black for contrast on light bar */}
                 ${sharePrice.toFixed(2)}
               </div>
               <div
                 className="w-12 sm:w-14 rounded-t-sm"
                 style={{
                   height: `${sharePricePercentage}%`,
-                  backgroundColor: COLOR_BAR_FILL_PRIMARY, // Reverted to primary color
-                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`, // Kept border
+                  backgroundColor: COLOR_BAR_FILL_ANGULAR,
+                  border: `${BAR_BORDER_WIDTH_ANGULAR} solid ${COLOR_BAR_BORDER_ANGULAR}`,
                  }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Share Price</div>
@@ -122,7 +121,7 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
           <ListChecks className="mr-1.5 h-3.5 w-3.5" />
           MORE DETAILS
         </Button>
-        <Button variant="ghost" size="sm" className="text-xs">
+        <Button variant="ghost" size="sm" className="text-xs text-red-500 hover:text-red-600">
           <Share2 className="mr-1.5 h-3.5 w-3.5" />
           SHARE
         </Button>
