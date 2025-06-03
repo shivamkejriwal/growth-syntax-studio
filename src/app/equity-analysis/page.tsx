@@ -1,5 +1,4 @@
 
-
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -80,18 +79,17 @@ export default function EquityAnalysisPage() {
           </CardContent>
         </Card>
 
-        <SharePriceVsFairValueChart
-          currentPrice={sharePriceVsFairValueData.currentPrice}
-          fairValue={sharePriceVsFairValueData.fairValue}
-          undervaluedThresholdPercent={sharePriceVsFairValueData.undervaluedThresholdPercent}
-          overvaluedThresholdPercent={sharePriceVsFairValueData.overvaluedThresholdPercent}
-          currencySymbol={sharePriceVsFairValueData.currencySymbol}
-          companyTicker={companyData.ticker}
-          companyName={companyData.name}
-        />
-
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <IntroSnowflakeChart />
+          <SharePriceVsFairValueChart
+            currentPrice={sharePriceVsFairValueData.currentPrice}
+            fairValue={sharePriceVsFairValueData.fairValue}
+            undervaluedThresholdPercent={sharePriceVsFairValueData.undervaluedThresholdPercent}
+            overvaluedThresholdPercent={sharePriceVsFairValueData.overvaluedThresholdPercent}
+            currencySymbol={sharePriceVsFairValueData.currencySymbol}
+            companyTicker={companyData.ticker}
+            companyName={companyData.name}
+          />
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Stock Price History</CardTitle>
@@ -138,4 +136,3 @@ function InfoCard({ icon, title, value, subValue }: InfoCardProps) {
     </Card>
   );
 }
-
