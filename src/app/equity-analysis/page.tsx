@@ -1,4 +1,3 @@
-
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,8 @@ import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAre
 import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineChart";
 import DividendAnalysisChart from "@/components/equity/DividendAnalysisChart";
 import IntroSnowflakeChart from "@/components/equity/IntroSnowflakeChart";
+import RevenueExpensesBreakdownChart from "@/components/equity/RevenueExpensesBreakdownChart";
+
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -103,13 +104,14 @@ export default function EquityAnalysisPage() {
               <CardTitle>Quarterly Earnings</CardTitle>
             </CardHeader>
             <CardContent>
-              <SampleBarChart title={`${companyData.ticker} Quarterly Revenue & Profit`} />
+              <SampleBarChart title={`${companyData.ticker} Quarterly Revenue &amp; Profit`} />
             </CardContent>
           </Card>
           <ManagementStackedAreaChart />
           <FinancialHealthLineChart />
           <DividendAnalysisChart />
         </div>
+        <RevenueExpensesBreakdownChart />
       </div>
     </AppShell>
   );
