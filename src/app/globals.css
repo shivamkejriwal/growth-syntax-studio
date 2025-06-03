@@ -63,3 +63,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .diagonal-stripes-destructive {
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(var(--destructive) / 0.5),
+      hsl(var(--destructive) / 0.5) 10px,
+      hsl(var(--destructive) / 0.3) 10px,
+      hsl(var(--destructive) / 0.3) 20px
+    );
+  }
+}

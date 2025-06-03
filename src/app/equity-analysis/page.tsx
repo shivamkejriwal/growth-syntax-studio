@@ -8,10 +8,12 @@ import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
 import ValueGaugeChart from "@/components/equity/value-gauge-chart";
+import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; // New Import
 
 export default function EquityAnalysisPage() {
   const companyData = {
-    name: "Example Corp (EXMPL)",
+    name: "Example Corp",
+    ticker: "EXMPL",
     valuation: "$150.7B",
     peRatio: "25.3",
     financialHealth: "Stable (B+)",
@@ -29,6 +31,15 @@ export default function EquityAnalysisPage() {
     aboutRightZoneMax: 650,  
     chartDisplayMaxY: 850,   
   };
+
+  const sharePriceVsFairValueData = {
+    currentPrice: 37.96,
+    fairValue: 62.93,
+    undervaluedThresholdPercent: 20,
+    overvaluedThresholdPercent: 20,
+    currencySymbol: "US$",
+  };
+
 
   return (
     <AppShell>
@@ -48,7 +59,7 @@ export default function EquityAnalysisPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-2xl">{companyData.name}</CardTitle>
+                <CardTitle className="text-2xl">{companyData.name} ({companyData.ticker})</CardTitle>
                 <CardDescription>Detailed financial overview and performance metrics.</CardDescription>
               </div>
               <Image src="https://placehold.co/100x40.png" alt={`${companyData.name} logo`} width={100} height={40} data-ai-hint="company logo"/>
@@ -73,13 +84,24 @@ export default function EquityAnalysisPage() {
           </CardContent>
         </Card>
 
+        {/* New Share Price vs Fair Value Chart Section */}
+        <SharePriceVsFairValueChart
+          currentPrice={sharePriceVsFairValueData.currentPrice}
+          fairValue={sharePriceVsFairValueData.fairValue}
+          undervaluedThresholdPercent={sharePriceVsFairValueData.undervaluedThresholdPercent}
+          overvaluedThresholdPercent={sharePriceVsFairValueData.overvaluedThresholdPercent}
+          currencySymbol={sharePriceVsFairValueData.currencySymbol}
+          companyTicker={companyData.ticker}
+          companyName={companyData.name}
+        />
+
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Stock Price History</CardTitle>
             </CardHeader>
             <CardContent>
-              <SampleLineChart title="EXMPL Stock Price (1Y)" />
+              <SampleLineChart title={`${companyData.ticker} Stock Price (1Y)`} />
             </CardContent>
           </Card>
           <Card className="shadow-lg">
@@ -87,7 +109,7 @@ export default function EquityAnalysisPage() {
               <CardTitle>Quarterly Earnings</CardTitle>
             </CardHeader>
             <CardContent>
-              <SampleBarChart title="EXMPL Quarterly Revenue & Profit" />
+              <SampleBarChart title={`${companyData.ticker} Quarterly Revenue & Profit`} />
             </CardContent>
           </Card>
            <ValueGaugeChart
