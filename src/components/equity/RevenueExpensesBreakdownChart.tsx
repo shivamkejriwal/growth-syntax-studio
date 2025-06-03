@@ -3,97 +3,117 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { SampleLineChart } from "@/components/charts/sample-line-chart"; // Placeholder for timeline
-import { cn } from "@/lib/utils";
+import { Group } from '@visx/group';
+import { Sankey, SankeyNode, SankeyLink } from '@visx/sankey';
+import { Text } from '@visx/text';
+import { ParentSize } from '@visx/responsive';
+import { useTooltip, useTooltipInPortal, defaultStyles as tooltipStyles } from '@visx/tooltip';
+import { localPoint } from '@visx/event';
+
+// Define colors based on the image and app theme
+const colorRevenue = "hsl(var(--chart-1))"; // Blue from theme
+const colorGrossProfit = "hsl(var(--chart-5))"; // Light Teal/Gray from theme
+const colorCostOfSales = "#B8860B"; // DarkGoldenRod - for Cost of Sales
+const colorEarnings = "hsl(var(--chart-2))"; // Green from theme
+const colorExpenses = "#D2B48C"; // Tan - for general expenses
+const defaultLinkColor = "hsla(var(--muted-foreground), 0.3)";
+const nodeStrokeColor = "hsl(var(--border))";
 
 // Helper function to format currency (simplified)
-const formatCurrency = (value: number, unit: 'b' | 'm' | 'k' = 'b') => {
+const formatCurrency = (value: number | undefined, unit: 'b' | 'm' | 'k' = 'b', precision = 2) => {
+  if (value === undefined) return 'N/A';
   let valStr = "";
-  if (unit === 'b') valStr = (value / 1_000_000_000).toFixed(2) + 'b';
-  else if (unit === 'm') valStr = (value / 1_000_000).toFixed(2) + 'm';
-  else valStr = (value / 1_000).toFixed(2) + 'k';
+  if (unit === 'b') valStr = (value / 1_000_000_000).toFixed(precision) + 'b';
+  else if (unit === 'm') valStr = (value / 1_000_000).toFixed(precision) + 'm';
+  else valStr = (value / 1_000).toFixed(precision) + 'k';
   return `US$${valStr}`;
 };
 
-// Define colors based on the image
-const colorRevenue = "hsl(var(--chart-1))"; // Blue
-const colorGrossProfit = "hsl(var(--chart-5))"; // Light Teal/Gray
-const colorCostOfSales = "#B8860B"; // DarkGoldenRod - for Cost of Sales & Expenses
-const colorEarnings = "hsl(var(--chart-2))"; // Green
-const colorExpenses = "#D2B48C"; // Tan - for general expenses and sub-categories
-
-interface DataPointProps {
-  label: string;
-  value: string;
-  barColor: string;
-  barHeight?: string; // e.g., "h-16"
-  badgeText?: string;
-  badgeColor?: "blue" | "green" | "yellow";
-  className?: string;
-}
-
-const DataPoint: React.FC<DataPointProps> = ({ label, value, barColor, barHeight = "h-12", badgeText, badgeColor, className }) => {
-  let badgeBg = "";
-  if (badgeColor === "blue") badgeBg = "bg-blue-500 hover:bg-blue-600";
-  else if (badgeColor === "green") badgeBg = "bg-green-500 hover:bg-green-600";
-  else if (badgeColor === "yellow") badgeBg = "bg-yellow-600 hover:bg-yellow-700";
-  
-  return (
-    <div className={cn("flex items-start space-x-2 py-1", className)}>
-      <div className="flex-shrink-0">
-        <div style={{ backgroundColor: barColor }} className={cn("w-2 rounded-sm", barHeight)}></div>
-      </div>
-      <div className="flex-grow">
-        <div className="text-xs text-muted-foreground">{label}</div>
-        <div className="text-sm font-semibold">{value}</div>
-      </div>
-      {badgeText && (
-        <Badge variant="default" className={cn("ml-auto text-xs text-white", badgeBg)}>
-          {badgeText}
-        </Badge>
-      )}
-    </div>
-  );
+const revenueData = {
+  offRoad: 5570000000,
+  onRoad: 932400000,
+  marine: 472800000,
+  other: 97800000,
+  totalRevenue: 7070000000, // This will be sum of inputs in Sankey
+};
+const profitData = {
+  grossProfit: 1480000000,
+  costOfSales: 5590000000, // Total Revenue - Gross Profit
+};
+const earningsData = {
+  earnings: 40200000, // Gross Profit - Total Expenses
+  expensesTotal: 1440000000,
+};
+const expensesBreakdown = {
+  generalAdmin: 440200000,
+  researchDev: 332000000,
+  salesMarketing: 491600000,
+  nonOperating: 175300000,
 };
 
+const nodeData = [
+  { name: "Off-Road" }, { name: "On-Road" }, { name: "Marine" }, { name: "Other Revenue" },
+  { name: "Total Revenue" },
+  { name: "Cost of Sales" },
+  { name: "Gross Profit" },
+  { name: "General & Admin" }, { name: "Research & Dev" }, { name: "Sales & Marketing" }, { name: "Non-Operating Exp" },
+  { name: "Total Expenses" },
+  { name: "Net Earnings" } // Renamed from "Earnings" for clarity
+];
+
+const linkData = [
+  // Revenue sources to Total Revenue
+  { source: 0, target: 4, value: revenueData.offRoad },
+  { source: 1, target: 4, value: revenueData.onRoad },
+  { source: 2, target: 4, value: revenueData.marine },
+  { source: 3, target: 4, value: revenueData.other },
+
+  // Total Revenue splits into Gross Profit and Cost of Sales
+  { source: 4, target: 6, value: profitData.grossProfit }, // To Gross Profit
+  { source: 4, target: 5, value: profitData.costOfSales }, // To Cost of Sales
+
+  // Gross Profit splits into Net Earnings and Total Expenses
+  { source: 6, target: 12, value: earningsData.earnings }, // To Net Earnings
+  { source: 6, target: 11, value: earningsData.expensesTotal }, // To Total Expenses
+
+  // Total Expenses splits into individual expense categories
+  { source: 11, target: 7, value: expensesBreakdown.generalAdmin },
+  { source: 11, target: 8, value: expensesBreakdown.researchDev },
+  { source: 11, target: 9, value: expensesBreakdown.salesMarketing },
+  { source: 11, target: 10, value: expensesBreakdown.nonOperating },
+];
+
+const sankeyGraph = {
+  nodes: nodeData.map(node => ({ ...node })), // Clone nodes
+  links: linkData.map(link => ({ ...link })), // Clone links
+};
+
+const getNodeColor = (node: { name: string }): string => {
+  const { name } = node;
+  if (["Off-Road", "On-Road", "Marine", "Other Revenue", "Total Revenue"].includes(name)) return colorRevenue;
+  if (name === "Cost of Sales") return colorCostOfSales;
+  if (name === "Gross Profit") return colorGrossProfit;
+  if (["General & Admin", "Research & Dev", "Sales & Marketing", "Non-Operating Exp", "Total Expenses"].includes(name)) return colorExpenses;
+  if (name === "Net Earnings") return colorEarnings;
+  return 'grey';
+};
+
+const margin = { top: 20, right: 150, bottom: 20, left: 150 }; // Increased margins for labels
 
 const RevenueExpensesBreakdownChart: React.FC = () => {
-  // Data from the image
-  const revenueData = {
-    offRoad: 5570000000,
-    onRoad: 932400000,
-    marine: 472800000,
-    other: 97800000,
-    totalRevenue: 7070000000,
-  };
-  const profitData = {
-    grossProfit: 1480000000,
-    costOfSales: 5590000000,
-  };
-  const earningsData = {
-    earnings: 40200000,
-    expensesTotal: 1440000000,
-  };
-  const expensesBreakdown = {
-    generalAdmin: 440200000,
-    researchDev: 332000000,
-    salesMarketing: 491600000,
-    nonOperating: 175300000,
-  };
+  const {
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    showTooltip,
+    hideTooltip,
+  } = useTooltip<any>();
 
-  const calculateBarHeight = (value: number, maxValue: number, baseHeightClass: string = "h-16") => {
-    const minHeightPx = 8; // Minimum height for small values to be visible
-    const maxHeightPx = 64; // Corresponds to h-16 (4rem)
-    
-    if (maxValue === 0) return `h-[${minHeightPx}px]`;
-    const proportion = Math.max(0.05, value / maxValue); // Ensure a minimum proportion for visibility
-    const calculatedHeightPx = Math.max(minHeightPx, proportion * maxHeightPx);
-    return `h-[${Math.min(calculatedHeightPx, maxHeightPx).toFixed(0)}px]`;
-  }
-  
-  const totalRevenueSources = revenueData.offRoad + revenueData.onRoad + revenueData.marine + revenueData.other;
-
+  const { containerRef, TooltipInPortal } = useTooltipInPortal({
+    scroll: true,
+    detectBounds: true,
+  });
 
   return (
     <Card className="shadow-lg w-full">
@@ -104,72 +124,122 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Timeline Chart Placeholder */}
-        <div className="h-20 bg-muted/30 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+        <div className="h-20 bg-muted/30 rounded-md flex items-center justify-center text-muted-foreground text-sm mb-4">
           Timeline Chart Area (2014-2025) - Placeholder
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-11 gap-x-2 items-start">
-          {/* Column 1: Revenue Sources */}
-          <div className="md:col-span-2 space-y-1 pr-2">
-            <DataPoint label="Off-Road" value={formatCurrency(revenueData.offRoad, 'b')} barColor={colorRevenue} barHeight={calculateBarHeight(revenueData.offRoad, totalRevenueSources)} />
-            <DataPoint label="On-Road" value={formatCurrency(revenueData.onRoad, 'm')} barColor={colorRevenue} barHeight={calculateBarHeight(revenueData.onRoad, totalRevenueSources)} />
-            <DataPoint label="Marine" value={formatCurrency(revenueData.marine, 'm')} barColor={colorRevenue} barHeight={calculateBarHeight(revenueData.marine, totalRevenueSources)} />
-            <DataPoint label="Other" value={formatCurrency(revenueData.other, 'm')} barColor={colorRevenue} barHeight={calculateBarHeight(revenueData.other, totalRevenueSources)} />
-          </div>
+        <div ref={containerRef} className="w-full" style={{ height: '500px', position: 'relative' }}>
+          <ParentSize>
+            {({ width, height }) => (
+              <Sankey
+                data={sankeyGraph}
+                width={width}
+                height={height}
+                margin={margin}
+                nodeWidth={20}
+                nodePadding={25}
+                iterations={32} // Default is 32
+                nodeSort={null} // Preserve node order from data
+              >
+                {({ data }) => ( // data here is { nodes, links } with layout properties
+                  <Group>
+                    {/* Links */}
+                    {data.links.map((link, i) => (
+                      <SankeyLink
+                        key={`link-${i}`}
+                        link={link}
+                        sourceNodeColor={getNodeColor(link.source as any)}
+                        targetNodeColor={getNodeColor(link.target as any)}
+                        color={defaultLinkColor}
+                        strokeWidth={Math.max(1, link.width || 0)}
+                        opacity={0.7}
+                        onMouseEnter={(event) => {
+                          const point = localPoint(event) || { x: 0, y: 0 };
+                          showTooltip({
+                            tooltipData: `Value: ${formatCurrency(link.value, 'b')}`,
+                            tooltipTop: point.y,
+                            tooltipLeft: point.x,
+                          });
+                        }}
+                        onMouseLeave={hideTooltip}
+                      />
+                    ))}
 
-          {/* Connector Arrow (Simplified) */}
-          <div className="hidden md:flex md:col-span-1 items-center justify-center h-full">
-            <div className="w-1 h-3/4 bg-primary/75 relative">
-              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[10px] border-l-primary/75"></div>
-            </div>
-          </div>
-
-          {/* Column 2: Total Revenue, GP, CoS */}
-          <div className="md:col-span-2 space-y-1 pr-2">
-            <DataPoint label="Total Revenue" value={formatCurrency(revenueData.totalRevenue, 'b')} barColor={colorRevenue} barHeight="h-20" badgeText="Revenue" badgeColor="blue" />
-            <div className="pt-4 space-y-1">
-              <DataPoint label="Gross Profit" value={formatCurrency(profitData.grossProfit, 'b')} barColor={colorGrossProfit} barHeight={calculateBarHeight(profitData.grossProfit, revenueData.totalRevenue)} />
-              <DataPoint label="Cost of Sales" value={formatCurrency(profitData.costOfSales, 'b')} barColor={colorCostOfSales} barHeight={calculateBarHeight(profitData.costOfSales, revenueData.totalRevenue, "h-20")} />
-            </div>
-          </div>
-          
-          {/* Connector Arrow (Simplified) */}
-          <div className="hidden md:flex md:col-span-1 items-center justify-center h-full">
-             <div className="w-1 h-1/2 bg-primary/75 relative">
-              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[10px] border-l-primary/75"></div>
-            </div>
-          </div>
-
-
-          {/* Column 3: Earnings, Expenses */}
-          <div className="md:col-span-2 space-y-1 pr-2">
-            <DataPoint label="Earnings" value={formatCurrency(earningsData.earnings, 'm')} barColor={colorEarnings} barHeight={calculateBarHeight(earningsData.earnings, profitData.grossProfit)} badgeText="Earnings" badgeColor="green" />
-             <div className="pt-4">
-                <DataPoint label="Total Expenses" value={formatCurrency(earningsData.expensesTotal, 'b')} barColor={colorExpenses} barHeight={calculateBarHeight(earningsData.expensesTotal, profitData.grossProfit, "h-20")} badgeText="Expenses" badgeColor="yellow" />
-             </div>
-          </div>
-
-          {/* Connector Arrow (Simplified) */}
-           <div className="hidden md:flex md:col-span-1 items-center justify-center h-full">
-             <div className="w-1 h-1/2 bg-primary/75 relative">
-              <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[10px] border-l-primary/75"></div>
-            </div>
-          </div>
-
-          {/* Column 4: Expense Breakdown */}
-          <div className="md:col-span-2 space-y-1">
-            <DataPoint label="General &amp; Admin..." value={formatCurrency(expensesBreakdown.generalAdmin, 'm')} barColor={colorExpenses} barHeight={calculateBarHeight(expensesBreakdown.generalAdmin, earningsData.expensesTotal)} />
-            <DataPoint label="Research &amp; Devel..." value={formatCurrency(expensesBreakdown.researchDev, 'm')} barColor={colorExpenses} barHeight={calculateBarHeight(expensesBreakdown.researchDev, earningsData.expensesTotal)} />
-            <DataPoint label="Sales &amp; Marketin..." value={formatCurrency(expensesBreakdown.salesMarketing, 'm')} barColor={colorExpenses} barHeight={calculateBarHeight(expensesBreakdown.salesMarketing, earningsData.expensesTotal)} />
-            <DataPoint label="Non-Operating Ex..." value={formatCurrency(expensesBreakdown.nonOperating, 'm')} barColor={colorExpenses} barHeight={calculateBarHeight(expensesBreakdown.nonOperating, earningsData.expensesTotal)} />
-          </div>
+                    {/* Nodes */}
+                    {data.nodes.map((node, i) => (
+                       <SankeyNode
+                        key={`node-${i}`}
+                        node={node}
+                        color={getNodeColor(node)}
+                        stroke={nodeStrokeColor}
+                        strokeWidth={1}
+                        opacity={1}
+                        onMouseEnter={(event) => {
+                          const point = localPoint(event) || { x: 0, y: 0 };
+                           showTooltip({
+                            tooltipData: `${node.name}: ${formatCurrency(node.value, 'b')}`,
+                            tooltipTop: point.y,
+                            tooltipLeft: point.x,
+                          });
+                        }}
+                        onMouseLeave={hideTooltip}
+                      >
+                        {/* Custom Node Labeling */}
+                        <Text
+                          x={(node.x1 || 0) - (node.x0 || 0) > 50 ? 6 : (node.x1 || 0) - (node.x0 || 0) + 6} // position right or inside
+                          y={((node.y1 || 0) - (node.y0 || 0)) / 2}
+                          verticalAnchor="middle"
+                          textAnchor={(node.x1 || 0) - (node.x0 || 0) > 50 ? "start" : "start"}
+                          style={{ 
+                            fill: 'hsl(var(--foreground))', 
+                            fontSize: '10px',
+                            pointerEvents: 'none'
+                          }}
+                        >
+                          {node.name}
+                        </Text>
+                         <Text
+                          x={(node.x1 || 0) - (node.x0 || 0) > 50 ? 6 : (node.x1 || 0) - (node.x0 || 0) + 6}
+                          y={((node.y1 || 0) - (node.y0 || 0)) / 2 + 12}
+                          verticalAnchor="middle"
+                          textAnchor={(node.x1 || 0) - (node.x0 || 0) > 50 ? "start" : "start"}
+                          style={{ 
+                            fill: 'hsl(var(--muted-foreground))', 
+                            fontSize: '9px',
+                            fontWeight: 'bold',
+                            pointerEvents: 'none'
+                          }}
+                        >
+                          {formatCurrency(node.value, 'b')}
+                        </Text>
+                       </SankeyNode>
+                    ))}
+                  </Group>
+                )}
+              </Sankey>
+            )}
+          </ParentSize>
+           {tooltipOpen && tooltipData && (
+            <TooltipInPortal
+              key={Math.random()} // HACK ensure position recompute on Data change
+              top={tooltipTop}
+              left={tooltipLeft}
+              style={{
+                ...tooltipStyles,
+                background: 'hsl(var(--popover))',
+                color: 'hsl(var(--popover-foreground))',
+                border: '1px solid hsl(var(--border))',
+                fontSize: '12px',
+                padding: '8px',
+              }}
+            >
+              {tooltipData}
+            </TooltipInPortal>
+          )}
         </div>
-
       </CardContent>
     </Card>
   );
 };
 
 export default RevenueExpensesBreakdownChart;
-
