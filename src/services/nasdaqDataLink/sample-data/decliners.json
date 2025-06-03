@@ -1,0 +1,38 @@
+[
+  {
+    "symbol": "NFLX",
+    "last": 400.10,
+    "change": -8.50,
+    "percentChange": -2.08,
+    "volume": 32000000,
+    "name": "Netflix Inc.",
+    "exchange": "NASDAQ",
+    "industry": "Entertainment",
+    "sector": "Communication Services",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "ZM",
+    "last": 65.20,
+    "change": -1.30,
+    "percentChange": -1.95,
+    "volume": 18000000,
+    "name": "Zoom Video Communications",
+    "exchange": "NASDAQ",
+    "industry": "Technology",
+    "sector": "Electronics & IT",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "PYPL",
+    "last": 70.50,
+    "change": -1.10,
+    "percentChange": -1.54,
+    "volume": 22000000,
+    "name": "PayPal Holdings Inc.",
+    "exchange": "NASDAQ",
+    "industry": "Financial Services",
+    "sector": "Technology",
+    "time": "2025-06-02T20:00:00Z"
+  }
+]

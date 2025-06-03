@@ -1,0 +1,23 @@
+[
+  {
+    "symbol": "AAPL",
+    "tradePrice": 195.32,
+    "tradeSize": 100,
+    "tradeTime": "2025-06-02T20:00:00Z",
+    "exchange": "NASDAQ"
+  },
+  {
+    "symbol": "TSLA",
+    "tradePrice": 720.15,
+    "tradeSize": 50,
+    "tradeTime": "2025-06-02T20:00:00Z",
+    "exchange": "NASDAQ"
+  },
+  {
+    "symbol": "AMZN",
+    "tradePrice": 3400.50,
+    "tradeSize": 30,
+    "tradeTime": "2025-06-02T20:00:00Z",
+    "exchange": "NASDAQ"
+  }
+]

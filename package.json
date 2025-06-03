@@ -12,8 +12,9 @@
     "clean": "rm -rf .next",
     "reset": "rm -rf node_modules package-lock.json && npm run clean",
     "typecheck": "tsc --noEmit",
-    "update-companies": "npx ts-node src/services/updateCompanyPrices.ts",
-    "import-companies-from-csv": "npx ts-node src/services/importCompaniesFromCsv.ts"
+    "update-companies": "npx ts-node src/services/sharadarData/updateCompanyPrices.ts",
+    "import-companies-from-csv": "npx ts-node src/services/sharadarData/importCompaniesFromCsv.ts",
+    "pull-msft-data": "npx ts-node src/services/nasdaqDataLink/pullMsftData.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",

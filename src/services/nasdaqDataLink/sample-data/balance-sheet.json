@@ -1,0 +1,34 @@
+[
+  {
+    "symbol": "AAPL",
+    "calendardate": "2024-12-31",
+    "assets": 364840000000,
+    "bvps": 22.21,
+    "cashneq": 104757000000,
+    "debt": 61270000000,
+    "liabilities": 198298000000,
+    "equity": 166542000000,
+    "investmentsnc": 6891000000,
+    "receivables": 44261000000,
+    "inventory": 3742000000,
+    "ppnenet": 87546000000,
+    "intangibles": 78822000000,
+    "tangibles": 286018000000
+  },
+  {
+    "symbol": "TSLA",
+    "calendardate": "2024-12-31",
+    "assets": 120000000000,
+    "bvps": 15.00,
+    "cashneq": 25000000000,
+    "debt": 20000000000,
+    "liabilities": 60000000000,
+    "equity": 50000000000,
+    "investmentsnc": 2000000000,
+    "receivables": 15000000000,
+    "inventory": 3000000000,
+    "ppnenet": 40000000000,
+    "intangibles": 5000000000,
+    "tangibles": 100000000000
+  }
+]

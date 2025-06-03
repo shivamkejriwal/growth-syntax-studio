@@ -1,0 +1,38 @@
+[
+  {
+    "symbol": "AAPL",
+    "last": 195.32,
+    "change": 2.15,
+    "percentChange": 1.11,
+    "volume": 120000000,
+    "name": "Apple Inc.",
+    "exchange": "NASDAQ",
+    "industry": "Technology",
+    "sector": "Electronics & IT",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "last": 720.15,
+    "change": 10.25,
+    "percentChange": 1.44,
+    "volume": 95000000,
+    "name": "Tesla Inc.",
+    "exchange": "NASDAQ",
+    "industry": "Automotive",
+    "sector": "Consumer Discretionary",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "NVDA",
+    "last": 410.25,
+    "change": 5.10,
+    "percentChange": 1.26,
+    "volume": 78000000,
+    "name": "NVIDIA Corp.",
+    "exchange": "NASDAQ",
+    "industry": "Semiconductors",
+    "sector": "Technology",
+    "time": "2025-06-02T20:00:00Z"
+  }
+]

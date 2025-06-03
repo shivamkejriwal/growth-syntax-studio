@@ -1,0 +1,23 @@
+[
+  {
+    "symbol": "AAPL",
+    "price": 195.32,
+    "size": 100,
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "price": 720.15,
+    "size": 50,
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "AMZN",
+    "price": 3400.50,
+    "size": 30,
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  }
+]

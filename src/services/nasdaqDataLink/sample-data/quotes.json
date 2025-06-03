@@ -1,0 +1,35 @@
+[
+  {
+    "symbol": "AAPL",
+    "bid": 195.30,
+    "ask": 195.34,
+    "bidSize": 500,
+    "askSize": 600,
+    "last": 195.32,
+    "volume": 120000000,
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "bid": 719.90,
+    "ask": 720.40,
+    "bidSize": 300,
+    "askSize": 350,
+    "last": 720.15,
+    "volume": 95000000,
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "AMZN",
+    "bid": 3400.00,
+    "ask": 3401.00,
+    "bidSize": 200,
+    "askSize": 250,
+    "last": 3400.50,
+    "volume": 87000000,
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  }
+]

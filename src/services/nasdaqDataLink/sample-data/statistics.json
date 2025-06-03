@@ -1,0 +1,35 @@
+[
+  {
+    "symbol": "AAPL",
+    "marketcap": 3000000000000,
+    "high52week": 200.00,
+    "low52week": 150.00,
+    "avgvolume1m": 110000000,
+    "divyield": 0.006,
+    "pe": 32.5,
+    "eps": 6.01,
+    "date": "2025-06-02"
+  },
+  {
+    "symbol": "TSLA",
+    "marketcap": 900000000000,
+    "high52week": 800.00,
+    "low52week": 500.00,
+    "avgvolume1m": 90000000,
+    "divyield": 0.0,
+    "pe": 70.2,
+    "eps": 10.25,
+    "date": "2025-06-02"
+  },
+  {
+    "symbol": "AMZN",
+    "marketcap": 1700000000000,
+    "high52week": 3500.00,
+    "low52week": 2900.00,
+    "avgvolume1m": 80000000,
+    "divyield": 0.0,
+    "pe": 60.1,
+    "eps": 56.50,
+    "date": "2025-06-02"
+  }
+]

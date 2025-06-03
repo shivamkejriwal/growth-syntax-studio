@@ -1,0 +1,30 @@
+[
+  {
+    "symbol": "AAPL",
+    "figi": "BBG000BPH459",
+    "exchange": "NASDAQ",
+    "category": "Domestic Common Stock",
+    "cusips": "037833100",
+    "name": "Apple Inc.",
+    "industry": "Technology",
+    "companysite": "http://www.apple.com",
+    "sector": "Electronics & IT",
+    "secfilings": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000320193",
+    "siccode": 3571,
+    "location": "California, U.S.A"
+  },
+  {
+    "symbol": "TSLA",
+    "figi": "BBG000N9MNX3",
+    "exchange": "NASDAQ",
+    "category": "Domestic Common Stock",
+    "cusips": "88160R101",
+    "name": "Tesla Inc.",
+    "industry": "Automotive",
+    "companysite": "http://www.tesla.com",
+    "sector": "Consumer Discretionary",
+    "secfilings": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001318605",
+    "siccode": 3711,
+    "location": "California, U.S.A"
+  }
+]

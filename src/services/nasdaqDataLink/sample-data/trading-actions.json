@@ -1,0 +1,23 @@
+[
+  {
+    "symbol": "AAPL",
+    "action": "halted",
+    "reason": "Volatility Trading Pause",
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T19:45:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "action": "trading",
+    "reason": "Normal Trading",
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T20:00:00Z"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "paused",
+    "reason": "News Pending",
+    "exchange": "NASDAQ",
+    "time": "2025-06-02T19:50:00Z"
+  }
+]

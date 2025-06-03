@@ -1,0 +1,30 @@
+[
+  {
+    "symbol": "AAPL",
+    "calendardate": "2024-12-31",
+    "opex": 147163000,
+    "ncfi": -82169000,
+    "ncff": -100557000,
+    "fcf": 89348000,
+    "ncfo": 185375000,
+    "capex": -96027000,
+    "sbcomp": 8273000,
+    "depamor": 96655000,
+    "ncfcommon": -39060000,
+    "ncfinv": -17120000
+  },
+  {
+    "symbol": "TSLA",
+    "calendardate": "2024-12-31",
+    "opex": 80000000,
+    "ncfi": -40000000,
+    "ncff": -50000000,
+    "fcf": 40000000,
+    "ncfo": 90000000,
+    "capex": -30000000,
+    "sbcomp": 4000000,
+    "depamor": 30000000,
+    "ncfcommon": -10000000,
+    "ncfinv": -8000000
+  }
+]

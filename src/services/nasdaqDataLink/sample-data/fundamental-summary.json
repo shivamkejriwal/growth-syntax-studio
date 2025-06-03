@@ -1,0 +1,42 @@
+[
+  {
+    "symbol": "AAPL",
+    "calendardate": "2024-12-31",
+    "fcfps": 8.69,
+    "ps": 9.68,
+    "pe": 32.5,
+    "revenue": 400000000000,
+    "currentratio": 1.8,
+    "de": 1.2,
+    "roa": 0.21,
+    "roe": 0.45,
+    "gp": 135620000000,
+    "opinc": 83383000000,
+    "netmargin": 0.36,
+    "ebitda": 100239000000,
+    "bvps": 22.21,
+    "evebit": 22,
+    "evebitda": 18.73,
+    "tbvps": 38.16
+  },
+  {
+    "symbol": "TSLA",
+    "calendardate": "2024-12-31",
+    "fcfps": 5.12,
+    "ps": 12.34,
+    "pe": 70.2,
+    "revenue": 90000000000,
+    "currentratio": 1.5,
+    "de": 2.1,
+    "roa": 0.15,
+    "roe": 0.30,
+    "gp": 25000000000,
+    "opinc": 12000000000,
+    "netmargin": 0.25,
+    "ebitda": 18000000000,
+    "bvps": 15.00,
+    "evebit": 40,
+    "evebitda": 35.00,
+    "tbvps": 20.00
+  }
+]
