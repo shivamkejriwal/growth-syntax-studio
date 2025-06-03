@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
-import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent, Plane, FlaskConical, Shirt, Square, HeartPulse, Megaphone, Tv, Car, Building } from "lucide-react";
+import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent, Plane, FlaskConical, Shirt, Square, HeartPulse, Megaphone, Tv, Car, Building, Truck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import React, { useState } from 'react';
@@ -316,4 +316,3 @@ function StatCard({ icon, title, value, change, changeType }: StatCardProps) {
     </Card>
   );
 }
-
