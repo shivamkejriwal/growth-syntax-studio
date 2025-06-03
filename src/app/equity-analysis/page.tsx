@@ -1,4 +1,5 @@
 
+
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
 import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; 
+import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -75,7 +77,6 @@ export default function EquityAnalysisPage() {
           </CardContent>
         </Card>
 
-        {/* New Share Price vs Fair Value Chart Section */}
         <SharePriceVsFairValueChart
           currentPrice={sharePriceVsFairValueData.currentPrice}
           fairValue={sharePriceVsFairValueData.fairValue}
@@ -86,7 +87,7 @@ export default function EquityAnalysisPage() {
           companyName={companyData.name}
         />
 
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Stock Price History</CardTitle>
@@ -103,6 +104,7 @@ export default function EquityAnalysisPage() {
               <SampleBarChart title={`${companyData.ticker} Quarterly Revenue & Profit`} />
             </CardContent>
           </Card>
+          <ManagementStackedAreaChart />
         </div>
       </div>
     </AppShell>
