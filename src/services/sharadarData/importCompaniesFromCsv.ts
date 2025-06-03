@@ -2,9 +2,9 @@ import { config } from 'dotenv';
 config(); // Load environment variables from .env
 
 import { parseCsvData, type CsvRecord, createCsvTransform, processCsvWithTransform } from './csvUtils';
-import { addCompany, getCompanyByTicker } from '../lib/db/companies';
-import type { Company } from '../lib/db/companies';
-import tickerList from './tickerList.json';
+import { addCompany, getCompanyByTicker } from '../../lib/db/companies';
+import type { Company } from '../../lib/db/companies';
+import tickerList from '../tickerList.json';
 import { COMPANY_CSV_FILE_PATH } from './constants';
 import { toBoolean, toNumber } from './parseUtils';
 

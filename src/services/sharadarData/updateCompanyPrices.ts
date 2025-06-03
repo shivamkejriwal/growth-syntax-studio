@@ -3,7 +3,7 @@ config(); // Load environment variables from .env
 
 import { importEquityPrices, type EquityPriceData } from './importEquityPricesFromCsv';
 import { importCompanies } from './importCompaniesFromCsv';
-import type { Company } from '../lib/db/companies';
+import type { Company } from '../../lib/db/companies';
 import { COMPANY_CSV_FILE_PATH, EQUITY_PRICE_CSV_FILE_PATH, TARGET_DATE } from './constants';
 import { toNumber } from './parseUtils';
 
