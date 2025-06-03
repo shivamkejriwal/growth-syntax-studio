@@ -9,8 +9,8 @@ import { Text } from '@visx/text';
 import { ParentSize } from '@visx/responsive';
 import { useTooltip, useTooltipInPortal, defaultStyles as tooltipStyles } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
-import { sankeyLinkHorizontal } from 'd3-sankey';
 import type { SankeyLink as D3SankeyLink, SankeyNode as D3SankeyNode } from 'd3-sankey';
+import { sankeyLinkHorizontal } from 'd3-sankey';
 
 // Define colors based on the image and app theme
 const colorRevenue = "hsl(var(--chart-1))"; // Blue from theme
@@ -139,7 +139,7 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
           <ParentSize>
             {({ width, height }) => {
               if (width <= 0 || height <= 0) {
-                return null; // Or a loading indicator/placeholder
+                return null; 
               }
               return (
                 <Sankey
@@ -147,22 +147,30 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
                   width={width}
                   height={height}
                   margin={margin}
-                  nodeWidth={20} // Width of the node rectangles
-                  nodePadding={25} // Vertical space between nodes in the same column
-                  iterations={32} // Number of iterations for the layout algorithm
-                  nodeSort={null} // To maintain the order of nodes as defined in nodeData
+                  nodeWidth={20} 
+                  nodePadding={25} 
+                  iterations={32} 
+                  nodeSort={null} 
                 >
-                  {({ data: processedData }) => {
-                     if (!processedData || !processedData.nodes || !processedData.links) {
-                        console.warn('VisX Sankey layout returned invalid data.');
-                        return null; 
+                  {(sankeyLayout) => {
+                     if (!sankeyLayout || !sankeyLayout.data || !sankeyLayout.data.nodes || !sankeyLayout.data.links) {
+                        console.warn('VisX Sankey layout returned invalid or incomplete data.', sankeyLayout);
+                        return (
+                          <svg width={width} height={height}>
+                            <text x={width/2} y={height/2} textAnchor="middle" fill="hsl(var(--destructive))">
+                              Error: Could not render Sankey chart. Data might be invalid.
+                            </text>
+                          </svg>
+                        );
                       }
+                    const processedData = sankeyLayout.data;
                     return (
                       <Group>
                         {/* Render Links */}
                         {processedData.links.map((link, i) => {
                           const d3Link = link as D3SankeyLink<NodeData, LinkData>;
-                          const sourceNodeColor = d3Link.source && typeof d3Link.source !== 'number' ? getNodeColor(d3Link.source as D3SankeyNode<NodeData, LinkData>) : defaultLinkColor;
+                          const sourceNode = d3Link.source as D3SankeyNode<NodeData, LinkData>;
+                          const sourceNodeColor = getNodeColor(sourceNode);
                           const linkColor = sourceNodeColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
 
                           return (
@@ -176,7 +184,7 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
                               onMouseEnter={(event) => {
                                 const point = localPoint(event.currentTarget.ownerSVGElement!, event) || { x: 0, y: 0 };
                                 showTooltip({
-                                  tooltipData: `Value: ${formatCurrency(d3Link.value, 'b')}`,
+                                  tooltipData: `${(d3Link.source as D3SankeyNode<NodeData, LinkData>).name} → ${(d3Link.target as D3SankeyNode<NodeData, LinkData>).name}: ${formatCurrency(d3Link.value, 'b')}`,
                                   tooltipTop: point.y,
                                   tooltipLeft: point.x,
                                 });
@@ -218,7 +226,7 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
                                 x={nodeWidthVal > 50 && nodeHeightVal > 20 ? 6 : nodeWidthVal + 6}
                                 y={nodeHeightVal / 2}
                                 verticalAnchor="middle"
-                                textAnchor={(nodeWidthVal > 50 && nodeHeightVal > 20) ? "start" : "start"}
+                                textAnchor={(d3Node.x0 ?? 0) < width / 2 ? "start" : "end"}
                                 style={{
                                   fill: 'hsl(var(--foreground))',
                                   fontSize: '10px',
@@ -232,7 +240,7 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
                                   x={nodeWidthVal > 50 && nodeHeightVal > 20 ? 6 : nodeWidthVal + 6}
                                   y={nodeHeightVal / 2 + 12}
                                   verticalAnchor="middle"
-                                  textAnchor={(nodeWidthVal > 50 && nodeHeightVal > 20) ? "start" : "start"}
+                                  textAnchor={(d3Node.x0 ?? 0) < width / 2 ? "start" : "end"}
                                   style={{
                                     fill: 'hsl(var(--muted-foreground))',
                                     fontSize: '9px',
@@ -277,3 +285,4 @@ const RevenueExpensesBreakdownChart: React.FC = () => {
 };
 
 export default RevenueExpensesBreakdownChart;
+
