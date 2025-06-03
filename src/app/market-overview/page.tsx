@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
-import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent } from "lucide-react";
+import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent, Plane, FlaskConical, Shirt, Square, HeartPulse, Megaphone, Tv, Car, Building } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import React, { useState } from 'react';
@@ -55,7 +55,6 @@ const sectorData = [
   { name: "Finance", change: "-0.62%", icon: <Landmark className="h-5 w-5 text-muted-foreground" /> },
   { name: "Financial Services", change: "-1.00%", icon: <DollarSign className="h-5 w-5 text-muted-foreground" /> },
   { name: "Health Care", change: "-0.63%", icon: <BriefcaseMedical className="h-5 w-5 text-muted-foreground" /> },
-  { name: "Healthcare", change: "-1.51%", icon: <BriefcaseMedical className="h-5 w-5 text-muted-foreground" /> }, // Note: 'Healthcare' often synonym for 'Health Care'
   { name: "Industrials", change: "-0.79%", icon: <HardHat className="h-5 w-5 text-muted-foreground" /> },
   { name: "Miscellaneous", change: "-1.03%", icon: <ShoppingBag className="h-5 w-5 text-muted-foreground" /> },
   { name: "Public Utilities", change: "0.51%", icon: <Lightbulb className="h-5 w-5 text-muted-foreground" /> },
@@ -65,22 +64,36 @@ const sectorData = [
   { name: "Utilities", change: "0.53%", icon: <Settings2 className="h-5 w-5 text-muted-foreground" /> },
 ];
 
+const industryData = [
+  { name: "Accident & Health Insurance", change: "-0.28%", icon: <HeartPulse className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Advertising", change: "0.07%", icon: <Megaphone className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Advertising Agencies", change: "-1.79%", icon: <Tv className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Aerospace", change: "-0.69%", icon: <Plane className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Aerospace & Defense", change: "-0.96%", icon: <Shield className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Agricultural Chemicals", change: "-0.82%", icon: <FlaskConical className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Agricultural Inputs", change: "-1.44%", icon: <Square className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Air Freight & Delivery", change: "-1.40%", icon: <Truck className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Airlines", change: "-1.95%", icon: <Plane className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Airports & Air Services", change: "-2.28%", icon: <Square className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Aluminum", change: "-2.34%", icon: <Layers className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Apparel", change: "-0.55%", icon: <Shirt className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Apparel Manufacturing", change: "-1.77%", icon: <Square className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Apparel Retail", change: "-0.72%", icon: <Square className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Asset Management", change: "0.08%", icon: <DollarSign className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Auto & Truck Dealerships", change: "-1.45%", icon: <Square className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Auto Manufacturers", change: "0.21%", icon: <Car className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Auto Manufacturing", change: "-2.08%", icon: <Cog className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Auto Parts", change: "-1.88%", icon: <Wrench className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Banks", change: "-0.37%", icon: <Landmark className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Biotechnology", change: "+1.20%", icon: <FlaskConical className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Building Materials", change: "-0.15%", icon: <Building className="h-5 w-5 text-muted-foreground" /> },
+];
+
 
 export default function MarketOverviewPage() {
-  const [activeTab, setActiveTab] = useState("gainers");
+  const [activeMarketMoversTab, setActiveMarketMoversTab] = useState("gainers");
+  const [activeSegmentsTab, setActiveSegmentsTab] = useState("sectors");
 
-  const getTableData = () => {
-    switch (activeTab) {
-      case "gainers":
-        return sampleGainers;
-      case "losers":
-        return sampleLosers;
-      case "active":
-        return sampleActive;
-      default:
-        return [];
-    }
-  };
 
   return (
     <AppShell>
@@ -126,7 +139,7 @@ export default function MarketOverviewPage() {
               <CardDescription>Market data for {new Date().toLocaleDateString()}</CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <Tabs value={activeMarketMoversTab} onValueChange={setActiveMarketMoversTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="gainers">Gainers</TabsTrigger>
                   <TabsTrigger value="losers">Losers</TabsTrigger>
@@ -161,21 +174,42 @@ export default function MarketOverviewPage() {
 
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle className="text-lg">Sectors</CardTitle>
-              <Separator className="mt-2" />
+              <CardTitle className="text-lg">Sectors & Industries</CardTitle>
+               <Separator className="my-2" />
+                 <Tabs value={activeSegmentsTab} onValueChange={setActiveSegmentsTab} className="w-full pt-2">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="sectors">Sectors</TabsTrigger>
+                  <TabsTrigger value="industries">Industries</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {sectorData.map((sector) => (
-                <div key={sector.name} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    {sector.icon}
-                    <span>{sector.name}</span>
+            <CardContent className="space-y-3 max-h-[340px] overflow-y-auto">
+              <TabsContent value="sectors" className="mt-0">
+                {sectorData.map((sector) => (
+                  <div key={sector.name} className="flex items-center justify-between text-sm py-1.5">
+                    <div className="flex items-center gap-2">
+                      {sector.icon}
+                      <span>{sector.name}</span>
+                    </div>
+                    <span className={parseFloat(sector.change) >= 0 ? "text-primary" : "text-destructive"}>
+                      {sector.change}
+                    </span>
                   </div>
-                  <span className={parseFloat(sector.change) >= 0 ? "text-primary" : "text-destructive"}>
-                    {sector.change}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </TabsContent>
+              <TabsContent value="industries" className="mt-0">
+                {industryData.map((industry) => (
+                  <div key={industry.name} className="flex items-center justify-between text-sm py-1.5">
+                    <div className="flex items-center gap-2">
+                      {industry.icon}
+                      <span>{industry.name}</span>
+                    </div>
+                    <span className={parseFloat(industry.change) >= 0 ? "text-primary" : "text-destructive"}>
+                      {industry.change}
+                    </span>
+                  </div>
+                ))}
+              </TabsContent>
             </CardContent>
           </Card>
         </div>
@@ -282,3 +316,4 @@ function StatCard({ icon, title, value, change, changeType }: StatCardProps) {
     </Card>
   );
 }
+
