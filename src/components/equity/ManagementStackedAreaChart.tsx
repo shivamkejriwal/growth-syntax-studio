@@ -80,9 +80,9 @@ const ManagementStackedAreaChart: React.FC = () => {
               itemStyle={{ color: 'hsl(var(--foreground))' }}
               cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 1, fill: 'hsl(var(--primary))', fillOpacity: 0.1 }}
             />
-            <Area type="monotone" dataKey="research" stackId="1" stroke="hsl(var(--chart-4))" fill="url(#colorResearch)" strokeWidth={2} activeDot={{ r: 5 }} dot={(props) => <CustomizedDot {...props} color="hsl(var(--chart-4))" />} />
-            <Area type="monotone" dataKey="production" stackId="1" stroke="hsl(var(--chart-2))" fill="url(#colorProduction)" strokeWidth={2} activeDot={{ r: 5 }} dot={(props) => <CustomizedDot {...props} color="hsl(var(--chart-2))" />} />
-            <Area type="monotone" dataKey="acquisitions" stackId="1" stroke="hsl(var(--chart-1))" fill="url(#colorAcquisitions)" strokeWidth={2} activeDot={{ r: 5 }} dot={(props) => <CustomizedDot {...props} color="hsl(var(--chart-1))" />} />
+            <Area type="monotone" dataKey="research" stackId="1" stroke="hsl(var(--chart-4))" fill="url(#colorResearch)" strokeWidth={2} activeDot={{ r: 5 }} dot={({ key, ...restProps }) => <CustomizedDot key={key} {...restProps} color="hsl(var(--chart-4))" />} />
+            <Area type="monotone" dataKey="production" stackId="1" stroke="hsl(var(--chart-2))" fill="url(#colorProduction)" strokeWidth={2} activeDot={{ r: 5 }} dot={({ key, ...restProps }) => <CustomizedDot key={key} {...restProps} color="hsl(var(--chart-2))" />} />
+            <Area type="monotone" dataKey="acquisitions" stackId="1" stroke="hsl(var(--chart-1))" fill="url(#colorAcquisitions)" strokeWidth={2} activeDot={{ r: 5 }} dot={({ key, ...restProps }) => <CustomizedDot key={key} {...restProps} color="hsl(var(--chart-1))" />} />
             <Legend payload={legendPayload} wrapperStyle={{ paddingTop: '20px' }} align="center" verticalAlign="bottom" />
           </AreaChart>
         </ResponsiveContainer>
@@ -102,3 +102,4 @@ const ManagementStackedAreaChart: React.FC = () => {
 };
 
 export default ManagementStackedAreaChart;
+
