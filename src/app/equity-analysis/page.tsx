@@ -7,8 +7,7 @@ import { Search, Briefcase, Activity, DollarSign, Zap } from "lucide-react";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
-import ValueGaugeChart from "@/components/equity/value-gauge-chart";
-import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; // New Import
+import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; 
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -22,14 +21,6 @@ export default function EquityAnalysisPage() {
     analystRating: "Buy (4.2/5)",
     pastDividends: "$1.20/share (Annual)",
     yield: "2.1%",
-  };
-
-  const valueGaugeData = {
-    fairValue: 623.95,
-    sharePrice: 324.00,
-    undervaluedZoneMax: 350, 
-    aboutRightZoneMax: 650,  
-    chartDisplayMaxY: 850,   
   };
 
   const sharePriceVsFairValueData = {
@@ -95,7 +86,7 @@ export default function EquityAnalysisPage() {
           companyName={companyData.name}
         />
 
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Stock Price History</CardTitle>
@@ -112,13 +103,6 @@ export default function EquityAnalysisPage() {
               <SampleBarChart title={`${companyData.ticker} Quarterly Revenue & Profit`} />
             </CardContent>
           </Card>
-           <ValueGaugeChart
-            fairValue={valueGaugeData.fairValue}
-            sharePrice={valueGaugeData.sharePrice}
-            undervaluedZoneMax={valueGaugeData.undervaluedZoneMax}
-            aboutRightZoneMax={valueGaugeData.aboutRightZoneMax}
-            chartDisplayMaxY={valueGaugeData.chartDisplayMaxY}
-          />
         </div>
       </div>
     </AppShell>
