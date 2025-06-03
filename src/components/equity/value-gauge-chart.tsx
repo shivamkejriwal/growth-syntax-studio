@@ -14,10 +14,12 @@ interface ValueGaugeChartProps {
   chartDisplayMaxY: number;
 }
 
-const COLOR_UNDERVALUED = "rgba(144, 238, 144, 0.6)"; // Soft Green with opacity from PRD
-const COLOR_ABOUT_RIGHT = "rgba(245, 245, 220, 0.6)"; // Light Beige with opacity from PRD
-const COLOR_OVERVALUED = "rgba(240, 128, 128, 0.6)";  // Gentle Red with opacity from PRD
-const COLOR_BAR_FILL = "hsl(var(--primary))"; // Use primary theme color for bars
+// Colors derived from the provided image for closer matching
+const COLOR_UNDERVALUED_ZONE = "#7EA17E"; // Muted Green
+const COLOR_ABOUT_RIGHT_ZONE = "#F0C882"; // Muted Gold/Yellow
+const COLOR_OVERVALUED_ZONE = "#C85050";  // Muted Red
+const COLOR_BAR_FILL_IMG = "#96AAD2";      // Muted Blue/Grey for bars from image
+const COLOR_BAR_BORDER_IMG = "#000000";   // Black border for bars
 
 const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
   fairValue,
@@ -36,14 +38,13 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
 
   const undervaluedZoneDisplayHeight = calculatePercentageHeight(undervaluedZoneMax);
   const aboutRightZoneDisplayHeight = calculatePercentageHeight(aboutRightZoneMax - undervaluedZoneMax);
-  // Calculate overvalued zone height to fill remaining space, ensuring it's not negative
   const overvaluedZoneDisplayHeight = Math.max(0, 100 - (undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight));
 
 
   const legendItems = [
-    { label: "Undervalued", color: COLOR_UNDERVALUED.replace(', 0.6)', ')') }, // Remove opacity for legend swatch
-    { label: "About Right", color: COLOR_ABOUT_RIGHT.replace(', 0.6)', ')') },
-    { label: "Overvalued", color: COLOR_OVERVALUED.replace(', 0.6)', ')') },
+    { label: "Undervalued", color: COLOR_UNDERVALUED_ZONE },
+    { label: "About Right", color: COLOR_ABOUT_RIGHT_ZONE },
+    { label: "Overvalued", color: COLOR_OVERVALUED_ZONE },
   ];
 
   return (
@@ -52,7 +53,7 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
         <CardTitle className="text-xl">Value</CardTitle>
       </CardHeader>
       <CardContent className="pb-4 flex-grow flex flex-col">
-        <div className="flex justify-center items-center space-x-3 sm:space-x-4 mb-4 text-xs pl-1">
+        <div className="flex justify-start items-center space-x-3 sm:space-x-4 mb-4 text-xs pl-1">
           {legendItems.map((item) => (
             <div key={item.label} className="flex items-center">
               <span
@@ -68,29 +69,30 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
           {/* Background Zones: Rendered from bottom to top visually */}
           <div
             className="absolute bottom-0 left-0 w-full"
-            style={{ height: `${undervaluedZoneDisplayHeight}%`, backgroundColor: COLOR_UNDERVALUED }}
+            style={{ height: `${undervaluedZoneDisplayHeight}%`, backgroundColor: COLOR_UNDERVALUED_ZONE }}
           />
           <div
             className="absolute left-0 w-full"
-            style={{ bottom: `${undervaluedZoneDisplayHeight}%`, height: `${aboutRightZoneDisplayHeight}%`, backgroundColor: COLOR_ABOUT_RIGHT }}
+            style={{ bottom: `${undervaluedZoneDisplayHeight}%`, height: `${aboutRightZoneDisplayHeight}%`, backgroundColor: COLOR_ABOUT_RIGHT_ZONE }}
           />
           <div
             className="absolute left-0 w-full"
-            style={{ bottom: `${undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight}%`, height: `${overvaluedZoneDisplayHeight}%`, backgroundColor: COLOR_OVERVALUED }}
+            style={{ bottom: `${undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight}%`, height: `${overvaluedZoneDisplayHeight}%`, backgroundColor: COLOR_OVERVALUED_ZONE }}
           />
 
           {/* Bars */}
           <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-2 sm:px-4">
             {/* Fair Value Bar */}
             <div className="flex flex-col items-center w-2/5 sm:w-1/3">
-              <div className="text-sm font-semibold mb-1 text-foreground">
+              <div className="text-sm font-semibold mb-1 text-black">
                 ${fairValue.toFixed(2)}
               </div>
               <div
-                className="w-12 sm:w-14 rounded-t-sm shadow-md"
+                className="w-12 sm:w-14 rounded-t-sm"
                 style={{ 
                   height: `${fairValuePercentage}%`, 
-                  backgroundColor: COLOR_BAR_FILL,
+                  backgroundColor: COLOR_BAR_FILL_IMG,
+                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`,
                 }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Fair Value</div>
@@ -98,14 +100,15 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
 
             {/* Share Price Bar */}
             <div className="flex flex-col items-center w-2/5 sm:w-1/3">
-              <div className="text-sm font-semibold mb-1 text-foreground">
+              <div className="text-sm font-semibold mb-1 text-black">
                 ${sharePrice.toFixed(2)}
               </div>
               <div
-                className="w-12 sm:w-14 rounded-t-sm shadow-md"
+                className="w-12 sm:w-14 rounded-t-sm"
                 style={{ 
                   height: `${sharePricePercentage}%`, 
-                  backgroundColor: COLOR_BAR_FILL,
+                  backgroundColor: COLOR_BAR_FILL_IMG,
+                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`,
                  }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Share Price</div>
@@ -128,4 +131,3 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
 };
 
 export default ValueGaugeChart;
-
