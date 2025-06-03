@@ -6,38 +6,63 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
-import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown } from "lucide-react";
+import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import React, { useState } from 'react';
+import { Separator } from "@/components/ui/separator";
 
 const sampleGainers = [
-  { ticker: "AAPL", close: 165.30, change: "+3.32%", changeType: "positive" },
-  { ticker: "BA", close: 197.85, change: "+0.93%", changeType: "positive" },
-  { ticker: "BNTX", close: 351.74, change: "+4.81%", changeType: "positive" },
-  { ticker: "CHGG", close: 27.85, change: "+6.70%", changeType: "positive" },
-  { ticker: "CPIX", close: 5.03, change: "+21.79%", changeType: "positive" },
-  { ticker: "GRTS", close: 13.20, change: "+25.95%", changeType: "positive" },
-  { ticker: "LI", close: 35.44, change: "+2.96%", changeType: "positive" },
-  { ticker: "MEIP", close: 3.37, change: "+19.50%", changeType: "positive" },
-  { ticker: "MRNA", close: 352.43, change: "+0.24%", changeType: "positive" },
-  { ticker: "MSTR", close: 721.43, change: "+3.32%", changeType: "positive" },
+  { ticker: "AAPL", close: 165.30, change: "+3.32%", changeType: "positive" as const },
+  { ticker: "BA", close: 197.85, change: "+0.93%", changeType: "positive" as const },
+  { ticker: "BNTX", close: 351.74, change: "+4.81%", changeType: "positive" as const },
+  { ticker: "CHGG", close: 27.85, change: "+6.70%", changeType: "positive" as const },
+  { ticker: "CPIX", close: 5.03, change: "+21.79%", changeType: "positive" as const },
+  { ticker: "GRTS", close: 13.20, change: "+25.95%", changeType: "positive" as const },
+  { ticker: "LI", close: 35.44, change: "+2.96%", changeType: "positive" as const },
+  { ticker: "MEIP", close: 3.37, change: "+19.50%", changeType: "positive" as const },
+  { ticker: "MRNA", close: 352.43, change: "+0.24%", changeType: "positive" as const },
+  { ticker: "MSTR", close: 721.43, change: "+3.32%", changeType: "positive" as const },
 ];
 
 const sampleLosers = [
-  { ticker: "NFLX", close: 400.10, change: "-2.08%", changeType: "negative" },
-  { ticker: "ZM", close: 65.20, change: "-1.95%", changeType: "negative" },
-  { ticker: "PYPL", close: 70.50, change: "-1.54%", changeType: "negative" },
-  { ticker: "COIN", close: 150.80, change: "-3.10%", changeType: "negative" },
-  { ticker: "HOOD", close: 10.20, change: "-4.50%", changeType: "negative" },
+  { ticker: "NFLX", close: 400.10, change: "-2.08%", changeType: "negative" as const },
+  { ticker: "ZM", close: 65.20, change: "-1.95%", changeType: "negative" as const },
+  { ticker: "PYPL", close: 70.50, change: "-1.54%", changeType: "negative" as const },
+  { ticker: "COIN", close: 150.80, change: "-3.10%", changeType: "negative" as const },
+  { ticker: "HOOD", close: 10.20, change: "-4.50%", changeType: "negative" as const },
 ];
 
 const sampleActive = [
-  { ticker: "TSLA", close: 720.15, change: "+1.44%", changeType: "positive", volume: "120M" },
-  { ticker: "AMD", close: 105.50, change: "-0.50%", changeType: "negative", volume: "95M" },
-  { ticker: "NVDA", close: 410.25, change: "+1.26%", changeType: "positive", volume: "80M" },
-  { ticker: "F", close: 12.50, change: "+0.80%", changeType: "positive", volume: "75M" },
-  { ticker: "BAC", close: 35.00, change: "-0.20%", changeType: "negative", volume: "70M" },
+  { ticker: "TSLA", close: 720.15, change: "+1.44%", changeType: "positive" as const, volume: "120M" },
+  { ticker: "AMD", close: 105.50, change: "-0.50%", changeType: "negative" as const, volume: "95M" },
+  { ticker: "NVDA", close: 410.25, change: "+1.26%", changeType: "positive" as const, volume: "80M" },
+  { ticker: "F", close: 12.50, change: "+0.80%", changeType: "positive" as const, volume: "75M" },
+  { ticker: "BAC", close: 35.00, change: "-0.20%", changeType: "negative" as const, volume: "70M" },
+];
+
+const sectorData = [
+  { name: "Basic Industries", change: "-0.83%", icon: <Cog className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Basic Materials", change: "-0.91%", icon: <Layers className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Capital Goods", change: "-1.16%", icon: <Wrench className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Communication Services", change: "-0.66%", icon: <MessageSquare className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Consumer Cyclical", change: "-1.39%", icon: <ShoppingCart className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Consumer Defensive", change: "-1.17%", icon: <Shield className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Consumer Durables", change: "-1.11%", icon: <ShoppingCart className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Consumer Non-Durables", change: "-0.29%", icon: <Tag className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Consumer Services", change: "-0.61%", icon: <Users className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Energy", change: "-2.16%", icon: <Flame className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Finance", change: "-0.62%", icon: <Landmark className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Financial Services", change: "-1.00%", icon: <DollarSign className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Health Care", change: "-0.63%", icon: <BriefcaseMedical className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Healthcare", change: "-1.51%", icon: <BriefcaseMedical className="h-5 w-5 text-muted-foreground" /> }, // Note: 'Healthcare' often synonym for 'Health Care'
+  { name: "Industrials", change: "-0.79%", icon: <HardHat className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Miscellaneous", change: "-1.03%", icon: <ShoppingBag className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Public Utilities", change: "0.51%", icon: <Lightbulb className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Real Estate", change: "0.01%", icon: <Home className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Technology", change: "0.48%", icon: <Zap className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Transportation", change: "-0.95%", icon: <BusFront className="h-5 w-5 text-muted-foreground" /> },
+  { name: "Utilities", change: "0.53%", icon: <Settings2 className="h-5 w-5 text-muted-foreground" /> },
 ];
 
 
@@ -94,50 +119,71 @@ export default function MarketOverviewPage() {
           <StatCard icon={<Briefcase />} title="Tech Sector Performance" value="Leading" change="+1.5% today" changeType="positive" />
         </div>
 
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle>Market Movers & Activity</CardTitle>
-            <CardDescription>Market data for {new Date().toLocaleDateString()}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="gainers">Gainers</TabsTrigger>
-                <TabsTrigger value="losers">Losers</TabsTrigger>
-                <TabsTrigger value="active">Active</TabsTrigger>
-              </TabsList>
-              <TabsContent value="gainers">
-                <MarketDataTable data={sampleGainers} type="gainer-loser" />
-              </TabsContent>
-              <TabsContent value="losers">
-                <MarketDataTable data={sampleLosers} type="gainer-loser" />
-              </TabsContent>
-              <TabsContent value="active">
-                <MarketDataTable data={sampleActive} type="active" />
-              </TabsContent>
-            </Tabs>
-             <div className="mt-4 flex items-center justify-between text-sm">
-                <div className="flex items-center text-primary">
-                  <TrendingUp className="mr-1 h-4 w-4" />
-                  <span>Advancers: 2242</span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="shadow-lg lg:col-span-2">
+            <CardHeader>
+              <CardTitle>Market Movers & Activity</CardTitle>
+              <CardDescription>Market data for {new Date().toLocaleDateString()}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="gainers">Gainers</TabsTrigger>
+                  <TabsTrigger value="losers">Losers</TabsTrigger>
+                  <TabsTrigger value="active">Active</TabsTrigger>
+                </TabsList>
+                <TabsContent value="gainers">
+                  <MarketDataTable data={sampleGainers} type="gainer-loser" />
+                </TabsContent>
+                <TabsContent value="losers">
+                  <MarketDataTable data={sampleLosers} type="gainer-loser" />
+                </TabsContent>
+                <TabsContent value="active">
+                  <MarketDataTable data={sampleActive} type="active" />
+                </TabsContent>
+              </Tabs>
+               <div className="mt-4 flex items-center justify-between text-sm">
+                  <div className="flex items-center text-primary">
+                    <TrendingUp className="mr-1 h-4 w-4" />
+                    <span>Advancers: 2242</span>
+                  </div>
+                  <div className="h-2 w-1/2 bg-muted rounded-full relative">
+                      <div className="h-2 w-1/2 bg-primary rounded-l-full"></div>
+                      <div className="absolute top-1/2 left-1/2 h-4 w-1 bg-primary-foreground border border-primary rounded-sm -translate-y-1/2 -translate-x-1/2"></div>
+                  </div>
+                  <div className="flex items-center text-destructive">
+                    <TrendingDown className="mr-1 h-4 w-4" />
+                    <span>Decliners: 5806</span>
+                  </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-lg">Sectors</CardTitle>
+              <Separator className="mt-2" />
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {sectorData.map((sector) => (
+                <div key={sector.name} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    {sector.icon}
+                    <span>{sector.name}</span>
+                  </div>
+                  <span className={parseFloat(sector.change) >= 0 ? "text-primary" : "text-destructive"}>
+                    {sector.change}
+                  </span>
                 </div>
-                {/* Placeholder for the slider, can be implemented later */}
-                <div className="h-2 w-1/2 bg-muted rounded-full relative">
-                    <div className="h-2 w-1/2 bg-primary rounded-l-full"></div>
-                    <div className="absolute top-1/2 left-1/2 h-4 w-1 bg-primary-foreground border border-primary rounded-sm -translate-y-1/2 -translate-x-1/2"></div>
-                </div>
-                <div className="flex items-center text-destructive">
-                  <TrendingDown className="mr-1 h-4 w-4" />
-                  <span>Decliners: 5806</span>
-                </div>
-            </div>
-          </CardContent>
-        </Card>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
         
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle>Sector Performance</CardTitle>
+              <CardTitle>Sector Performance Chart</CardTitle>
               <CardDescription>Year-to-date performance by major sectors.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -184,7 +230,7 @@ interface MarketDataTableProps {
 
 function MarketDataTable({ data, type }: MarketDataTableProps) {
   return (
-    <div className="max-h-[400px] overflow-y-auto">
+    <div className="max-h-[300px] overflow-y-auto"> {/* Adjusted max height */}
       <Table>
         <TableHeader>
           <TableRow>
@@ -236,4 +282,3 @@ function StatCard({ icon, title, value, change, changeType }: StatCardProps) {
     </Card>
   );
 }
-
