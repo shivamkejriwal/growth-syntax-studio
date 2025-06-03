@@ -18,7 +18,7 @@ interface ValueGaugeChartProps {
 const COLOR_UNDERVALUED_ZONE = "#7EA17E"; // Muted Green
 const COLOR_ABOUT_RIGHT_ZONE = "#F0C882"; // Muted Gold/Yellow
 const COLOR_OVERVALUED_ZONE = "#C85050";  // Muted Red
-const COLOR_BAR_FILL_IMG = "#96AAD2";      // Muted Blue/Grey for bars from image
+const COLOR_BAR_FILL_PRIMARY = "hsl(var(--primary))"; // Using theme primary color for definite visibility
 const COLOR_BAR_BORDER_IMG = "#000000";   // Black border for bars
 
 const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
@@ -65,7 +65,8 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
           ))}
         </div>
 
-        <div className="relative h-72 w-full max-w-xs mx-auto mt-4 flex-grow"> {/* Container for zones and bars */}
+        {/* Ensure this container has explicit height and does not rely on flex-grow if children use % height */}
+        <div className="relative h-72 w-full max-w-xs mx-auto mt-4"> {/* Removed flex-grow */}
           {/* Background Zones: Rendered from bottom to top visually */}
           <div
             className="absolute bottom-0 left-0 w-full"
@@ -80,35 +81,35 @@ const ValueGaugeChart: FC<ValueGaugeChartProps> = ({
             style={{ bottom: `${undervaluedZoneDisplayHeight + aboutRightZoneDisplayHeight}%`, height: `${overvaluedZoneDisplayHeight}%`, backgroundColor: COLOR_OVERVALUED_ZONE }}
           />
 
-          {/* Bars */}
+          {/* Bars Container */}
           <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-2 sm:px-4">
-            {/* Fair Value Bar */}
+            {/* Fair Value Bar Item */}
             <div className="flex flex-col items-center w-2/5 sm:w-1/3">
-              <div className="text-sm font-semibold mb-1 text-black">
+              <div className="text-sm font-semibold mb-1 text-foreground"> {/* Reverted to text-foreground */}
                 ${fairValue.toFixed(2)}
               </div>
               <div
                 className="w-12 sm:w-14 rounded-t-sm"
-                style={{ 
-                  height: `${fairValuePercentage}%`, 
-                  backgroundColor: COLOR_BAR_FILL_IMG,
-                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`,
+                style={{
+                  height: `${fairValuePercentage}%`,
+                  backgroundColor: COLOR_BAR_FILL_PRIMARY, // Reverted to primary color
+                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`, // Kept border
                 }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Fair Value</div>
             </div>
 
-            {/* Share Price Bar */}
+            {/* Share Price Bar Item */}
             <div className="flex flex-col items-center w-2/5 sm:w-1/3">
-              <div className="text-sm font-semibold mb-1 text-black">
+              <div className="text-sm font-semibold mb-1 text-foreground"> {/* Reverted to text-foreground */}
                 ${sharePrice.toFixed(2)}
               </div>
               <div
                 className="w-12 sm:w-14 rounded-t-sm"
-                style={{ 
-                  height: `${sharePricePercentage}%`, 
-                  backgroundColor: COLOR_BAR_FILL_IMG,
-                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`,
+                style={{
+                  height: `${sharePricePercentage}%`,
+                  backgroundColor: COLOR_BAR_FILL_PRIMARY, // Reverted to primary color
+                  border: `2px solid ${COLOR_BAR_BORDER_IMG}`, // Kept border
                  }}
               />
               <div className="mt-2 text-xs text-muted-foreground text-center">Share Price</div>
