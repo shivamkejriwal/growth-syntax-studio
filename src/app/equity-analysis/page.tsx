@@ -12,6 +12,7 @@ import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValu
 import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
 import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineChart";
 import DividendAnalysisChart from "@/components/equity/DividendAnalysisChart";
+import IntroSnowflakeChart from "@/components/equity/IntroSnowflakeChart";
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -78,6 +79,8 @@ export default function EquityAnalysisPage() {
             </Card>
           </CardContent>
         </Card>
+
+        <IntroSnowflakeChart />
 
         <SharePriceVsFairValueChart
           currentPrice={sharePriceVsFairValueData.currentPrice}
