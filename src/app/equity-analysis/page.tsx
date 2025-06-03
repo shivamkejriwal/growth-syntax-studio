@@ -11,6 +11,7 @@ import Image from "next/image";
 import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart"; 
 import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
 import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineChart";
+import DividendAnalysisChart from "@/components/equity/DividendAnalysisChart";
 
 export default function EquityAnalysisPage() {
   const companyData = {
@@ -109,6 +110,7 @@ export default function EquityAnalysisPage() {
         </div>
         
         <FinancialHealthLineChart />
+        <DividendAnalysisChart />
 
       </div>
     </AppShell>
@@ -134,3 +136,4 @@ function InfoCard({ icon, title, value, subValue }: InfoCardProps) {
     </Card>
   );
 }
+
