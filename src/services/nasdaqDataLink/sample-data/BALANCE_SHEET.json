@@ -1,0 +1,10 @@
+[
+  {
+    "symbol": "AAPL",
+    "fiscalyear": "2024",
+    "totaldebt": 110000000000,
+    "totalassets": 352583000000,
+    "debttoequity": 1.5,
+    "cashandequivalents": 62000000000
+  }
+]

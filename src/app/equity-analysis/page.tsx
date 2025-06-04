@@ -1,10 +1,10 @@
+"use client";
+
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Briefcase, Activity, DollarSign, Zap } from "lucide-react";
-import { SampleLineChart } from "@/components/charts/sample-line-chart";
-import { SampleBarChart } from "@/components/charts/sample-bar-chart";
 import Image from "next/image";
 import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart";
 import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
@@ -14,178 +14,277 @@ import IntroSnowflakeChart from "@/components/equity/IntroSnowflakeChart";
 import RevenueExpensesBreakdownChart from "@/components/equity/RevenueExpensesBreakdownChart";
 import { StockPriceHistoryChart } from "@/components/equity/StockPriceHistoryChart";
 import { QuarterlyEarningsChart } from "@/components/equity/QuarterlyEarningsChart";
+import Finance from "@/math/finance";
+import { getSampleData } from "@/services/nasdaqDataLink/sampleDataApi";
+import { useEffect, useState } from "react";
 
-// --- Stock Price History Sample Data ---
-const stockPriceHistoryData = [
-  { date: '2024-06-01', price: 37.5 },
-  { date: '2024-06-08', price: 38.1 },
-  { date: '2024-06-15', price: 39.0 },
-  { date: '2024-06-22', price: 38.7 },
-  { date: '2024-06-29', price: 39.5 },
-  { date: '2024-07-06', price: 40.2 },
-  { date: '2024-07-13', price: 41.0 },
-  { date: '2024-07-20', price: 40.8 },
-  { date: '2024-07-27', price: 41.5 },
-  { date: '2024-08-03', price: 42.0 },
-  { date: '2024-08-10', price: 41.7 },
-  { date: '2024-08-17', price: 42.3 },
-  { date: '2024-08-24', price: 43.0 },
-  { date: '2024-08-31', price: 43.5 },
-  { date: '2024-09-07', price: 44.0 },
-  { date: '2024-09-14', price: 43.8 },
-  { date: '2024-09-21', price: 44.5 },
-  { date: '2024-09-28', price: 45.0 },
-  { date: '2024-10-05', price: 45.7 },
-  { date: '2024-10-12', price: 46.2 },
-  { date: '2024-10-19', price: 46.0 },
-  { date: '2024-10-26', price: 46.8 },
-  { date: '2024-11-02', price: 47.2 },
-  { date: '2024-11-09', price: 47.5 },
-  { date: '2024-11-16', price: 48.0 },
-  { date: '2024-11-23', price: 48.3 },
-  { date: '2024-11-30', price: 48.7 },
-  { date: '2024-12-07', price: 49.0 },
-  { date: '2024-12-14', price: 49.5 },
-  { date: '2024-12-21', price: 50.0 },
-  { date: '2024-12-28', price: 50.3 },
-  { date: '2025-01-04', price: 50.7 },
-  { date: '2025-01-11', price: 51.0 },
-  { date: '2025-01-18', price: 51.5 },
-  { date: '2025-01-25', price: 52.0 },
-  { date: '2025-02-01', price: 52.3 },
-  { date: '2025-02-08', price: 52.7 },
-  { date: '2025-02-15', price: 53.0 },
-  { date: '2025-02-22', price: 53.5 },
-  { date: '2025-03-01', price: 54.0 },
-  { date: '2025-03-08', price: 54.3 },
-  { date: '2025-03-15', price: 54.7 },
-  { date: '2025-03-22', price: 55.0 },
-  { date: '2025-03-29', price: 55.5 },
-  { date: '2025-04-05', price: 56.0 },
-  { date: '2025-04-12', price: 56.3 },
-  { date: '2025-04-19', price: 56.7 },
-  { date: '2025-04-26', price: 57.0 },
-  { date: '2025-05-03', price: 57.5 },
-  { date: '2025-05-10', price: 58.0 },
-  { date: '2025-05-17', price: 58.3 },
-  { date: '2025-05-24', price: 58.7 },
-  { date: '2025-05-31', price: 59.0 },
-];
+// --- Unified Company Profile & Sample Data ---
+interface CompanyProfile {
+  name: string;
+  ticker: string;
+  sector: string;
+  currency: string;
+  logoUrl: string;
+  valuation: string;
+  peRatio: string;
+  financialHealth: string;
+  debtToEquity: string;
+  futurePerformance: string;
+  analystRating: string;
+  pastDividends: string;
+  yield: string;
+  eps: string;
+  epsGrowth: string;
+  revenueGrowth: string;
+  revenueGrowthPeriod: string;
+}
 
-// --- Management Chart Sample Data ---
-const managementChartData = [
-  { year: '2011', research: 100, production: 150, acquisitions: 200 },
-  { year: '2012', research: 120, production: 180, acquisitions: 220 },
-  { year: '2013', research: 200, production: 250, acquisitions: 210 },
-  { year: '2014', research: 180, production: 220, acquisitions: 230 },
-  { year: '2015', research: 190, production: 240, acquisitions: 250 },
-  { year: '2016', research: 170, production: 260, acquisitions: 270 },
-  { year: '2017', research: 160, production: 230, acquisitions: 280 },
-  { year: '2018', research: 220, production: 300, acquisitions: 260 },
-  { year: '2019', research: 210, production: 270, acquisitions: 240 },
-  { year: '2020', research: 200, production: 250, acquisitions: 200 },
-];
-
-// --- Financial Health Sample Data ---
-const financialHealthData = [
-  { year: '2012', debt: 150, netWorth: 400 },
-  { year: '2013', debt: 160, netWorth: 550 },
-  { year: '2014', debt: 165, netWorth: 520 },
-  { year: '2015', debt: 170, netWorth: 530 },
-  { year: '2016', debt: 200, netWorth: 540 },
-  { year: '2017', debt: 280, netWorth: 450 },
-  { year: '2018', debt: 250, netWorth: 460 },
-  { year: '2019', debt: 240, netWorth: 455 },
-  { year: '2020', debt: 260, netWorth: 470 },
-  { year: '2021', debt: 300, netWorth: 500 },
-];
-
-// --- Dividend Analysis Sample Data ---
-const dividendChartData = [
-  { year: '2012', dps: 0.50 },
-  { year: '2013', dps: 0.55 },
-  { year: '2014', dps: 0.62 },
-  { year: '2015', dps: 0.68 },
-  { year: '2016', dps: 0.75 },
-  { year: '2017', dps: 0.83 },
-  { year: '2018', dps: 0.90 },
-  { year: '2019', dps: 1.00 },
-  { year: '2020', dps: 1.05 },
-  { year: '2021', dps: 1.12 },
-];
-const dividendMetrics = [
-  { label: "Score", value: "7" },
-  { label: "Safety", value: "8" },
-  { label: "Dividend History", value: "10" },
-  { label: "Increasing Dividends", value: "10" },
-  { label: "Stability", value: "1" },
-  { label: "Dividend Yield", value: "2.5%", isPercentage: true },
-];
-
-// --- Quarterly Earnings Sample Data ---
-const quarterlyEarningsData = [
-  { quarter: 'Q1 2024', revenue: 1200, profit: 300 },
-  { quarter: 'Q2 2024', revenue: 1350, profit: 350 },
-  { quarter: 'Q3 2024', revenue: 1400, profit: 370 },
-  { quarter: 'Q4 2024', revenue: 1500, profit: 400 },
-  { quarter: 'Q1 2025', revenue: 1550, profit: 420 },
-];
-
-// --- Revenue & Expenses Breakdown Sample Data ---
-const revenueExpensesData = {
-  nodes: [
-    { id: 'Off-Road' },
-    { id: 'On-Road' },
-    { id: 'Marine' },
-    { id: 'Other Revenue' },
-    { id: 'Total Revenue' },
-    { id: 'Cost of Sales' },
-    { id: 'Gross Profit' },
-    { id: 'General & Admin' },
-    { id: 'Research & Dev' },
-    { id: 'Sales & Marketing' },
-    { id: 'Non-Operating Exp' },
-    { id: 'Total Expenses' },
-    { id: 'Net Earnings' },
-  ],
-  links: [
-    { source: 'Off-Road', target: 'Total Revenue', value: 5570000000 },
-    { source: 'On-Road', target: 'Total Revenue', value: 932400000 },
-    { source: 'Marine', target: 'Total Revenue', value: 472800000 },
-    { source: 'Other Revenue', target: 'Total Revenue', value: 97800000 },
-    { source: 'Total Revenue', target: 'Gross Profit', value: 1480000000 },
-    { source: 'Total Revenue', target: 'Cost of Sales', value: 5590000000 },
-    { source: 'Gross Profit', target: 'Net Earnings', value: 40200000 },
-    { source: 'Gross Profit', target: 'Total Expenses', value: 1439800000 },
-    { source: 'Total Expenses', target: 'General & Admin', value: 440200000 },
-    { source: 'Total Expenses', target: 'Research & Dev', value: 332000000 },
-    { source: 'Total Expenses', target: 'Sales & Marketing', value: 491600000 },
-    { source: 'Total Expenses', target: 'Non-Operating Exp', value: 176000000 },
-  ],
+const companyProfile: CompanyProfile = {
+  name: "Example Corp",
+  ticker: "EXMPL",
+  sector: "Technology",
+  currency: "USD",
+  logoUrl: "https://placehold.co/100x40.png",
+  valuation: "$150.7B",
+  peRatio: "25.3",
+  financialHealth: "Stable (B+)",
+  debtToEquity: "0.45",
+  futurePerformance: "Moderate Growth Expected",
+  analystRating: "Buy (4.2/5)",
+  pastDividends: "$1.20/share (Annual)",
+  yield: "2.1%",
+  eps: "$5.67",
+  epsGrowth: "+8% YoY",
+  revenueGrowth: "+12.5%",
+  revenueGrowthPeriod: "Trailing Twelve Months",
 };
 
-export default function EquityAnalysisPage() {
-  const companyData = {
-    name: "Example Corp",
-    ticker: "EXMPL",
-    valuation: "$150.7B",
-    peRatio: "25.3",
+// --- Sample Fundamentals for DCF ---
+const sampleFundamentals = {
+  revenue: 120_000_000_000,
+  netIncome: 28_000_000_000,
+  sharesOutstanding: 2_500_000_000,
+  freeCashFlow: 25_000_000_000,
+  growthRate: 0.07,
+  capex: 5_000_000_000,
+  debt: 15_000_000_000,
+  cash: 10_000_000_000,
+};
+
+function getSharePriceVsFairValueData(
+  profile: CompanyProfile,
+  fundamentals: typeof sampleFundamentals
+) {
+  const growthOfMarket = 8.5;
+  const riskFreeRate = 2.5;
+  const timeFrame = 5;
+  const discountRate = profile.sector === "Financial" ? growthOfMarket + riskFreeRate : growthOfMarket;
+  const growthRate = profile.sector === "Financial" ? riskFreeRate : fundamentals.growthRate;
+  const fundamentalsArr = [
+    {
+      REVENUE: fundamentals.revenue,
+      NETINC: fundamentals.netIncome,
+      SHARESWA: fundamentals.sharesOutstanding,
+      FCF: fundamentals.freeCashFlow,
+      CAPEX: fundamentals.capex,
+      LIABILITIESNC: fundamentals.debt,
+      NCFF: 0,
+      NCFI: 0,
+      NCFO: 0,
+      DPS: 0,
+    },
+  ];
+  const fairValue = Finance.evaluateDCF(
+    { sector: profile.sector },
+    fundamentalsArr,
+    timeFrame,
+    discountRate,
+    riskFreeRate,
+    growthRate
+  );
+  const currentPrice = Math.round(fairValue * 0.6 * 100) / 100;
+  const undervaluedThreshold = Math.round(fairValue * 0.8 * 100) / 100;
+  const overvaluedThreshold = Math.round(fairValue * 1.2 * 100) / 100;
+  return {
+    currentPrice,
+    fairValue: Math.round(fairValue * 100) / 100,
+    undervaluedThreshold,
+    overvaluedThreshold,
+    currencySymbol: profile.currency === "USD" ? "US$" : profile.currency + "$",
+  };
+}
+
+const sharePriceVsFairValueData = getSharePriceVsFairValueData(companyProfile, sampleFundamentals);
+
+// --- Unified Company Sample Data (from sampleDataApi) ---
+async function buildCompanySampleData(ticker: string) {
+  // Fetch all relevant tables in parallel
+  const [quotes, fundamentals, balanceSheet, cashFlow, incomeStatement] = await Promise.all([
+    getSampleData({ table: "QUOTES", filter: { symbol: ticker } }),
+    getSampleData({ table: "FUNDAMENTAL_DETAILS", filter: { symbol: ticker } }),
+    getSampleData({ table: "BALANCE_SHEET", filter: { symbol: ticker } }),
+    getSampleData({ table: "CASH_FLOW_STATEMENT", filter: { symbol: ticker } }),
+    getSampleData({ table: "INCOME_STATEMENT", filter: { symbol: ticker } }),
+  ]);
+
+  // Filter for the correct ticker in all arrays
+  const filteredQuotes = quotes.filter((q: any) => q.symbol === ticker);
+  const filteredFundamentals = fundamentals.filter((f: any) => f.symbol === ticker);
+  const filteredBalanceSheet = balanceSheet.filter((b: any) => b.symbol === ticker);
+  const filteredCashFlow = cashFlow.filter((c: any) => c.symbol === ticker);
+  const filteredIncomeStatement = incomeStatement.filter((i: any) => i.symbol === ticker);
+
+  const quote = filteredQuotes[0] || {};
+  const fundamental = filteredFundamentals[0] || {};
+
+  // Profile
+  const profile = {
+    name: quote.name || ticker,
+    ticker: quote.symbol || ticker,
+    sector: fundamental.sector || "N/A",
+    currency: quote.currency || "USD",
+    logoUrl: "https://placehold.co/100x40.png",
+    valuation: quote.marketcap ? `$${(quote.marketcap / 1e9).toFixed(1)}B` : "N/A",
+    peRatio: quote.pe ? quote.pe.toString() : "N/A",
     financialHealth: "Stable (B+)",
-    debtToEquity: "0.45",
+    debtToEquity: filteredBalanceSheet[0]?.debttoequity || "N/A",
     futurePerformance: "Moderate Growth Expected",
     analystRating: "Buy (4.2/5)",
-    pastDividends: "$1.20/share (Annual)",
-    yield: "2.1%",
+    pastDividends: fundamental.dividend ? `$${fundamental.dividend}/share (Annual)` : "N/A",
+    yield: fundamental.dividendyield ? `${fundamental.dividendyield}%` : "N/A",
+    eps: quote.eps ? `$${quote.eps}` : "N/A",
+    epsGrowth: "+8% YoY",
+    revenueGrowth: "+12.5%",
+    revenueGrowthPeriod: "Trailing Twelve Months",
   };
 
-  const sharePriceVsFairValueData = {
-    currentPrice: 37.96,
-    fairValue: 62.93,
-    undervaluedThresholdPercent: 20,
-    overvaluedThresholdPercent: 20,
-    currencySymbol: "US$",
+  // Fundamentals for DCF
+  const fundamentalsForDcf = {
+    revenue: fundamental.revenue || 0,
+    netIncome: fundamental.netincome || 0,
+    sharesOutstanding: quote.sharesoutstanding || 0,
+    freeCashFlow: filteredCashFlow[0]?.fcf || 0,
+    growthRate: 0.07,
+    capex: filteredCashFlow[0]?.capex || 0,
+    debt: filteredBalanceSheet[0]?.totaldebt || 0,
+    cash: filteredBalanceSheet[0]?.cashandequivalents || 0,
   };
 
+  // Stock price history (bars)
+  const bars = (await getSampleData({ table: "BARS", filter: { symbol: ticker } })).filter((bar: any) => bar.symbol === ticker);
+  // Sort bars by date ascending for proper chart rendering
+  const stockPriceHistory = bars
+    .map((bar: any) => ({
+      date: bar.date,
+      price: bar.close,
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  // Management/Capex allocation (cash flow statement)
+  const managementRaw = filteredCashFlow.map((row: any) => ({
+    year: row.fiscalyear || row.date || "",
+    NCFI: row.ncfi || 0,
+    CAPEX: row.capex || 0,
+    RND: row.rnd || 0,
+  }));
+
+  // Financial health (balance sheet)
+  const financialHealth = filteredBalanceSheet.map((row: any) => ({
+    year: row.fiscalyear || row.date || "",
+    debt: row.totaldebt || 0,
+    netWorth: row.totalassets || 0,
+  }));
+
+  // Dividend chart (fundamental details)
+  const dividendChart = filteredFundamentals.map((row: any) => ({
+    year: row.fiscalyear || row.date || "",
+    dps: row.dividend || 0,
+  }));
+
+  // Quarterly earnings (income statement)
+  const quarterlyEarnings = filteredIncomeStatement.map((row: any) => ({
+    quarter: row.fiscalperiod || row.date || "",
+    revenue: row.revenue || 0,
+    profit: row.profit !== undefined ? row.profit : row.netincome || 0,
+  }));
+
+  // Revenue/expenses breakdown (income statement)
+  const firstIS = filteredIncomeStatement[0] || {};
+  const revenueExpenses = {
+    nodes: [
+      { id: 'Total Revenue' },
+      { id: 'Cost of Sales' },
+      { id: 'Gross Profit' },
+      { id: 'Total Expenses' },
+      { id: 'Net Earnings' },
+    ],
+    links: [
+      { source: 'Total Revenue', target: 'Gross Profit', value: firstIS.grossprofit || 0 },
+      { source: 'Total Revenue', target: 'Cost of Sales', value: firstIS.costofrevenue || 0 },
+      { source: 'Gross Profit', target: 'Net Earnings', value: firstIS.netincome || 0 },
+      { source: 'Gross Profit', target: 'Total Expenses', value: firstIS.totalexpenses || 0 },
+    ],
+  };
+
+  // Dividend metrics (static or derived)
+  const dividendMetrics = [
+    { label: "Score", value: "7" },
+    { label: "Safety", value: "8" },
+    { label: "Dividend History", value: "10" },
+    { label: "Increasing Dividends", value: "10" },
+    { label: "Stability", value: "1" },
+    { label: "Dividend Yield", value: profile.yield, isPercentage: true },
+  ];
+
+  return {
+    profile,
+    fundamentals: fundamentalsForDcf,
+    stockPriceHistory,
+    managementRaw,
+    financialHealth,
+    dividendChart,
+    dividendMetrics,
+    quarterlyEarnings,
+    revenueExpenses,
+  };
+}
+
+// Usage in a React component (client-side):
+// const [companySampleData, setCompanySampleData] = useState<any>(null);
+// useEffect(() => {
+//   buildCompanySampleData("AAPL").then(setCompanySampleData);
+// }, []);
+
+export default function EquityAnalysisPage() {
+  const companyData = companyProfile;
+  // --- State for async sample data ---
+  const [companySampleData, setCompanySampleData] = useState<any | null>(null);
+
+  useEffect(() => {
+    buildCompanySampleData(companyData.ticker).then(setCompanySampleData);
+  }, [companyData.ticker]);
+
+  // Show loading state until data is loaded
+  if (!companySampleData) {
+    return (
+      <AppShell>
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="text-lg text-muted-foreground">Loading company data...</div>
+        </div>
+      </AppShell>
+    );
+  }
+
+  // Management chart data transformation
+  const managementChartData = companySampleData.managementRaw.map((row: any) => {
+    const allocation = Finance.getCashAllocationData({ NCFI: row.NCFI, CAPEX: row.CAPEX, RND: row.RND });
+    return {
+      year: row.year,
+      research: allocation.rnd,
+      production: allocation.capex,
+      acquisitions: allocation.acquisitions,
+    };
+  });
 
   return (
     <AppShell>
@@ -208,7 +307,7 @@ export default function EquityAnalysisPage() {
                 <CardTitle className="text-2xl">{companyData.name} ({companyData.ticker})</CardTitle>
                 <CardDescription>Detailed financial overview and performance metrics.</CardDescription>
               </div>
-              <Image src="https://placehold.co/100x40.png" alt={`${companyData.name} logo`} width={100} height={40} data-ai-hint="company logo"/>
+              <Image src={companyData.logoUrl} alt={`${companyData.name} logo`} width={100} height={40} data-ai-hint="company logo"/>
             </div>
           </CardHeader>
           <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -216,16 +315,15 @@ export default function EquityAnalysisPage() {
             <InfoCard icon={<Briefcase />} title="Financial Health" value={companyData.financialHealth} subValue={`Debt/Equity: ${companyData.debtToEquity}`} />
             <InfoCard icon={<Zap />} title="Future Performance" value={companyData.futurePerformance} subValue={`Analyst Rating: ${companyData.analystRating}`} />
             <InfoCard icon={<Activity />} title="Past Dividends" value={companyData.pastDividends} subValue={`Yield: ${companyData.yield}`} />
-            
-             <Card className="p-4 bg-card/70">
+            <Card className="p-4 bg-card/70">
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Earnings Per Share (EPS)</h3>
-              <p className="text-xl font-semibold">$5.67</p>
-              <p className="text-xs text-primary">+8% YoY</p>
+              <p className="text-xl font-semibold">{companyData.eps}</p>
+              <p className="text-xs text-primary">{companyData.epsGrowth}</p>
             </Card>
-             <Card className="p-4 bg-card/70">
+            <Card className="p-4 bg-card/70">
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Revenue Growth</h3>
-              <p className="text-xl font-semibold">+12.5%</p>
-              <p className="text-xs text-muted-foreground">Trailing Twelve Months</p>
+              <p className="text-xl font-semibold">{companyData.revenueGrowth}</p>
+              <p className="text-xs text-muted-foreground">{companyData.revenueGrowthPeriod}</p>
             </Card>
           </CardContent>
         </Card>
@@ -235,24 +333,24 @@ export default function EquityAnalysisPage() {
           <SharePriceVsFairValueChart
             currentPrice={sharePriceVsFairValueData.currentPrice}
             fairValue={sharePriceVsFairValueData.fairValue}
-            undervaluedThreshold={sharePriceVsFairValueData.fairValue * (1 - sharePriceVsFairValueData.undervaluedThresholdPercent / 100)}
-            overvaluedThreshold={sharePriceVsFairValueData.fairValue * (1 + sharePriceVsFairValueData.overvaluedThresholdPercent / 100)}
+            undervaluedThreshold={sharePriceVsFairValueData.undervaluedThreshold}
+            overvaluedThreshold={sharePriceVsFairValueData.overvaluedThreshold}
             currencySymbol={sharePriceVsFairValueData.currencySymbol}
             ticker={companyData.ticker}
             companyName={companyData.name}
           />
           <StockPriceHistoryChart 
             ticker={companyData.ticker}
-            data={stockPriceHistoryData}
+            data={companySampleData.stockPriceHistory}
           />
           <ManagementStackedAreaChart data={managementChartData} />
-          <FinancialHealthLineChart data={financialHealthData} />
-          <DividendAnalysisChart data={dividendChartData} metrics={dividendMetrics} />
+          <FinancialHealthLineChart data={companySampleData.financialHealth} />
+          <DividendAnalysisChart data={companySampleData.dividendChart} metrics={companySampleData.dividendMetrics} />
           <QuarterlyEarningsChart 
             ticker={companyData.ticker}
-            data={quarterlyEarningsData}
+            data={companySampleData.quarterlyEarnings}
           />
-          <RevenueExpensesBreakdownChart data={revenueExpensesData} />
+          <RevenueExpensesBreakdownChart data={companySampleData.revenueExpenses} />
         </div>
       </div>
     </AppShell>

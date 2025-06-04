@@ -1,0 +1,22 @@
+[
+  {
+    "symbol": "AAPL",
+    "fiscalperiod": "Q1 2024",
+    "revenue": 119575000000,
+    "profit": 34000000000,
+    "grossprofit": 54000000000,
+    "costofrevenue": 65575000000,
+    "totalexpenses": 20000000000,
+    "netincome": 34000000000
+  },
+  {
+    "symbol": "AAPL",
+    "fiscalperiod": "Q2 2024",
+    "revenue": 90000000000,
+    "profit": 25000000000,
+    "grossprofit": 40000000000,
+    "costofrevenue": 50000000000,
+    "totalexpenses": 15000000000,
+    "netincome": 25000000000
+  }
+]
