@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -23,10 +22,10 @@ const sampleData: SnowflakeDataPoint[] = [
 const MAX_SCORE = 10; // Max possible score for any category
 
 const IntroSnowflakeChart: React.FC = () => {
-  const chartSize = 280; // Overall size of the SVG
+  const chartSize = 440; // Increased size for a much bigger snowflake
   const centerX = chartSize / 2;
   const centerY = chartSize / 2;
-  const maxRadius = chartSize / 2 - 20; // Max radius for a score of MAX_SCORE, leaving some padding
+  const maxRadius = chartSize / 2 - 20; // Keep padding
 
   const polarToCartesian = (cx: number, cy: number, radius: number, angleInDegrees: number) => {
     const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
@@ -96,7 +95,7 @@ const IntroSnowflakeChart: React.FC = () => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between pt-4">
+      <CardFooter className="flex justify-between pt-6">
         <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
           <Newspaper className="mr-2 h-4 w-4" />
           MORE DETAILS

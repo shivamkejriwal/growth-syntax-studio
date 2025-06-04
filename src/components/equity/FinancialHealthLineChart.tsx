@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -32,7 +31,7 @@ const FinancialHealthLineChart: React.FC = () => {
         <CardTitle>Health</CardTitle>
       </CardHeader>
       <CardContent className="pb-2">
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={600}>
           <LineChart 
             data={chartData} 
             margin={{ top: 5, right: 20, left: -25, bottom: 20 }}
@@ -80,7 +79,7 @@ const FinancialHealthLineChart: React.FC = () => {
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-      <CardFooter className="flex justify-between pt-4">
+      <CardFooter className="flex justify-between pt-6">
         <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
           <Newspaper className="mr-2 h-4 w-4" />
           MORE DETAILS

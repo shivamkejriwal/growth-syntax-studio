@@ -1,66 +1,73 @@
-
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Newspaper, Share2 } from "lucide-react";
+
+// Helper: Calculate percent difference
+function getActualPercentageDiff(currentPrice: number, fairValue: number) {
+  return fairValue > 0 ? ((currentPrice - fairValue) / fairValue) * 100 : 0;
+}
+
+// Helper: Determine valuation status and color
+function getValuationStatus(currentPrice: number, fairValue: number, undervaluedThreshold: number, overvaluedThreshold: number) {
+  if (currentPrice < undervaluedThreshold) {
+    return { status: "Undervalued", color: "text-emerald-500" };
+  } else if (currentPrice > overvaluedThreshold) {
+    return { status: "Overvalued", color: "text-red-500" };
+  } else {
+    if (currentPrice < fairValue) {
+      return { status: "Fairly Valued", color: "text-emerald-500" };
+    } else if (currentPrice > fairValue) {
+      return { status: "Fairly Valued", color: "text-red-500" };
+    } else {
+      return { status: "Fairly Valued", color: "text-foreground" };
+    }
+  }
+}
+
+// Helper: Chart calculations
+function getChartWidths(currentPrice: number, fairValue: number, undervaluedThreshold: number, overvaluedThreshold: number) {
+  const chartMaxX = Math.max(currentPrice, fairValue, overvaluedThreshold) * 1.25;
+  const toPercentWidth = (value: number) => (value / chartMaxX) * 100;
+  return {
+    currentPriceBarWidth: toPercentWidth(currentPrice),
+    fairValueBarWidth: toPercentWidth(fairValue),
+    undervaluedZoneWidth: toPercentWidth(undervaluedThreshold),
+    aboutRightZoneWidth: toPercentWidth(overvaluedThreshold - undervaluedThreshold),
+    overvaluedZoneWidth: 100 - (toPercentWidth(undervaluedThreshold) + toPercentWidth(overvaluedThreshold - undervaluedThreshold)),
+  };
+}
 
 interface SharePriceVsFairValueChartProps {
+  ticker: string;
   currentPrice: number;
   fairValue: number;
-  undervaluedThresholdPercent?: number; // e.g., 20 for 20% below fair value
-  overvaluedThresholdPercent?: number;  // e.g., 20 for 20% above fair value
+  undervaluedThreshold: number; // Not percent, absolute value
+  overvaluedThreshold: number;  // Not percent, absolute value
   currencySymbol?: string;
-  companyTicker?: string;
   companyName?: string;
 }
 
 const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
+  ticker,
   currentPrice,
   fairValue,
-  undervaluedThresholdPercent = 20,
-  overvaluedThresholdPercent = 20,
+  undervaluedThreshold,
+  overvaluedThreshold,
   currencySymbol = "$",
-  companyTicker = "PII",
   companyName = "Example Corp"
 }) => {
-  let valuationStatus = "Fairly Valued";
-  let statusColor = "text-foreground";
+  const actualPercentageDiff = getActualPercentageDiff(currentPrice, fairValue);
+  const { status: valuationStatus, color: statusColor } = getValuationStatus(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
+  const { currentPriceBarWidth, fairValueBarWidth, undervaluedZoneWidth, aboutRightZoneWidth, overvaluedZoneWidth } = getChartWidths(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
 
-  const actualPercentageDiff = fairValue > 0 ? ((currentPrice - fairValue) / fairValue) * 100 : 0;
+  // Use numeric values for bar height and gap
+  const barHeightClass = "h-20"; // Keep bars thick
+  const chartAreaHeightClass = "h-64"; // Much taller chart area for more space
 
-  if (actualPercentageDiff < -undervaluedThresholdPercent) {
-      valuationStatus = "Undervalued";
-      statusColor = "text-emerald-500";
-  } else if (actualPercentageDiff > overvaluedThresholdPercent) {
-      valuationStatus = "Overvalued";
-      statusColor = "text-red-500";
-  } else {
-      valuationStatus = "Fairly Valued";
-      if (actualPercentageDiff < 0) {
-        statusColor = "text-emerald-500";
-      } else if (actualPercentageDiff > 0) {
-        statusColor = "text-red-500";
-      }
-  }
-
-  const upperFairValueLimit = fairValue * (1 + overvaluedThresholdPercent / 100);
-  const chartMaxX = Math.max(currentPrice, fairValue, upperFairValueLimit) * 1.25; 
-
-  const toPercentWidth = (value: number) => (value / chartMaxX) * 100;
-
-  const currentPriceBarWidth = toPercentWidth(currentPrice);
-  const fairValueBarWidth = toPercentWidth(fairValue);
-
-  const undervaluedZoneEnd = fairValue * (1 - undervaluedThresholdPercent / 100);
-  const overvaluedZoneStart = fairValue * (1 + overvaluedThresholdPercent / 100);
-
-  const undervaluedZoneWidth = toPercentWidth(undervaluedZoneEnd);
-  const aboutRightZoneWidth = toPercentWidth(Math.max(0, overvaluedZoneStart - undervaluedZoneEnd));
-  const overvaluedZoneWidth = Math.max(0, 100 - (undervaluedZoneWidth + aboutRightZoneWidth)); 
-
-  const barHeightClass = "h-10"; 
-  const chartAreaHeightClass = "h-32";
-
+  // Increase spacing between bars by adjusting top/bottom values
   return (
     <Card className="shadow-lg w-full">
       <CardHeader>
@@ -68,7 +75,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
           Share Price vs Fair Value
         </CardTitle>
         <CardDescription>
-          What is the Fair Price of {companyTicker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
+          What is the Fair Price of {ticker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -99,7 +106,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
             </div>
 
             {/* Current Price Bar & Label */}
-            <div className={`absolute top-4 left-0 w-full flex items-center`} style={{ height: 'auto' }}>
+            <div className={`absolute top-8 left-0 w-full flex items-center`} style={{ height: 'auto' }}>
               <div
                 className={`bg-emerald-400 ${barHeightClass} rounded-sm`}
                 style={{ width: `${currentPriceBarWidth}%` }}
@@ -111,7 +118,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
             </div>
 
             {/* Fair Value Bar & Label */}
-            <div className={`absolute bottom-4 left-0 w-full flex items-center`} style={{ height: 'auto' }}>
+            <div className={`absolute bottom-8 left-0 w-full flex items-center`} style={{ height: 'auto' }}>
               <div
                 className={`bg-emerald-600 ${barHeightClass} rounded-sm`} 
                 style={{ width: `${fairValueBarWidth}%` }}
@@ -125,11 +132,21 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
         </div>
 
         <div className="flex justify-between text-xs text-muted-foreground px-1">
-          <span className="text-emerald-500 text-center" style={{ flexBasis: `${undervaluedZoneWidth > 0 ? undervaluedThresholdPercent : 0}%`}}>{undervaluedThresholdPercent}% Undervalued</span>
-          <span className="text-center" style={{ flexBasis: `${aboutRightZoneWidth > 0 ? (100 - undervaluedThresholdPercent - overvaluedThresholdPercent) : 0}%`}}>About Right</span>
-          <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThresholdPercent : 0}%`}}>{overvaluedThresholdPercent}% Overvalued</span>
+          <span className="text-emerald-500 text-center" style={{ flexBasis: `${undervaluedZoneWidth > 0 ? undervaluedThreshold : 0}%`}}>{undervaluedThreshold} Undervalued</span>
+          <span className="text-center" style={{ flexBasis: `${aboutRightZoneWidth > 0 ? (100 - undervaluedThreshold - overvaluedThreshold) : 0}%`}}>About Right</span>
+          <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold} Overvalued</span>
         </div>
       </CardContent>
+      <CardFooter className="flex justify-between pt-6">
+        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
+          <Newspaper className="mr-2 h-4 w-4" />
+          MORE DETAILS
+        </Button>
+        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
+          <Share2 className="mr-2 h-4 w-4" />
+          SHARE
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

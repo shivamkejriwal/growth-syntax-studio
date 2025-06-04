@@ -1,9 +1,11 @@
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ParentSize } from '@visx/responsive';
 import { Sankey, sankeyLinkHorizontal } from '@visx/sankey';
+import { Button } from "@/components/ui/button";
+import { Newspaper, Share2 } from "lucide-react";
 
 const sankeyData = {
   nodes: [
@@ -158,6 +160,16 @@ const RevenueExpensesBreakdownChart: React.FC = () => (
         </ParentSize>
       </div>
     </CardContent>
+    <CardFooter className="flex justify-between pt-6">
+      <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
+        <Newspaper className="mr-2 h-4 w-4" />
+        MORE DETAILS
+      </Button>
+      <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
+        <Share2 className="mr-2 h-4 w-4" />
+        SHARE
+      </Button>
+    </CardFooter>
   </Card>
 );
 

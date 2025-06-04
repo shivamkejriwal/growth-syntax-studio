@@ -1,4 +1,3 @@
-
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,8 @@ import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineCha
 import DividendAnalysisChart from "@/components/equity/DividendAnalysisChart";
 import IntroSnowflakeChart from "@/components/equity/IntroSnowflakeChart";
 import RevenueExpensesBreakdownChart from "@/components/equity/RevenueExpensesBreakdownChart";
+import { StockPriceHistoryChart } from "@/components/equity/StockPriceHistoryChart";
+import { QuarterlyEarningsChart } from "@/components/equity/QuarterlyEarningsChart";
 
 
 export default function EquityAnalysisPage() {
@@ -86,31 +87,17 @@ export default function EquityAnalysisPage() {
           <SharePriceVsFairValueChart
             currentPrice={sharePriceVsFairValueData.currentPrice}
             fairValue={sharePriceVsFairValueData.fairValue}
-            undervaluedThresholdPercent={sharePriceVsFairValueData.undervaluedThresholdPercent}
-            overvaluedThresholdPercent={sharePriceVsFairValueData.overvaluedThresholdPercent}
+            undervaluedThreshold={sharePriceVsFairValueData.fairValue * (1 - sharePriceVsFairValueData.undervaluedThresholdPercent / 100)}
+            overvaluedThreshold={sharePriceVsFairValueData.fairValue * (1 + sharePriceVsFairValueData.overvaluedThresholdPercent / 100)}
             currencySymbol={sharePriceVsFairValueData.currencySymbol}
-            companyTicker={companyData.ticker}
+            ticker={companyData.ticker}
             companyName={companyData.name}
           />
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle>Stock Price History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <SampleLineChart title={`${companyData.ticker} Stock Price (1Y)`} />
-            </CardContent>
-          </Card>
+          <StockPriceHistoryChart />
           <ManagementStackedAreaChart />
           <FinancialHealthLineChart />
           <DividendAnalysisChart />
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle>Quarterly Earnings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <SampleBarChart title={`${companyData.ticker} Quarterly Revenue &amp; Profit`} />
-            </CardContent>
-          </Card>
+          <QuarterlyEarningsChart />
           <RevenueExpensesBreakdownChart />
         </div>
       </div>

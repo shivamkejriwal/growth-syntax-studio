@@ -42,7 +42,7 @@ const DividendAnalysisChart: React.FC = () => {
         <CardTitle>Dividend</CardTitle>
       </CardHeader>
       <CardContent className="pb-2">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={350}>
           <LineChart 
             data={dividendChartData} 
             margin={{ top: 5, right: 20, left: -25, bottom: 20 }}
