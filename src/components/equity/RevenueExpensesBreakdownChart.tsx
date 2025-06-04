@@ -7,37 +7,12 @@ import { Sankey, sankeyLinkHorizontal } from '@visx/sankey';
 import { Button } from "@/components/ui/button";
 import { Newspaper, Share2 } from "lucide-react";
 
-const sankeyData = {
-  nodes: [
-    { id: 'Off-Road' },
-    { id: 'On-Road' },
-    { id: 'Marine' },
-    { id: 'Other Revenue' },
-    { id: 'Total Revenue' },
-    { id: 'Cost of Sales' },
-    { id: 'Gross Profit' },
-    { id: 'General & Admin' },
-    { id: 'Research & Dev' },
-    { id: 'Sales & Marketing' },
-    { id: 'Non-Operating Exp' },
-    { id: 'Total Expenses' },
-    { id: 'Net Earnings' },
-  ],
-  links: [
-    { source: 'Off-Road', target: 'Total Revenue', value: 5570000000 },
-    { source: 'On-Road', target: 'Total Revenue', value: 932400000 },
-    { source: 'Marine', target: 'Total Revenue', value: 472800000 },
-    { source: 'Other Revenue', target: 'Total Revenue', value: 97800000 },
-    { source: 'Total Revenue', target: 'Gross Profit', value: 1480000000 },
-    { source: 'Total Revenue', target: 'Cost of Sales', value: 5590000000 },
-    { source: 'Gross Profit', target: 'Net Earnings', value: 40200000 },
-    { source: 'Gross Profit', target: 'Total Expenses', value: 1439800000 },
-    { source: 'Total Expenses', target: 'General & Admin', value: 440200000 },
-    { source: 'Total Expenses', target: 'Research & Dev', value: 332000000 },
-    { source: 'Total Expenses', target: 'Sales & Marketing', value: 491600000 },
-    { source: 'Total Expenses', target: 'Non-Operating Exp', value: 176000000 },
-  ],
-};
+export interface RevenueExpensesBreakdownChartProps {
+  data: {
+    nodes: Array<{ id: string }>;
+    links: Array<{ source: string; target: string; value: number }>;
+  };
+}
 
 // Utility for currency formatting
 const formatCurrency = (value: number) => {
@@ -78,7 +53,7 @@ const getLinkColor = (link: { target: { id?: string } | string }) => {
   return linkColors[targetId ?? ''] || '#69b3a2';
 };
 
-const RevenueExpensesBreakdownChart: React.FC = () => (
+const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps> = ({ data }) => (
   <Card className="shadow-lg w-full">
     <CardHeader>
       <CardTitle className="text-xl">Revenue &amp; Expenses Breakdown</CardTitle>
@@ -92,7 +67,7 @@ const RevenueExpensesBreakdownChart: React.FC = () => (
           {({ width, height }) => (
             <svg width={width} height={height}>
               <Sankey
-                root={sankeyData}
+                root={data}
                 extent={[[0, 0], [width, height]]}
                 nodeWidth={20}
                 nodePadding={25}

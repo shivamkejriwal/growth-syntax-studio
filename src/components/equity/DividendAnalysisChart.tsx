@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -9,33 +8,16 @@ import { Newspaper, Share2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
-const dividendChartData = [
-  { year: '2012', dps: 0.50 },
-  { year: '2013', dps: 0.55 },
-  { year: '2014', dps: 0.62 },
-  { year: '2015', dps: 0.68 },
-  { year: '2016', dps: 0.75 },
-  { year: '2017', dps: 0.83 },
-  { year: '2018', dps: 0.90 },
-  { year: '2019', dps: 1.00 },
-  { year: '2020', dps: 1.05 },
-  { year: '2021', dps: 1.12 },
-];
-
-const dividendMetrics = [
-  { label: "Score", value: "7" },
-  { label: "Safety", value: "8" },
-  { label: "Dividend History", value: "10" },
-  { label: "Increasing Dividends", value: "10" },
-  { label: "Stability", value: "1" },
-  { label: "Dividend Yield", value: "2.5%", isPercentage: true },
-];
+export interface DividendAnalysisChartProps {
+  data: Array<{ year: string; dps: number }>;
+  metrics: Array<{ label: string; value: string; isPercentage?: boolean }>;
+}
 
 const legendPayload = [
-    { value: 'Dividend Per Share', type: 'line', id: 'dps', color: 'hsl(var(--chart-4))' },
+  { value: 'Dividend Per Share', type: 'line' as const, id: 'dps', color: 'hsl(var(--chart-4))' },
 ];
 
-const DividendAnalysisChart: React.FC = () => {
+const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics }) => {
   return (
     <Card className="shadow-lg w-full">
       <CardHeader>
@@ -44,7 +26,7 @@ const DividendAnalysisChart: React.FC = () => {
       <CardContent className="pb-2">
         <ResponsiveContainer width="100%" height={350}>
           <LineChart 
-            data={dividendChartData} 
+            data={data}
             margin={{ top: 5, right: 20, left: -25, bottom: 20 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={true} vertical={false} />
@@ -85,7 +67,7 @@ const DividendAnalysisChart: React.FC = () => {
         <Separator className="my-6" />
 
         <div className="space-y-3">
-          {dividendMetrics.map((metric) => (
+          {metrics.map((metric) => (
             <div key={metric.label} className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{metric.label}</span>
               {metric.isPercentage ? (

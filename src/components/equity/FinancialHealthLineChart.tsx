@@ -6,25 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Newspaper, Share2 } from "lucide-react";
 
-const chartData = [
-  { year: '2012', debt: 150, netWorth: 400 },
-  { year: '2013', debt: 160, netWorth: 550 },
-  { year: '2014', debt: 165, netWorth: 520 },
-  { year: '2015', debt: 170, netWorth: 530 },
-  { year: '2016', debt: 200, netWorth: 540 },
-  { year: '2017', debt: 280, netWorth: 450 },
-  { year: '2018', debt: 250, netWorth: 460 },
-  { year: '2019', debt: 240, netWorth: 455 },
-  { year: '2020', debt: 260, netWorth: 470 },
-  { year: '2021', debt: 300, netWorth: 500 },
-];
+export interface FinancialHealthLineChartProps {
+  data: Array<{ year: string; debt: number; netWorth: number }>;
+}
 
 const legendPayload = [
-    { value: 'Debt', type: 'line', id: 'debt', color: 'hsl(var(--chart-3))' },
-    { value: 'Net Worth', type: 'line', id: 'netWorth', color: 'hsl(var(--chart-2))' },
+  { value: 'Debt', type: 'line' as const, id: 'debt', color: 'hsl(var(--chart-3))' },
+  { value: 'Net Worth', type: 'line' as const, id: 'netWorth', color: 'hsl(var(--chart-2))' },
 ];
 
-const FinancialHealthLineChart: React.FC = () => {
+const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data }) => {
   return (
     <Card className="shadow-lg w-full">
       <CardHeader>
@@ -33,7 +24,7 @@ const FinancialHealthLineChart: React.FC = () => {
       <CardContent className="pb-2">
         <ResponsiveContainer width="100%" height={600}>
           <LineChart 
-            data={chartData} 
+            data={data} 
             margin={{ top: 5, right: 20, left: -25, bottom: 20 }}
           >
             <XAxis 
