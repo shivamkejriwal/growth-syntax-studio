@@ -2,15 +2,16 @@
 "use client";
 
 import { AppShell } from "@/components/layout/app-shell";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SampleBarChart } from "@/components/charts/sample-bar-chart";
-import { SampleLineChart } from "@/components/charts/sample-line-chart";
-import { Globe, Landmark, Briefcase, TrendingUp, TrendingDown, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Percent, Plane, FlaskConical, Shirt, Square, HeartPulse, Megaphone, Tv, Car, Building, Truck } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Globe, Landmark, Briefcase, Cog, Wrench, MessageSquare, ShoppingCart, Shield, Tag, Users, Flame, BriefcaseMedical, ShoppingBag, Lightbulb, Home, Zap, BusFront, Settings2, Layers, HardHat, DollarSign, Plane, FlaskConical, Shirt, Square, HeartPulse, Megaphone, Tv, Car, Building, Truck } from "lucide-react";
 import React, { useState, useEffect } from 'react';
-import { Separator } from "@/components/ui/separator";
+
+import { StatCard, StatCardProps } from "@/components/market-overview/StatCard";
+import { MarketMoversCard, MarketDataRow } from "@/components/market-overview/MarketMoversCard";
+import { SegmentsCard, SegmentData } from "@/components/market-overview/SegmentsCard";
+import { SectorPerformanceChartCard } from "@/components/market-overview/SectorPerformanceChartCard";
+import { EconomicIndicatorsCard } from "@/components/market-overview/EconomicIndicatorsCard";
+import { IndustryHeatmapCard } from "@/components/market-overview/IndustryHeatmapCard";
 
 const sampleGainers = [
   { ticker: "AAPL", close: 165.30, change: "+3.32%", changeType: "positive" as const },
@@ -89,14 +90,13 @@ const industryData = [
   { name: "Building Materials", change: "-0.15%", icon: <Building className="h-5 w-5 text-muted-foreground" /> },
 ];
 
-
 export default function MarketOverviewPage() {
-  const [activeMarketMoversTab, setActiveMarketMoversTab] = useState("gainers");
-  const [activeSegmentsTab, setActiveSegmentsTab] = useState("sectors");
   const [currentDate, setCurrentDate] = useState<string>("today");
 
   useEffect(() => {
-    setCurrentDate(new Date().toLocaleDateString());
+    // Format date as "Month Day, Year" e.g., "July 20, 2024"
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    setCurrentDate(new Date().toLocaleDateString(undefined, options));
   }, []);
 
 
@@ -132,194 +132,31 @@ export default function MarketOverviewPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <StatCard icon={<Globe />} title="Global Market Cap" value="$95.2 Trillion" change="+0.8%" changeType="positive" />
-          <StatCard icon={<Landmark />} title="S&P 500 Index" value="4,500.75" change="-0.2%" changeType="negative" />
-          <StatCard icon={<Briefcase />} title="Tech Sector Performance" value="Leading" change="+1.5% today" changeType="positive" />
+          <StatCard icon={<Globe className="h-5 w-5 text-muted-foreground" />} title="Global Market Cap" value="$95.2 Trillion" change="+0.8%" changeType="positive" />
+          <StatCard icon={<Landmark className="h-5 w-5 text-muted-foreground" />} title="S&P 500 Index" value="4,500.75" change="-0.2%" changeType="negative" />
+          <StatCard icon={<Briefcase className="h-5 w-5 text-muted-foreground" />} title="Tech Sector Performance" value="Leading" change="+1.5% today" changeType="positive" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="shadow-lg lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Market Movers & Activity</CardTitle>
-              <CardDescription>Market data for {currentDate}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Tabs value={activeMarketMoversTab} onValueChange={setActiveMarketMoversTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="gainers">Gainers</TabsTrigger>
-                  <TabsTrigger value="losers">Losers</TabsTrigger>
-                  <TabsTrigger value="active">Active</TabsTrigger>
-                </TabsList>
-                <TabsContent value="gainers">
-                  <MarketDataTable data={sampleGainers} type="gainer-loser" />
-                </TabsContent>
-                <TabsContent value="losers">
-                  <MarketDataTable data={sampleLosers} type="gainer-loser" />
-                </TabsContent>
-                <TabsContent value="active">
-                  <MarketDataTable data={sampleActive} type="active" />
-                </TabsContent>
-              </Tabs>
-               <div className="mt-4 flex items-center justify-between text-sm">
-                  <div className="flex items-center text-primary">
-                    <TrendingUp className="mr-1 h-4 w-4" />
-                    <span>Advancers: 2242</span>
-                  </div>
-                  <div className="h-2 w-1/2 bg-muted rounded-full relative">
-                      <div className="h-2 w-1/2 bg-primary rounded-l-full"></div>
-                      <div className="absolute top-1/2 left-1/2 h-4 w-1 bg-primary-foreground border border-primary rounded-sm -translate-y-1/2 -translate-x-1/2"></div>
-                  </div>
-                  <div className="flex items-center text-destructive">
-                    <TrendingDown className="mr-1 h-4 w-4" />
-                    <span>Decliners: 5806</span>
-                  </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-lg">Sectors & Industries</CardTitle>
-              <Separator className="my-2" />
-            </CardHeader>
-            <CardContent className="pt-0">
-              <Tabs value={activeSegmentsTab} onValueChange={setActiveSegmentsTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-3">
-                  <TabsTrigger value="sectors">Sectors</TabsTrigger>
-                  <TabsTrigger value="industries">Industries</TabsTrigger>
-                </TabsList>
-                <div className="max-h-[300px] overflow-y-auto">
-                  <TabsContent value="sectors" className="mt-0">
-                    {sectorData.map((sector) => (
-                      <div key={sector.name} className="flex items-center justify-between text-sm py-1.5">
-                        <div className="flex items-center gap-2">
-                          {sector.icon}
-                          <span>{sector.name}</span>
-                        </div>
-                        <span className={parseFloat(sector.change) >= 0 ? "text-primary" : "text-destructive"}>
-                          {sector.change}
-                        </span>
-                      </div>
-                    ))}
-                  </TabsContent>
-                  <TabsContent value="industries" className="mt-0">
-                    {industryData.map((industry) => (
-                      <div key={industry.name} className="flex items-center justify-between text-sm py-1.5">
-                        <div className="flex items-center gap-2">
-                          {industry.icon}
-                          <span>{industry.name}</span>
-                        </div>
-                        <span className={parseFloat(industry.change) >= 0 ? "text-primary" : "text-destructive"}>
-                          {industry.change}
-                        </span>
-                      </div>
-                    ))}
-                  </TabsContent>
-                </div>
-              </Tabs>
-            </CardContent>
-          </Card>
+          <MarketMoversCard
+            className="lg:col-span-2"
+            currentDate={currentDate}
+            gainersData={sampleGainers}
+            losersData={sampleLosers}
+            activeData={sampleActive}
+            advancers={2242}
+            decliners={5806}
+          />
+          <SegmentsCard sectorData={sectorData} industryData={industryData} />
         </div>
         
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle>Sector Performance Chart</CardTitle>
-              <CardDescription>Year-to-date performance by major sectors.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SampleBarChart title="Sector Performance (YTD)" />
-            </CardContent>
-          </Card>
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle>Key Economic Indicators</CardTitle>
-              <CardDescription>Inflation, GDP Growth, Unemployment Rate.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SampleLineChart title="Inflation Rate Trend" />
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SectorPerformanceChartCard />
+          <EconomicIndicatorsCard />
         </div>
 
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle>Industry Heatmap</CardTitle>
-            <CardDescription>Visual overview of industry performance (placeholder).</CardDescription>
-          </CardHeader>
-          <CardContent className="h-[300px] flex items-center justify-center bg-muted/30 rounded-md">
-            <p className="text-muted-foreground">Industry Heatmap Placeholder</p>
-          </CardContent>
-        </Card>
+        <IndustryHeatmapCard />
       </div>
     </AppShell>
-  );
-}
-
-interface MarketDataRow {
-  ticker: string;
-  close: number;
-  change: string;
-  changeType: "positive" | "negative";
-  volume?: string; // Only for active table
-}
-
-interface MarketDataTableProps {
-  data: MarketDataRow[];
-  type: "gainer-loser" | "active";
-}
-
-function MarketDataTable({ data, type }: MarketDataTableProps) {
-  return (
-    <div className="max-h-[300px] overflow-y-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Ticker</TableHead>
-            <TableHead className="text-right">Close</TableHead>
-            <TableHead className="text-right">Change</TableHead>
-            {type === "active" && <TableHead className="text-right">Volume</TableHead>}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((item) => (
-            <TableRow key={item.ticker}>
-              <TableCell className="font-medium">{item.ticker}</TableCell>
-              <TableCell className="text-right">{item.close.toFixed(2)}</TableCell>
-              <TableCell className={`text-right font-medium ${item.changeType === "positive" ? "text-primary" : "text-destructive"}`}>
-                {item.change}
-              </TableCell>
-              {type === "active" && <TableCell className="text-right">{item.volume}</TableCell>}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
-
-
-interface StatCardProps {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-  change: string;
-  changeType: "positive" | "negative";
-}
-
-function StatCard({ icon, title, value, change, changeType }: StatCardProps) {
-  return (
-    <Card className="shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <span className="text-muted-foreground">{icon}</span>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        <p className={`text-xs ${changeType === "positive" ? "text-primary" : "text-destructive"}`}>
-          {change}
-        </p>
-      </CardContent>
-    </Card>
   );
 }
