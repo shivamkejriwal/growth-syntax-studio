@@ -108,45 +108,45 @@ export default function EquityAnalysisPage() {
   };
 
   const fetchAllData = async () => {
-      if (!companyData.ticker) {
-        // Reset data if ticker is not available
-        resetAllChartData();
-        return;
-      }
+    if (!companyData.ticker) {
+      // Reset data if ticker is not available
+      resetAllChartData();
+      return;
+    }
 
-      try {
-        // Fetch all required raw data in parallel
-        const [
-          rawBarData,
-          rawBalanceSheetData,
-          rawIncomeStatementData,
-          rawCashFlowData,
-        ] = await Promise.all([
-          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'BARS' }) as Promise<BarDataItem[]>,
-          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'BALANCE_SHEET' }) as Promise<BalanceSheetItem[]>,
-          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'INCOME_STATEMENT' }) as Promise<IncomeStatementItem[]>,
-          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'CASH_FLOW_STATEMENT' }) as Promise<CashFlowStatementItem[]>,
-        ]);
+    try {
+      // Fetch all required raw data in parallel
+      const [
+        rawBarData,
+        rawBalanceSheetData,
+        rawIncomeStatementData,
+        rawCashFlowData,
+      ] = await Promise.all([
+        getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'BARS' }) as Promise<BarDataItem[]>,
+        getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'BALANCE_SHEET' }) as Promise<BalanceSheetItem[]>,
+        getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'INCOME_STATEMENT' }) as Promise<IncomeStatementItem[]>,
+        getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'CASH_FLOW_STATEMENT' }) as Promise<CashFlowStatementItem[]>,
+      ]);
 
-        // Process all fetched data using the common function
-        const processedData = processFetchedEquityData(
-          rawBarData,
-          rawBalanceSheetData,
-          rawIncomeStatementData,
-          rawCashFlowData,
-        );
+      // Process all fetched data using the common function
+      const processedData = processFetchedEquityData(
+        rawBarData,
+        rawBalanceSheetData,
+        rawIncomeStatementData,
+        rawCashFlowData,
+      );
 
-        // Update states with processed data
-        setStockPriceHistoryData(processedData.stockPriceHistory);
-        setFinancialHealthData(processedData.financialHealth);
-        setQuarterlyEarningsData(processedData.quarterlyEarnings);
-        setManagementChartData(processedData.managementAllocation);
+      // Update states with processed data
+      setStockPriceHistoryData(processedData.stockPriceHistory);
+      setFinancialHealthData(processedData.financialHealth);
+      setQuarterlyEarningsData(processedData.quarterlyEarnings);
+      setManagementChartData(processedData.managementAllocation);
 
-      } catch (error) {
-        console.error("Failed to fetch equity data:", error);
-        resetAllChartData(); // Reset data on error
-      }
-    };
+    } catch (error) {
+      console.error("Failed to fetch equity data:", error);
+      resetAllChartData(); // Reset data on error
+    }
+  };
 
   const companyData = {
     name: "Example Corp",
