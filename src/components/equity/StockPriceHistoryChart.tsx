@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useRef } from 'react'; // Added useRef
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SampleLineChart } from "@/components/charts/sample-line-chart";
 import { ChartCardFooter } from './ChartCardFooter';
@@ -12,15 +15,16 @@ export function StockPriceHistoryChart({ ticker, data }: StockPriceHistoryChartP
   const chartData = data.map((d) => ({ date: d.date, value: d.price }));
   const cardTitle = "Stock Price History";
   const chartName = "stock-price-history";
+  const cardRef = useRef<HTMLDivElement>(null); // Added ref
   return (
-    <Card className="shadow-lg w-full flex flex-col">
+    <Card className="shadow-lg w-full flex flex-col" ref={cardRef}> {/* Used ref */}
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1">
         <SampleLineChart title={`${ticker} Stock Price (1Y)`} data={chartData} />
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} /> {/* Passed ref */}
     </Card>
   );
 }

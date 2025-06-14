@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, RefObject } from 'react';
 import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Newspaper, Share2 } from "lucide-react";
@@ -9,9 +9,10 @@ import { toPng, toBlob } from 'html-to-image';
 interface ChartCardFooterProps {
   cardTitle: string;
   chartName: string; // A slugified version of the title for the filename
+  cardRef: RefObject<HTMLDivElement>; // Pass the ref to the Card element
 }
 
-export const ChartCardFooter: React.FC<ChartCardFooterProps> = ({ cardTitle, chartName }) => {
+export const ChartCardFooter: React.FC<ChartCardFooterProps> = ({ cardTitle, chartName, cardRef }) => {
   const [isSharing, setIsSharing] = useState(false);
   const commonImageOptions = {
     pixelRatio: 2, // Capture at double resolution for clarity
@@ -30,8 +31,7 @@ export const ChartCardFooter: React.FC<ChartCardFooterProps> = ({ cardTitle, cha
   };
 
   const handleShareClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonElement = event.currentTarget;
-    const cardElement = buttonElement.parentElement?.parentElement as HTMLElement | null;
+    const cardElement = cardRef.current;
 
     if (!cardElement) {
       console.error("Could not find the card element to share.");

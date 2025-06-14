@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ParentSize } from '@visx/responsive';
 import { Sankey, sankeyLinkHorizontal } from '@visx/sankey';
@@ -56,7 +56,8 @@ const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps
   const cardTitle = "Revenue & Expenses Breakdown";
   // Simple slugify for filename
   const chartName = cardTitle.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and');
-  return (<Card className="shadow-lg w-full flex flex-col">
+  const cardRef = useRef<HTMLDivElement>(null);
+  return (<Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
     <CardHeader>
       <CardTitle className="text-xl">{cardTitle}</CardTitle>
       <CardDescription>
@@ -137,7 +138,7 @@ const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps
         </ParentSize>
       </div>
     </CardContent>
-    <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+    <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
   </Card>);
 };
 

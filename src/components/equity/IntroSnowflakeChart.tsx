@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartCardFooter } from './ChartCardFooter';
 
@@ -23,6 +23,7 @@ const MAX_SCORE = 10; // Max possible score for any category
 const IntroSnowflakeChart: React.FC = () => {
   const cardTitle = "Overview";
   const chartName = "overview";
+  const cardRef = useRef<HTMLDivElement>(null);
   const chartSize = 440; // Increased size for a much bigger snowflake
   const centerX = chartSize / 2;
   const centerY = chartSize / 2;
@@ -54,7 +55,7 @@ const IntroSnowflakeChart: React.FC = () => {
   let currentAngle = 0;
 
   return (
-    <Card className="shadow-lg w-full flex flex-col">
+    <Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
@@ -96,7 +97,7 @@ const IntroSnowflakeChart: React.FC = () => {
           </div>
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
     </Card>
   );
 };

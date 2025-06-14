@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Keep CartesianGrid if used
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -19,8 +19,9 @@ const legendPayload = [
 const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics }) => {
   const cardTitle = "Dividend";
   const chartName = "dividend";
+  const cardRef = useRef<HTMLDivElement>(null);
   return (
-    <Card className="shadow-lg w-full flex flex-col">
+    <Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
@@ -82,7 +83,7 @@ const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, met
           ))}
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
     </Card>
   );
 };

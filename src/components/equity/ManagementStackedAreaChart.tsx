@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Keep CartesianGrid if used
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Removed CardDescription, CardFooter
 import { ChartCardFooter } from './ChartCardFooter';
@@ -23,7 +23,8 @@ const legendPayload = [
 const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({ data }) => {
 	const cardTitle = "Management";
 	const chartName = "management";
-	return (<Card className="shadow-lg col-span-1 flex flex-col">
+	const cardRef = useRef<HTMLDivElement>(null);
+	return (<Card className="shadow-lg col-span-1 flex flex-col" ref={cardRef}>
 		<CardHeader>
 			<CardTitle>{cardTitle}</CardTitle>
 		</CardHeader>
@@ -66,7 +67,7 @@ const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({
 				</AreaChart>
 			</ResponsiveContainer>
 		</CardContent>
-		<ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+		<ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
 	</Card>);
 };
 

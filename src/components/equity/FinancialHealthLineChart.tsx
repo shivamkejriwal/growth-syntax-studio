@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartCardFooter } from './ChartCardFooter';
@@ -17,8 +17,9 @@ const legendPayload = [
 const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data }) => {
   const cardTitle = "Health";
   const chartName = "health";
+  const cardRef = useRef<HTMLDivElement>(null);
   return (
-    <Card className="shadow-lg w-full flex flex-col">
+    <Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
@@ -71,7 +72,7 @@ const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ dat
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
     </Card>
   );
 };

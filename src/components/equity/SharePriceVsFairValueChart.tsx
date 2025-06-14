@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartCardFooter } from './ChartCardFooter';
 
@@ -63,13 +63,14 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
   const { currentPriceBarWidth, fairValueBarWidth, undervaluedZoneWidth, aboutRightZoneWidth, overvaluedZoneWidth } = getChartWidths(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
   const cardTitle = "Share Price vs Fair Value";
   const chartName = "share-price-vs-fair-value";
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Use numeric values for bar height and gap
   const barHeightClass = "h-20"; // Keep bars thick
   const chartAreaHeightClass = "h-64"; // Much taller chart area for more space
   // Increase spacing between bars by adjusting top/bottom values
   return (
-    <Card className="shadow-lg w-full flex flex-col">
+    <Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
       <CardHeader>
         <CardTitle className="text-xl">
           Share Price vs Fair Value
@@ -137,7 +138,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
           <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold.toFixed(2)} Overvalued</span>
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
     </Card>
   );
 };
