@@ -21,7 +21,7 @@ interface MarketDataTableProps {
 
 const MarketDataTable: React.FC<MarketDataTableProps> = ({ data, type }) => {
   return (
-    <div className="max-h-[300px] overflow-y-auto">
+    <div>
       <Table>
         <TableHeader>
           <TableRow>

@@ -45,7 +45,7 @@ export const SegmentsCard: React.FC<SegmentsCardProps> = ({ sectorData, industry
             <TabsTrigger value="sectors">Sectors</TabsTrigger>
             <TabsTrigger value="industries">Industries</TabsTrigger>
           </TabsList>
-          <div className="max-h-[300px] overflow-y-auto">
+          <div>
             <TabsContent value="sectors" className="mt-0">{renderSegmentList(sectorData)}</TabsContent>
             <TabsContent value="industries" className="mt-0">{renderSegmentList(industryData)}</TabsContent>
           </div>
