@@ -236,9 +236,9 @@ const evaluateDCF = (
 };
 
 const getCashAllocationData = (data: {
-    NCFI?: number;
-    CAPEX?: number;
-    RND?: number;
+    NCFI?: number; //Net Cash Flow from Investing
+    CAPEX?: number; //Capital Expenditures
+    RND?: number; //Research and Development
 }): { capex: number; rnd: number; acquisitions: number } => {
     const { NCFI = 0, CAPEX = 0, RND = 0 } = data;
     const NetCashFlowFromInvesting = Math.abs(NCFI);

@@ -15,7 +15,7 @@ import { IntroSnowflakeChart, introSnowflakeChartName } from "@/components/equit
 import { RevenueExpensesBreakdownChart, revenueExpensesBreakdownChartName } from "@/components/equity/RevenueExpensesBreakdownChart";
 import { StockPriceHistoryChart, stockPriceHistoryChartName } from "@/components/equity/StockPriceHistoryChart";
 import { QuarterlyEarningsChart, quarterlyEarningsChartName } from "@/components/equity/QuarterlyEarningsChart";
-
+import Finance from "@/math/finance"; // Import utility function for cash allocation data
 import { getSampleEquitiesTickers } from "@/services/nasdaqDataLink/sampleDataApi";
 
 // Define an interface for the bar data items (matching bars.json structure)
@@ -65,20 +65,35 @@ interface IncomeStatementItem {
   shareswa: number | null; // Weighted Average Shares Outstanding
 }
 
-
-// --- Management Chart Sample Data ---
-const managementChartData = [
-  { year: '2011', research: 100, production: 150, acquisitions: 200 },
-  { year: '2012', research: 120, production: 180, acquisitions: 220 },
-  { year: '2013', research: 200, production: 250, acquisitions: 210 },
-  { year: '2014', research: 180, production: 220, acquisitions: 230 },
-  { year: '2015', research: 190, production: 240, acquisitions: 250 },
-  { year: '2016', research: 170, production: 260, acquisitions: 270 },
-  { year: '2017', research: 160, production: 230, acquisitions: 280 },
-  { year: '2018', research: 220, production: 300, acquisitions: 260 },
-  { year: '2019', research: 210, production: 270, acquisitions: 240 },
-  { year: '2020', research: 200, production: 250, acquisitions: 200 },
+// --- Sample Input Data for Cash Allocation ---
+// Represents raw financial data that would be input to Finance.getCashAllocationData
+// All monetary values are in a consistent unit (e.g., millions of USD)
+const companyFinancialsInputData = [
+  { year: '2016', ncfi: -580, capexReported: 250, rndReported: 150 }, // Assuming ncfi is negative for investments
+  { year: '2017', ncfi: -620, capexReported: 270, rndReported: 160 },
+  { year: '2018', ncfi: -700, capexReported: 300, rndReported: 180 },
+  { year: '2019', ncfi: -750, capexReported: 320, rndReported: 200 },
+  { year: '2020', ncfi: -680, capexReported: 280, rndReported: 190 },
+  { year: '2021', ncfi: -720, capexReported: 310, rndReported: 210 },
 ];
+
+// --- Generate Management Chart Data using Finance.getCashAllocationData ---
+// This data will be used by the ManagementStackedAreaChart.
+// It assumes Finance.getCashAllocationData(ncfi, capex, rnd) returns { capex, rnd, acquisitions },
+// where output 'capex' is for 'production' and output 'rnd' is for 'research'.
+const managementChartData = companyFinancialsInputData.map(item => {
+  const allocation = Finance.getCashAllocationData({
+    NCFI: item.ncfi,
+    CAPEX: item.capexReported,
+    RND: item.rndReported
+  });
+  return {
+    year: item.year,
+    research: allocation.rnd,        // rnd output from Finance.getCashAllocationData
+    production: allocation.capex,    // capex output from Finance.getCashAllocationData
+    acquisitions: allocation.acquisitions,
+  };
+});
 
 // --- Dividend Analysis Sample Data ---
 const dividendChartData = [
