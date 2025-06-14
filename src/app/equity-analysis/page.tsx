@@ -42,8 +42,17 @@ interface BalanceSheetItem {
   debt: number;
   equity: number;
   assets: number;
-  reporttype: string;
-  currency: string;
+  reporttype?: string; // Made optional
+  currency?: string;   // Made optional
+  bvps?: number;
+  cashneq?: number;
+  liabilities?: number;
+  investmentsnc?: number;
+  receivables?: number;
+  inventory?: number;
+  ppnenet?: number;
+  intangibles?: number;
+  tangibles?: number;
 }
 
 // Define an interface for the raw income statement data items (matching income-statement.json structure)
@@ -63,37 +72,34 @@ interface IncomeStatementItem {
   taxexp: number; // Income Tax Expense
   netinc: number; // Net Income
   shareswa: number | null; // Weighted Average Shares Outstanding
+  reporttype?: string; // Made optional as not all entries have it
+  currency?: string;   // Made optional
 }
 
-// --- Sample Input Data for Cash Allocation ---
-// Represents raw financial data that would be input to Finance.getCashAllocationData
-// All monetary values are in a consistent unit (e.g., millions of USD)
-const companyFinancialsInputData = [
-  { year: '2016', ncfi: -580, capexReported: 250, rndReported: 150 }, // Assuming ncfi is negative for investments
-  { year: '2017', ncfi: -620, capexReported: 270, rndReported: 160 },
-  { year: '2018', ncfi: -700, capexReported: 300, rndReported: 180 },
-  { year: '2019', ncfi: -750, capexReported: 320, rndReported: 200 },
-  { year: '2020', ncfi: -680, capexReported: 280, rndReported: 190 },
-  { year: '2021', ncfi: -720, capexReported: 310, rndReported: 210 },
-];
+// Define an interface for the raw cash flow statement data items
+interface CashFlowStatementItem {
+  symbol: string;
+  calendardate: string; // e.g., "2021-12-31"
+  ncfi?: number;         // Net Cash Flow from Investing
+  capex?: number;        // Capital Expenditures (now stored as negative in JSON)
+  reporttype?: string;   // AR, AQ etc.
+  currency?: string;
+  opex?: number;         // Operating Expenses
+  ncff?: number;         // Net Cash Flow from Financing
+  fcf?: number;          // Free Cash Flow
+  ncfo?: number;         // Net Cash Flow from Operations
+  sbcomp?: number;       // Stock-Based Compensation
+  depamor?: number;      // Depreciation and Amortization
+  ncfcommon?: number;    // Net Cash Flow from Common Stock
+  ncfinv?: number;       // Net Change in Investments / Other Investing Activities
+}
 
-// --- Generate Management Chart Data using Finance.getCashAllocationData ---
-// This data will be used by the ManagementStackedAreaChart.
-// It assumes Finance.getCashAllocationData(ncfi, capex, rnd) returns { capex, rnd, acquisitions },
-// where output 'capex' is for 'production' and output 'rnd' is for 'research'.
-const managementChartData = companyFinancialsInputData.map(item => {
-  const allocation = Finance.getCashAllocationData({
-    NCFI: item.ncfi,
-    CAPEX: item.capexReported,
-    RND: item.rndReported
-  });
-  return {
-    year: item.year,
-    research: allocation.rnd,        // rnd output from Finance.getCashAllocationData
-    production: allocation.capex,    // capex output from Finance.getCashAllocationData
-    acquisitions: allocation.acquisitions,
-  };
-});
+interface ManagementChartDataPoint {
+  year: string;
+  research: number;
+  production: number;
+  acquisitions: number;
+}
 
 // --- Dividend Analysis Sample Data ---
 const dividendChartData = [
@@ -156,6 +162,7 @@ export default function EquityAnalysisPage() {
   const [stockPriceHistoryData, setStockPriceHistoryData] = useState<StockPriceHistoryChartItem[]>([]);
   const [financialHealthData, setFinancialHealthData] = useState<Array<{ year: string; debt: number; equity: number }>>([]);
   const [quarterlyEarningsData, setQuarterlyEarningsData] = useState<Array<{ quarter: string; revenue: number; netIncome: number }>>([]);
+  const [managementChartData, setManagementChartData] = useState<ManagementChartDataPoint[]>([]);
 
   const getQuarterFromDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -251,7 +258,68 @@ export default function EquityAnalysisPage() {
     };
     fetchQuarterlyEarnings();
 
-  }, [companyData.ticker]);
+    const fetchManagementAllocationData = async () => {
+      if (!companyData.ticker) return;
+      try {
+        const rawCashFlowData: CashFlowStatementItem[] = await getSampleEquitiesTickers({
+          ticker: companyData.ticker,
+          table: 'CASH_FLOW_STATEMENT',
+        });
+
+        const rawIncomeStatementData: IncomeStatementItem[] = await getSampleEquitiesTickers({
+          ticker: companyData.ticker,
+          table: 'INCOME_STATEMENT',
+        });
+
+        // Filter for annual reports and the specific ticker
+        const annualCashFlow = rawCashFlowData.filter(
+          item => item.symbol === companyData.ticker && item.reporttype === 'AR'
+        );
+        const annualIncome = rawIncomeStatementData.filter(
+          item => item.symbol === companyData.ticker && item.reporttype === 'AR'
+        );
+
+        // Combine data by year
+        const combinedFinancials = annualCashFlow.map(cfItem => {
+          const year = cfItem.calendardate.substring(0, 4);
+          const incomeItem = annualIncome.find(
+            incItem => incItem.calendardate.substring(0, 4) === year
+          );
+          return {
+            year: year,
+            ncfi: cfItem.ncfi || 0, // Default to 0 if undefined
+            // CAPEX is stored as negative in JSON, Finance.getCashAllocationData likely expects positive
+            capexReported: cfItem.capex !== undefined ? Math.abs(cfItem.capex) : 0,
+            // Use RND from income statement, default to 0 if not found for that year
+            rndReported: incomeItem && incomeItem.rnd !== undefined ? incomeItem.rnd : 0,
+          };
+        }).filter(item => item.rndReported !== undefined); // Ensure RND was processed (even if 0)
+
+        // Sort by year for chronological order in the chart
+        combinedFinancials.sort((a, b) => parseInt(a.year) - parseInt(b.year));
+
+        const chartData = combinedFinancials.map(item => {
+          const allocation = Finance.getCashAllocationData({
+            NCFI: item.ncfi,
+            CAPEX: item.capexReported,
+            RND: item.rndReported,
+          });
+          return {
+            year: item.year,
+            research: allocation.rnd,
+            production: allocation.capex,
+            acquisitions: allocation.acquisitions,
+          };
+        });
+        setManagementChartData(chartData);
+      } catch (error) {
+        console.error("Failed to fetch management allocation data:", error);
+        setManagementChartData([]); // Reset or handle error appropriately
+      }
+    };
+    fetchManagementAllocationData();
+
+  }, [companyData.ticker]); // Dependency array ensures this runs when ticker changes
 
 
   const handleChartFocus = (chartKey: string) => {
