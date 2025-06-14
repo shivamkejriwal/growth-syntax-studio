@@ -132,9 +132,9 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
         </div>
 
         <div className="flex justify-between text-xs text-muted-foreground px-1">
-          <span className="text-emerald-500 text-center" style={{ flexBasis: `${undervaluedZoneWidth > 0 ? undervaluedThreshold : 0}%`}}>{undervaluedThreshold} Undervalued</span>
+          <span className="text-emerald-500 text-center" style={{ flexBasis: `${undervaluedZoneWidth > 0 ? undervaluedThreshold : 0}%`}}>{undervaluedThreshold.toFixed(2)} Undervalued</span>
           <span className="text-center" style={{ flexBasis: `${aboutRightZoneWidth > 0 ? (100 - undervaluedThreshold - overvaluedThreshold) : 0}%`}}>About Right</span>
-          <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold} Overvalued</span>
+          <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold.toFixed(2)} Overvalued</span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between pt-6">
