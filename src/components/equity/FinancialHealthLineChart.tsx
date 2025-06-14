@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartCardFooter } from './ChartCardFooter';
 
 export interface FinancialHealthLineChartProps {
-  data: Array<{ year: string; debt: number; netWorth: number }>;
+  data: Array<{ year: string; debt: number; equity: number }>;
       onMoreDetailsClick?: (chartKey: string) => void;
 }
 
@@ -14,7 +14,7 @@ export const financialHealthChartName = "financial-health";
 
 const legendPayload = [
   { value: 'Debt', type: 'line' as const, id: 'debt', color: 'hsl(var(--chart-3))' },
-  { value: 'Net Worth', type: 'line' as const, id: 'netWorth', color: 'hsl(var(--chart-2))' },
+  { value: 'Equity', type: 'line' as const, id: 'equity', color: 'hsl(var(--chart-2))' },
 ];
 
 export const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data, onMoreDetailsClick }) => {
@@ -55,8 +55,8 @@ export const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> =
             />
             <Line
               type="monotone"
-              dataKey="netWorth"
-              name="Net Worth"
+              dataKey="equity"
+              name="Equity"
               stroke="hsl(var(--chart-2))"
               strokeWidth={2}
               dot={{ r: 4, fill: 'hsl(var(--chart-2))' }}

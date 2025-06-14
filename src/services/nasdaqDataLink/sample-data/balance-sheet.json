@@ -1,5 +1,95 @@
 [
   {
+    "symbol": "EXMPL",
+    "calendardate": "2012-12-31",
+    "debt": 150,
+    "equity": 400,
+    "assets": 550,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2013-12-31",
+    "debt": 160,
+    "equity": 550,
+    "assets": 710,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2014-12-31",
+    "debt": 165,
+    "equity": 520,
+    "assets": 685,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2015-12-31",
+    "debt": 170,
+    "equity": 530,
+    "assets": 700,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2016-12-31",
+    "debt": 200,
+    "equity": 540,
+    "assets": 740,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2017-12-31",
+    "debt": 280,
+    "equity": 450,
+    "assets": 730,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2018-12-31",
+    "debt": 250,
+    "equity": 460,
+    "assets": 710,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2019-12-31",
+    "debt": 240,
+    "equity": 455,
+    "assets": 695,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2020-12-31",
+    "debt": 260,
+    "equity": 470,
+    "assets": 730,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2021-12-31",
+    "debt": 300,
+    "equity": 500,
+    "assets": 800,
+    "reporttype": "Annual",
+    "currency": "USD"
+  },
+  {
     "symbol": "AAPL",
     "calendardate": "2024-12-31",
     "assets": 364840000000,
@@ -13,7 +103,9 @@
     "inventory": 3742000000,
     "ppnenet": 87546000000,
     "intangibles": 78822000000,
-    "tangibles": 286018000000
+    "tangibles": 286018000000,
+    "reporttype": "Annual",
+    "currency": "USD"
   },
   {
     "symbol": "TSLA",
@@ -29,6 +121,8 @@
     "inventory": 3000000000,
     "ppnenet": 40000000000,
     "intangibles": 5000000000,
-    "tangibles": 100000000000
+    "tangibles": 100000000000,
+    "reporttype": "Annual",
+    "currency": "USD"
   }
 ]

@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Briefcase, Activity, DollarSign, Zap, ArrowLeft } from "lucide-react";
-import React, { useState } from "react"; // Import useState
+import React, { useState, useEffect } from "react"; // Import useState and useEffect
 import Image from "next/image";
 import { SharePriceVsFairValueChart, sharePriceVsFairValueChartName } from "@/components/equity/SharePriceVsFairValueChart";
 import { ManagementStackedAreaChart, managementStackedAreaChartName } from "@/components/equity/ManagementStackedAreaChart";
@@ -16,62 +16,36 @@ import { RevenueExpensesBreakdownChart, revenueExpensesBreakdownChartName } from
 import { StockPriceHistoryChart, stockPriceHistoryChartName } from "@/components/equity/StockPriceHistoryChart";
 import { QuarterlyEarningsChart, quarterlyEarningsChartName } from "@/components/equity/QuarterlyEarningsChart";
 
-// --- Stock Price History Sample Data ---
-const stockPriceHistoryData = [
-  { date: '2024-06-01', price: 37.5 },
-  { date: '2024-06-08', price: 38.1 },
-  { date: '2024-06-15', price: 39.0 },
-  { date: '2024-06-22', price: 38.7 },
-  { date: '2024-06-29', price: 39.5 },
-  { date: '2024-07-06', price: 40.2 },
-  { date: '2024-07-13', price: 41.0 },
-  { date: '2024-07-20', price: 40.8 },
-  { date: '2024-07-27', price: 41.5 },
-  { date: '2024-08-03', price: 42.0 },
-  { date: '2024-08-10', price: 41.7 },
-  { date: '2024-08-17', price: 42.3 },
-  { date: '2024-08-24', price: 43.0 },
-  { date: '2024-08-31', price: 43.5 },
-  { date: '2024-09-07', price: 44.0 },
-  { date: '2024-09-14', price: 43.8 },
-  { date: '2024-09-21', price: 44.5 },
-  { date: '2024-09-28', price: 45.0 },
-  { date: '2024-10-05', price: 45.7 },
-  { date: '2024-10-12', price: 46.2 },
-  { date: '2024-10-19', price: 46.0 },
-  { date: '2024-10-26', price: 46.8 },
-  { date: '2024-11-02', price: 47.2 },
-  { date: '2024-11-09', price: 47.5 },
-  { date: '2024-11-16', price: 48.0 },
-  { date: '2024-11-23', price: 48.3 },
-  { date: '2024-11-30', price: 48.7 },
-  { date: '2024-12-07', price: 49.0 },
-  { date: '2024-12-14', price: 49.5 },
-  { date: '2024-12-21', price: 50.0 },
-  { date: '2024-12-28', price: 50.3 },
-  { date: '2025-01-04', price: 50.7 },
-  { date: '2025-01-11', price: 51.0 },
-  { date: '2025-01-18', price: 51.5 },
-  { date: '2025-01-25', price: 52.0 },
-  { date: '2025-02-01', price: 52.3 },
-  { date: '2025-02-08', price: 52.7 },
-  { date: '2025-02-15', price: 53.0 },
-  { date: '2025-02-22', price: 53.5 },
-  { date: '2025-03-01', price: 54.0 },
-  { date: '2025-03-08', price: 54.3 },
-  { date: '2025-03-15', price: 54.7 },
-  { date: '2025-03-22', price: 55.0 },
-  { date: '2025-03-29', price: 55.5 },
-  { date: '2025-04-05', price: 56.0 },
-  { date: '2025-04-12', price: 56.3 },
-  { date: '2025-04-19', price: 56.7 },
-  { date: '2025-04-26', price: 57.0 },
-  { date: '2025-05-03', price: 57.5 },
-  { date: '2025-05-10', price: 58.0 },
-  { date: '2025-05-17', price: 58.3 },
-  { date: '2025-05-24', price: 58.7 },
-  { date: '2025-05-31', price: 59.0 },
-];
+import { getSampleEquitiesTickers } from "@/services/nasdaqDataLink/sampleDataApi";
+
+// Define an interface for the bar data items (matching bars.json structure)
+interface BarDataItem {
+  symbol: string;
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+// Define an interface for the data format expected by StockPriceHistoryChart
+interface StockPriceHistoryChartItem {
+  date: string;
+  price: number;
+}
+
+// Define an interface for the raw balance sheet data items (matching balance-sheet.json structure)
+interface BalanceSheetItem {
+  symbol: string;
+  calendardate: string; // e.g., "2021-12-31"
+  debt: number;
+  equity: number;
+  assets: number;
+  reporttype: string;
+  currency: string;
+}
+
 
 // --- Management Chart Sample Data ---
 const managementChartData = [
@@ -85,20 +59,6 @@ const managementChartData = [
   { year: '2018', research: 220, production: 300, acquisitions: 260 },
   { year: '2019', research: 210, production: 270, acquisitions: 240 },
   { year: '2020', research: 200, production: 250, acquisitions: 200 },
-];
-
-// --- Financial Health Sample Data ---
-const financialHealthData = [
-  { year: '2012', debt: 150, netWorth: 400 },
-  { year: '2013', debt: 160, netWorth: 550 },
-  { year: '2014', debt: 165, netWorth: 520 },
-  { year: '2015', debt: 170, netWorth: 530 },
-  { year: '2016', debt: 200, netWorth: 540 },
-  { year: '2017', debt: 280, netWorth: 450 },
-  { year: '2018', debt: 250, netWorth: 460 },
-  { year: '2019', debt: 240, netWorth: 455 },
-  { year: '2020', debt: 260, netWorth: 470 },
-  { year: '2021', debt: 300, netWorth: 500 },
 ];
 
 // --- Dividend Analysis Sample Data ---
@@ -125,11 +85,11 @@ const dividendMetrics = [
 
 // --- Quarterly Earnings Sample Data ---
 const quarterlyEarningsData = [
-  { quarter: 'Q1 2024', revenue: 1200, profit: 300 },
-  { quarter: 'Q2 2024', revenue: 1350, profit: 350 },
-  { quarter: 'Q3 2024', revenue: 1400, profit: 370 },
-  { quarter: 'Q4 2024', revenue: 1500, profit: 400 },
-  { quarter: 'Q1 2025', revenue: 1550, profit: 420 },
+  { quarter: 'Q1 2024', revenue: 1200, netIncome: 300 },
+  { quarter: 'Q2 2024', revenue: 1350, netIncome: 350 },
+  { quarter: 'Q3 2024', revenue: 1400, netIncome: 370 },
+  { quarter: 'Q4 2024', revenue: 1500, netIncome: 400 },
+  { quarter: 'Q1 2025', revenue: 1550, netIncome: 420 },
 ];
 
 // --- Revenue & Expenses Breakdown Sample Data ---
@@ -167,6 +127,11 @@ const revenueExpensesData = {
 
 export default function EquityAnalysisPage() {
   const [focusedChartKey, setFocusedChartKey] = useState<string | null>(null);
+  const [stockPriceHistoryData, setStockPriceHistoryData] = useState<StockPriceHistoryChartItem[]>([]);
+  const [financialHealthData, setFinancialHealthData] = useState<Array<{ year: string; debt: number; equity: number }>>([]);
+
+
+
 
   const companyData = {
     name: "Example Corp",
@@ -188,6 +153,51 @@ export default function EquityAnalysisPage() {
     overvaluedThresholdPercent: 20,
     currencySymbol: "US$",
   };
+
+  useEffect(() => {
+    const fetchStockHistory = async () => {
+      try {
+        const rawBarData: BarDataItem[] = await getSampleEquitiesTickers({
+          ticker: companyData.ticker, // "EXMPL"
+          table: 'BARS',
+          // date and range are optional for getSampleEquitiesTickers if not filtering by date
+        });
+
+        // Transform data for the StockPriceHistoryChart
+        const formattedData = rawBarData.map(item => ({
+          date: item.date,
+          price: item.close, // Using 'close' price for the chart
+        }));
+        setStockPriceHistoryData(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch stock price history:", error);
+      }
+    };
+    fetchStockHistory();
+
+    const fetchFinancialHealth = async () => {
+      try {
+        const rawBalanceSheetData: BalanceSheetItem[] = await getSampleEquitiesTickers({
+          ticker: companyData.ticker, // "EXMPL"
+          table: 'BALANCE_SHEET',
+        });
+
+        // Transform data for the FinancialHealthLineChart
+        // The chart expects { year: string; debt: number; equity: number }
+        const formattedData = rawBalanceSheetData.map(item => ({
+          year: item.calendardate.substring(0, 4), // Extract year from "YYYY-MM-DD"
+          debt: item.debt,
+          equity: item.equity,
+        }));
+        setFinancialHealthData(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch financial health data:", error);
+      }
+    };
+    fetchFinancialHealth();
+
+  }, [companyData.ticker]);
+
 
   const handleChartFocus = (chartKey: string) => {
     setFocusedChartKey(chartKey);
