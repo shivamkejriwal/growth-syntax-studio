@@ -1,10 +1,9 @@
 "use client";
 
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Keep CartesianGrid if used
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Removed CardDescription, CardFooter
+import { ChartCardFooter } from './ChartCardFooter';
 
 export interface ManagementStackedAreaChartProps {
   data: Array<{
@@ -22,11 +21,11 @@ const legendPayload = [
 ];
 
 const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({ data }) => (
-	<Card className="shadow-lg col-span-1">
+	<Card className="shadow-lg col-span-1 flex flex-col">
 		<CardHeader>
 			<CardTitle>Management</CardTitle>
 		</CardHeader>
-		<CardContent className="pb-2">
+		<CardContent className="pb-2 flex-1">
 			<ResponsiveContainer width="100%" height={600}>
 				<AreaChart
 					data={data}
@@ -65,18 +64,8 @@ const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({
 				</AreaChart>
 			</ResponsiveContainer>
 		</CardContent>
-		<CardFooter className="flex justify-between pt-4">
-			<Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-				<Newspaper className="mr-2 h-4 w-4" />
-				MORE DETAILS
-			</Button>
-			<Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-				<Share2 className="mr-2 h-4 w-4" />
-				SHARE
-			</Button>
-		</CardFooter>
+		<ChartCardFooter />
 	</Card>
 );
 
 export default ManagementStackedAreaChart;
-

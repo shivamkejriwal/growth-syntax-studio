@@ -1,7 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SampleBarChart } from "@/components/charts/sample-bar-chart";
+import { ChartCardFooter } from './ChartCardFooter';
 
 export interface QuarterlyEarningsChartProps {
   ticker: string;
@@ -12,23 +11,14 @@ export function QuarterlyEarningsChart({ ticker, data }: QuarterlyEarningsChartP
   // Map data to the format expected by SampleBarChart
   const chartData = data.map(d => ({ month: d.quarter, desktop: d.revenue, mobile: d.profit }));
   return (
-    <Card className="shadow-lg w-full">
+    <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle>Quarterly Earnings</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1"> {/* Use flex-1 to allow content to grow and push footer down */}
         <SampleBarChart title={`${ticker} Quarterly Revenue & Profit`} data={chartData} />
       </CardContent>
-      <CardFooter className="flex justify-between pt-6">
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Newspaper className="mr-2 h-4 w-4" />
-          MORE DETAILS
-        </Button>
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Share2 className="mr-2 h-4 w-4" />
-          SHARE
-        </Button>
-      </CardFooter>
+      <ChartCardFooter />
     </Card>
   );
 }

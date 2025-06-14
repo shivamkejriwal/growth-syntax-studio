@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartCardFooter } from './ChartCardFooter';
 
 // Helper: Calculate percent difference
 function getActualPercentageDiff(currentPrice: number, fairValue: number) {
@@ -69,7 +68,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
 
   // Increase spacing between bars by adjusting top/bottom values
   return (
-    <Card className="shadow-lg w-full">
+    <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle className="text-xl">
           Share Price vs Fair Value
@@ -78,7 +77,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
           What is the Fair Price of {ticker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <div className={`text-center mb-6 ${statusColor}`}>
           <p className="text-3xl font-bold">
             {Math.abs(actualPercentageDiff).toFixed(1)}%
@@ -137,16 +136,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
           <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold.toFixed(2)} Overvalued</span>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between pt-6">
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Newspaper className="mr-2 h-4 w-4" />
-          MORE DETAILS
-        </Button>
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Share2 className="mr-2 h-4 w-4" />
-          SHARE
-        </Button>
-      </CardFooter>
+      <ChartCardFooter />
     </Card>
   );
 };

@@ -1,10 +1,9 @@
 "use client";
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartCardFooter } from './ChartCardFooter';
 
 export interface FinancialHealthLineChartProps {
   data: Array<{ year: string; debt: number; netWorth: number }>;
@@ -17,11 +16,11 @@ const legendPayload = [
 
 const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data }) => {
   return (
-    <Card className="shadow-lg w-full">
+    <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle>Health</CardTitle>
       </CardHeader>
-      <CardContent className="pb-2">
+      <CardContent className="pb-2 flex-1">
         <ResponsiveContainer width="100%" height={600}>
           <LineChart 
             data={data} 
@@ -70,16 +69,7 @@ const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ dat
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-      <CardFooter className="flex justify-between pt-6">
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Newspaper className="mr-2 h-4 w-4" />
-          MORE DETAILS
-        </Button>
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Share2 className="mr-2 h-4 w-4" />
-          SHARE
-        </Button>
-      </CardFooter>
+      <ChartCardFooter />
     </Card>
   );
 };

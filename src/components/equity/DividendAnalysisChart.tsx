@@ -1,12 +1,11 @@
 "use client";
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Keep CartesianGrid if used
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { ChartCardFooter } from './ChartCardFooter';
 
 export interface DividendAnalysisChartProps {
   data: Array<{ year: string; dps: number }>;
@@ -19,11 +18,11 @@ const legendPayload = [
 
 const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics }) => {
   return (
-    <Card className="shadow-lg w-full">
+    <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle>Dividend</CardTitle>
       </CardHeader>
-      <CardContent className="pb-2">
+      <CardContent className="pb-2 flex-1">
         <ResponsiveContainer width="100%" height={350}>
           <LineChart 
             data={data}
@@ -81,19 +80,9 @@ const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, met
           ))}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between pt-6">
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Newspaper className="mr-2 h-4 w-4" />
-          MORE DETAILS
-        </Button>
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Share2 className="mr-2 h-4 w-4" />
-          SHARE
-        </Button>
-      </CardFooter>
+      <ChartCardFooter />
     </Card>
   );
 };
 
 export default DividendAnalysisChart;
-

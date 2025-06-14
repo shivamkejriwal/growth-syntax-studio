@@ -1,11 +1,10 @@
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ParentSize } from '@visx/responsive';
 import { Sankey, sankeyLinkHorizontal } from '@visx/sankey';
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { ChartCardFooter } from './ChartCardFooter';
 
 export interface RevenueExpensesBreakdownChartProps {
   data: {
@@ -54,14 +53,14 @@ const getLinkColor = (link: { target: { id?: string } | string }) => {
 };
 
 const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps> = ({ data }) => (
-  <Card className="shadow-lg w-full">
+  <Card className="shadow-lg w-full flex flex-col">
     <CardHeader>
       <CardTitle className="text-xl">Revenue &amp; Expenses Breakdown</CardTitle>
       <CardDescription>
         How Example Corp makes and spends money. Based on latest reported earnings, on an LTM basis.
       </CardDescription>
     </CardHeader>
-    <CardContent className="space-y-6">
+    <CardContent className="space-y-6 flex-1">
       <div className="w-full" style={{ height: '500px', position: 'relative' }}>
         <ParentSize>
           {({ width, height }) => (
@@ -135,16 +134,7 @@ const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps
         </ParentSize>
       </div>
     </CardContent>
-    <CardFooter className="flex justify-between pt-6">
-      <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-        <Newspaper className="mr-2 h-4 w-4" />
-        MORE DETAILS
-      </Button>
-      <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-        <Share2 className="mr-2 h-4 w-4" />
-        SHARE
-      </Button>
-    </CardFooter>
+    <ChartCardFooter />
   </Card>
 );
 

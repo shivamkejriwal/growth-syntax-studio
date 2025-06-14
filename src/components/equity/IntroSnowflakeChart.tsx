@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Newspaper, Share2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartCardFooter } from './ChartCardFooter';
 
 interface SnowflakeDataPoint {
   name: string;
@@ -53,11 +52,11 @@ const IntroSnowflakeChart: React.FC = () => {
   let currentAngle = 0;
 
   return (
-    <Card className="shadow-lg w-full">
+    <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
         <CardTitle>Overview</CardTitle>
       </CardHeader>
-      <CardContent className="pb-4">
+      <CardContent className="pb-4 flex-1">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           {/* Legend */}
           <div className="w-full sm:w-1/3 space-y-2">
@@ -95,16 +94,7 @@ const IntroSnowflakeChart: React.FC = () => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between pt-6">
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Newspaper className="mr-2 h-4 w-4" />
-          MORE DETAILS
-        </Button>
-        <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
-          <Share2 className="mr-2 h-4 w-4" />
-          SHARE
-        </Button>
-      </CardFooter>
+      <ChartCardFooter />
     </Card>
   );
 };
