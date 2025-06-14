@@ -98,29 +98,16 @@ export default function EquityAnalysisPage() {
     setManagementChartData([]);
   };
 
-  const companyData = {
-    name: "Example Corp",
-    ticker: "EXMPL",
-    valuation: "$150.7B",
-    peRatio: "25.3",
-    financialHealth: "Stable (B+)",
-    debtToEquity: "0.45",
-    futurePerformance: "Moderate Growth Expected",
-    analystRating: "Buy (4.2/5)",
-    pastDividends: "$1.20/share (Annual)",
-    yield: "2.1%",
+  const handleChartFocus = (chartKey: string) => {
+    setFocusedChartKey(chartKey);
+    window.scrollTo(0, 0); // Scroll to top when a chart is focused
   };
 
-  const sharePriceVsFairValueData = {
-    currentPrice: 37.96,
-    fairValue: 62.93,
-    undervaluedThresholdPercent: 20,
-    overvaluedThresholdPercent: 20,
-    currencySymbol: "US$",
+  const handleClearFocus = () => {
+    setFocusedChartKey(null);
   };
 
-  useEffect(() => {
-    const fetchAllData = async () => {
+  const fetchAllData = async () => {
       if (!companyData.ticker) {
         // Reset data if ticker is not available
         resetAllChartData();
@@ -160,19 +147,31 @@ export default function EquityAnalysisPage() {
         resetAllChartData(); // Reset data on error
       }
     };
+
+  const companyData = {
+    name: "Example Corp",
+    ticker: "EXMPL",
+    valuation: "$150.7B",
+    peRatio: "25.3",
+    financialHealth: "Stable (B+)",
+    debtToEquity: "0.45",
+    futurePerformance: "Moderate Growth Expected",
+    analystRating: "Buy (4.2/5)",
+    pastDividends: "$1.20/share (Annual)",
+    yield: "2.1%",
+  };
+
+  const sharePriceVsFairValueData = {
+    currentPrice: 37.96,
+    fairValue: 62.93,
+    undervaluedThresholdPercent: 20,
+    overvaluedThresholdPercent: 20,
+    currencySymbol: "US$",
+  };
+
+  useEffect(() => {
     fetchAllData();
-
   }, [companyData.ticker]); // Dependency array ensures this runs when ticker changes
-
-
-  const handleChartFocus = (chartKey: string) => {
-    setFocusedChartKey(chartKey);
-    window.scrollTo(0, 0); // Scroll to top when a chart is focused
-  };
-
-  const handleClearFocus = () => {
-    setFocusedChartKey(null);
-  };
 
   // Define all chart configurations in an array for easier management
   const allChartConfigs = [
