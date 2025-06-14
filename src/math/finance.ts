@@ -235,6 +235,30 @@ const evaluateDCF = (
   return fairValue;
 };
 
+const getCashAllocationData = (data: {
+    NCFI?: number;
+    CAPEX?: number;
+    RND?: number;
+}): { capex: number; rnd: number; acquisitions: number } => {
+    const { NCFI = 0, CAPEX = 0, RND = 0 } = data;
+    const NetCashFlowFromInvesting = Math.abs(NCFI);
+    const capex = Math.abs(CAPEX);
+    const rnd = Math.abs(RND);
+    const acquisitions = Math.abs(capex - NetCashFlowFromInvesting);
+    const totalAllocation = capex + rnd + acquisitions;
+
+    const fix = (value: number): number => (value < 0) ? 0 :
+        (value < 1) ? Number((value * 100).toFixed(2)) : 100; // TO DO: remove after cleaner data
+    const capexPercentage = fix(Utils.divide(capex, totalAllocation));
+    const rndPercentage = fix(Utils.divide(rnd, totalAllocation));
+    const acquisitionsPercentage = fix(Utils.divide(acquisitions, totalAllocation));
+    return {
+        capex: capexPercentage, //production
+        rnd: rndPercentage, //research
+        acquisitions: acquisitionsPercentage //acquisitions
+    };
+}
+
 // Instantiate a Finance class
 const Finance = {
   IRR,
@@ -244,7 +268,8 @@ const Finance = {
   TV,
   evaluateDCF,
   growthRates,
-  Forcast
+  Forcast,
+  getCashAllocationData
 };
 
 export default Finance;
