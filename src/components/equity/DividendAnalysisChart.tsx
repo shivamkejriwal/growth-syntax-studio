@@ -17,10 +17,12 @@ const legendPayload = [
 ];
 
 const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics }) => {
+  const cardTitle = "Dividend";
+  const chartName = "dividend";
   return (
     <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
-        <CardTitle>Dividend</CardTitle>
+        <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent className="pb-2 flex-1">
         <ResponsiveContainer width="100%" height={350}>
@@ -80,7 +82,7 @@ const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, met
           ))}
         </div>
       </CardContent>
-      <ChartCardFooter />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
     </Card>
   );
 };

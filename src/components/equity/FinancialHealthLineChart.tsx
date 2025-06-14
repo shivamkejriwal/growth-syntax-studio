@@ -15,10 +15,12 @@ const legendPayload = [
 ];
 
 const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data }) => {
+  const cardTitle = "Health";
+  const chartName = "health";
   return (
     <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
-        <CardTitle>Health</CardTitle>
+        <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent className="pb-2 flex-1">
         <ResponsiveContainer width="100%" height={600}>
@@ -69,7 +71,7 @@ const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ dat
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-      <ChartCardFooter />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
     </Card>
   );
 };

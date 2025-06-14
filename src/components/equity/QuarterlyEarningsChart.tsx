@@ -10,15 +10,17 @@ export interface QuarterlyEarningsChartProps {
 export function QuarterlyEarningsChart({ ticker, data }: QuarterlyEarningsChartProps) {
   // Map data to the format expected by SampleBarChart
   const chartData = data.map(d => ({ month: d.quarter, desktop: d.revenue, mobile: d.profit }));
+  const cardTitle = "Quarterly Earnings";
+  const chartName = "quarterly-earnings";
   return (
     <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
-        <CardTitle>Quarterly Earnings</CardTitle>
+        <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1"> {/* Use flex-1 to allow content to grow and push footer down */}
         <SampleBarChart title={`${ticker} Quarterly Revenue & Profit`} data={chartData} />
       </CardContent>
-      <ChartCardFooter />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
     </Card>
   );
 }

@@ -52,10 +52,13 @@ const getLinkColor = (link: { target: { id?: string } | string }) => {
   return linkColors[targetId ?? ''] || '#69b3a2';
 };
 
-const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps> = ({ data }) => (
-  <Card className="shadow-lg w-full flex flex-col">
+const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps> = ({ data }) => {
+  const cardTitle = "Revenue & Expenses Breakdown";
+  // Simple slugify for filename
+  const chartName = cardTitle.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and');
+  return (<Card className="shadow-lg w-full flex flex-col">
     <CardHeader>
-      <CardTitle className="text-xl">Revenue &amp; Expenses Breakdown</CardTitle>
+      <CardTitle className="text-xl">{cardTitle}</CardTitle>
       <CardDescription>
         How Example Corp makes and spends money. Based on latest reported earnings, on an LTM basis.
       </CardDescription>
@@ -134,8 +137,8 @@ const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps
         </ParentSize>
       </div>
     </CardContent>
-    <ChartCardFooter />
-  </Card>
-);
+    <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+  </Card>);
+};
 
 export default RevenueExpensesBreakdownChart;

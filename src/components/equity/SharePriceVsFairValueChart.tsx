@@ -61,11 +61,12 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
   const actualPercentageDiff = getActualPercentageDiff(currentPrice, fairValue);
   const { status: valuationStatus, color: statusColor } = getValuationStatus(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
   const { currentPriceBarWidth, fairValueBarWidth, undervaluedZoneWidth, aboutRightZoneWidth, overvaluedZoneWidth } = getChartWidths(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
+  const cardTitle = "Share Price vs Fair Value";
+  const chartName = "share-price-vs-fair-value";
 
   // Use numeric values for bar height and gap
   const barHeightClass = "h-20"; // Keep bars thick
   const chartAreaHeightClass = "h-64"; // Much taller chart area for more space
-
   // Increase spacing between bars by adjusting top/bottom values
   return (
     <Card className="shadow-lg w-full flex flex-col">
@@ -136,7 +137,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
           <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold.toFixed(2)} Overvalued</span>
         </div>
       </CardContent>
-      <ChartCardFooter />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
     </Card>
   );
 };

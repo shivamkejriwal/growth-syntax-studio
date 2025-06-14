@@ -10,15 +10,17 @@ export interface StockPriceHistoryChartProps {
 export function StockPriceHistoryChart({ ticker, data }: StockPriceHistoryChartProps) {
   // Map data to the format expected by SampleLineChart
   const chartData = data.map((d) => ({ date: d.date, value: d.price }));
+  const cardTitle = "Stock Price History";
+  const chartName = "stock-price-history";
   return (
     <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
-        <CardTitle>Stock Price History</CardTitle>
+        <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1">
         <SampleLineChart title={`${ticker} Stock Price (1Y)`} data={chartData} />
       </CardContent>
-      <ChartCardFooter />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
     </Card>
   );
 }

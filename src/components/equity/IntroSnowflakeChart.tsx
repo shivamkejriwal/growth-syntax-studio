@@ -21,6 +21,8 @@ const sampleData: SnowflakeDataPoint[] = [
 const MAX_SCORE = 10; // Max possible score for any category
 
 const IntroSnowflakeChart: React.FC = () => {
+  const cardTitle = "Overview";
+  const chartName = "overview";
   const chartSize = 440; // Increased size for a much bigger snowflake
   const centerX = chartSize / 2;
   const centerY = chartSize / 2;
@@ -54,7 +56,7 @@ const IntroSnowflakeChart: React.FC = () => {
   return (
     <Card className="shadow-lg w-full flex flex-col">
       <CardHeader>
-        <CardTitle>Overview</CardTitle>
+        <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent className="pb-4 flex-1">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -94,7 +96,7 @@ const IntroSnowflakeChart: React.FC = () => {
           </div>
         </div>
       </CardContent>
-      <ChartCardFooter />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
     </Card>
   );
 };

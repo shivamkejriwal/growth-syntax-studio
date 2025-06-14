@@ -20,10 +20,12 @@ const legendPayload = [
 	{ value: 'Acquisitions', type: 'square' as const, color: 'hsl(var(--chart-1))' },
 ];
 
-const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({ data }) => (
-	<Card className="shadow-lg col-span-1 flex flex-col">
+const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({ data }) => {
+	const cardTitle = "Management";
+	const chartName = "management";
+	return (<Card className="shadow-lg col-span-1 flex flex-col">
 		<CardHeader>
-			<CardTitle>Management</CardTitle>
+			<CardTitle>{cardTitle}</CardTitle>
 		</CardHeader>
 		<CardContent className="pb-2 flex-1">
 			<ResponsiveContainer width="100%" height={600}>
@@ -64,8 +66,8 @@ const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({
 				</AreaChart>
 			</ResponsiveContainer>
 		</CardContent>
-		<ChartCardFooter />
-	</Card>
-);
+		<ChartCardFooter cardTitle={cardTitle} chartName={chartName} />
+	</Card>);
+};
 
 export default ManagementStackedAreaChart;
