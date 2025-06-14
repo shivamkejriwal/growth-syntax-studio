@@ -59,7 +59,8 @@ export const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProp
   undervaluedThreshold,
   overvaluedThreshold,
   currencySymbol = "$",
-      companyName = "Example Corp",
+  companyName = "Example Corp",
+  onMoreDetailsClick,
 }) => {
   const actualPercentageDiff = getActualPercentageDiff(currentPrice, fairValue);
   const { status: valuationStatus, color: statusColor } = getValuationStatus(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);

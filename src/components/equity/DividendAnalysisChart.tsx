@@ -85,7 +85,7 @@ export const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ da
           ))}
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={dividendAnalysisChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
     </Card>
   );
 };
