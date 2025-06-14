@@ -7,16 +7,18 @@ import { ChartCardFooter } from './ChartCardFooter';
 
 export interface FinancialHealthLineChartProps {
   data: Array<{ year: string; debt: number; netWorth: number }>;
+      onMoreDetailsClick?: (chartKey: string) => void;
 }
+
+export const financialHealthChartName = "financial-health";
 
 const legendPayload = [
   { value: 'Debt', type: 'line' as const, id: 'debt', color: 'hsl(var(--chart-3))' },
   { value: 'Net Worth', type: 'line' as const, id: 'netWorth', color: 'hsl(var(--chart-2))' },
 ];
 
-const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data }) => {
+export const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ data, onMoreDetailsClick }) => {
   const cardTitle = "Health";
-  const chartName = "health";
   const cardRef = useRef<HTMLDivElement>(null);
   return (
     <Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
@@ -72,9 +74,7 @@ const FinancialHealthLineChart: React.FC<FinancialHealthLineChartProps> = ({ dat
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
+        <ChartCardFooter cardTitle={cardTitle} chartName={financialHealthChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
     </Card>
   );
 };
-
-export default FinancialHealthLineChart;

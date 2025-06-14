@@ -11,6 +11,7 @@ export interface RevenueExpensesBreakdownChartProps {
     nodes: Array<{ id: string }>;
     links: Array<{ source: string; target: string; value: number }>;
   };
+  onMoreDetailsClick?: (chartKey: string) => void;
 }
 
 // Utility for currency formatting
@@ -52,10 +53,10 @@ const getLinkColor = (link: { target: { id?: string } | string }) => {
   return linkColors[targetId ?? ''] || '#69b3a2';
 };
 
-const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps> = ({ data }) => {
+export const revenueExpensesBreakdownChartName = "revenue-and-expenses-breakdown";
+
+export const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps> = ({ data, onMoreDetailsClick }) => {
   const cardTitle = "Revenue & Expenses Breakdown";
-  // Simple slugify for filename
-  const chartName = cardTitle.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and');
   const cardRef = useRef<HTMLDivElement>(null);
   return (<Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
     <CardHeader>
@@ -138,8 +139,6 @@ const RevenueExpensesBreakdownChart: React.FC<RevenueExpensesBreakdownChartProps
         </ParentSize>
       </div>
     </CardContent>
-    <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
+    <ChartCardFooter cardTitle={cardTitle} chartName={revenueExpensesBreakdownChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
   </Card>);
 };
-
-export default RevenueExpensesBreakdownChart;

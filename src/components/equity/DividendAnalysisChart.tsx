@@ -10,15 +10,17 @@ import { ChartCardFooter } from './ChartCardFooter';
 export interface DividendAnalysisChartProps {
   data: Array<{ year: string; dps: number }>;
   metrics: Array<{ label: string; value: string; isPercentage?: boolean }>;
+      onMoreDetailsClick?: (chartKey: string) => void;
 }
+
+export const dividendAnalysisChartName = "dividend";
 
 const legendPayload = [
   { value: 'Dividend Per Share', type: 'line' as const, id: 'dps', color: 'hsl(var(--chart-4))' },
 ];
 
-const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics }) => {
+export const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics, onMoreDetailsClick }) => {
   const cardTitle = "Dividend";
-  const chartName = "dividend";
   const cardRef = useRef<HTMLDivElement>(null);
   return (
     <Card className="shadow-lg w-full flex flex-col" ref={cardRef}>
@@ -83,9 +85,7 @@ const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, met
           ))}
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
     </Card>
   );
 };
-
-export default DividendAnalysisChart;

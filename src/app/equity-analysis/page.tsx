@@ -1,19 +1,20 @@
+"use client"; // Required because we're using useState
+
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Briefcase, Activity, DollarSign, Zap } from "lucide-react";
-import { SampleLineChart } from "@/components/charts/sample-line-chart";
-import { SampleBarChart } from "@/components/charts/sample-bar-chart";
+import { Search, Briefcase, Activity, DollarSign, Zap, ArrowLeft } from "lucide-react";
+import React, { useState } from "react"; // Import useState
 import Image from "next/image";
-import SharePriceVsFairValueChart from "@/components/equity/SharePriceVsFairValueChart";
-import ManagementStackedAreaChart from "@/components/equity/ManagementStackedAreaChart";
-import FinancialHealthLineChart from "@/components/equity/FinancialHealthLineChart";
-import DividendAnalysisChart from "@/components/equity/DividendAnalysisChart";
-import IntroSnowflakeChart from "@/components/equity/IntroSnowflakeChart";
-import RevenueExpensesBreakdownChart from "@/components/equity/RevenueExpensesBreakdownChart";
-import { StockPriceHistoryChart } from "@/components/equity/StockPriceHistoryChart";
-import { QuarterlyEarningsChart } from "@/components/equity/QuarterlyEarningsChart";
+import { SharePriceVsFairValueChart, sharePriceVsFairValueChartName } from "@/components/equity/SharePriceVsFairValueChart";
+import { ManagementStackedAreaChart, managementStackedAreaChartName } from "@/components/equity/ManagementStackedAreaChart";
+import { FinancialHealthLineChart, financialHealthChartName } from "@/components/equity/FinancialHealthLineChart";
+import { DividendAnalysisChart, dividendAnalysisChartName } from "@/components/equity/DividendAnalysisChart";
+import { IntroSnowflakeChart, introSnowflakeChartName } from "@/components/equity/IntroSnowflakeChart";
+import { RevenueExpensesBreakdownChart, revenueExpensesBreakdownChartName } from "@/components/equity/RevenueExpensesBreakdownChart";
+import { StockPriceHistoryChart, stockPriceHistoryChartName } from "@/components/equity/StockPriceHistoryChart";
+import { QuarterlyEarningsChart, quarterlyEarningsChartName } from "@/components/equity/QuarterlyEarningsChart";
 
 // --- Stock Price History Sample Data ---
 const stockPriceHistoryData = [
@@ -165,6 +166,8 @@ const revenueExpensesData = {
 };
 
 export default function EquityAnalysisPage() {
+  const [focusedChartKey, setFocusedChartKey] = useState<string | null>(null);
+
   const companyData = {
     name: "Example Corp",
     ticker: "EXMPL",
@@ -186,6 +189,75 @@ export default function EquityAnalysisPage() {
     currencySymbol: "US$",
   };
 
+  const handleChartFocus = (chartKey: string) => {
+    setFocusedChartKey(chartKey);
+    window.scrollTo(0, 0); // Scroll to top when a chart is focused
+  };
+
+  const handleClearFocus = () => {
+    setFocusedChartKey(null);
+  };
+
+  // Define all chart configurations in an array for easier management
+  const allChartConfigs = [
+    {
+      key: introSnowflakeChartName,
+      component: <IntroSnowflakeChart onMoreDetailsClick={handleChartFocus} />,
+    },
+    {
+      key: sharePriceVsFairValueChartName,
+      component: (
+        <SharePriceVsFairValueChart
+          currentPrice={sharePriceVsFairValueData.currentPrice}
+          fairValue={sharePriceVsFairValueData.fairValue}
+          undervaluedThreshold={sharePriceVsFairValueData.fairValue * (1 - sharePriceVsFairValueData.undervaluedThresholdPercent / 100)}
+          overvaluedThreshold={sharePriceVsFairValueData.fairValue * (1 + sharePriceVsFairValueData.overvaluedThresholdPercent / 100)}
+          currencySymbol={sharePriceVsFairValueData.currencySymbol}
+          ticker={companyData.ticker}
+          companyName={companyData.name}
+          onMoreDetailsClick={handleChartFocus}
+        />
+      ),
+    },
+    {
+      key: stockPriceHistoryChartName,
+      component: <StockPriceHistoryChart ticker={companyData.ticker} data={stockPriceHistoryData} onMoreDetailsClick={handleChartFocus} />,
+    },
+    {
+      key: managementStackedAreaChartName,
+      component: <ManagementStackedAreaChart data={managementChartData} onMoreDetailsClick={handleChartFocus} />,
+    },
+    {
+      key: financialHealthChartName,
+      component: <FinancialHealthLineChart data={financialHealthData} onMoreDetailsClick={handleChartFocus} />,
+    },
+    {
+      key: dividendAnalysisChartName,
+      component: <DividendAnalysisChart data={dividendChartData} metrics={dividendMetrics} onMoreDetailsClick={handleChartFocus} />,
+    },
+    {
+      key: quarterlyEarningsChartName,
+      component: <QuarterlyEarningsChart ticker={companyData.ticker} data={quarterlyEarningsData} onMoreDetailsClick={handleChartFocus} />,
+    },
+    {
+      key: revenueExpensesBreakdownChartName,
+      component: <RevenueExpensesBreakdownChart data={revenueExpensesData} onMoreDetailsClick={handleChartFocus} />,
+    },
+  ];
+
+  if (focusedChartKey) {
+    const focusedChart = allChartConfigs.find(chart => chart.key === focusedChartKey);
+    return (
+      <AppShell>
+        <div className="p-4 md:p-6">
+          <Button onClick={handleClearFocus} variant="outline" className="mb-6">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Overview
+          </Button>
+          {focusedChart ? <div className="w-full">{focusedChart.component}</div> : <p>Chart not found.</p>}
+        </div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>
@@ -231,28 +303,11 @@ export default function EquityAnalysisPage() {
         </Card>
 
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-          <IntroSnowflakeChart />
-          <SharePriceVsFairValueChart
-            currentPrice={sharePriceVsFairValueData.currentPrice}
-            fairValue={sharePriceVsFairValueData.fairValue}
-            undervaluedThreshold={sharePriceVsFairValueData.fairValue * (1 - sharePriceVsFairValueData.undervaluedThresholdPercent / 100)}
-            overvaluedThreshold={sharePriceVsFairValueData.fairValue * (1 + sharePriceVsFairValueData.overvaluedThresholdPercent / 100)}
-            currencySymbol={sharePriceVsFairValueData.currencySymbol}
-            ticker={companyData.ticker}
-            companyName={companyData.name}
-          />
-          <StockPriceHistoryChart 
-            ticker={companyData.ticker}
-            data={stockPriceHistoryData}
-          />
-          <ManagementStackedAreaChart data={managementChartData} />
-          <FinancialHealthLineChart data={financialHealthData} />
-          <DividendAnalysisChart data={dividendChartData} metrics={dividendMetrics} />
-          <QuarterlyEarningsChart 
-            ticker={companyData.ticker}
-            data={quarterlyEarningsData}
-          />
-          <RevenueExpensesBreakdownChart data={revenueExpensesData} />
+          {allChartConfigs.map(chartConfig => (
+            <React.Fragment key={chartConfig.key}>
+              {chartConfig.component}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </AppShell>

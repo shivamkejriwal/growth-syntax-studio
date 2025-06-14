@@ -12,7 +12,10 @@ export interface ManagementStackedAreaChartProps {
     production: number;
     acquisitions: number;
   }>;
+      onMoreDetailsClick?: (chartKey: string) => void;
 }
+
+export const managementStackedAreaChartName = "management";
 
 const legendPayload = [
 	{ value: 'Research', type: 'square' as const, color: 'hsl(var(--chart-4))' },
@@ -20,9 +23,8 @@ const legendPayload = [
 	{ value: 'Acquisitions', type: 'square' as const, color: 'hsl(var(--chart-1))' },
 ];
 
-const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({ data }) => {
+export const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({ data, onMoreDetailsClick }) => {
 	const cardTitle = "Management";
-	const chartName = "management";
 	const cardRef = useRef<HTMLDivElement>(null);
 	return (<Card className="shadow-lg col-span-1 flex flex-col" ref={cardRef}>
 		<CardHeader>
@@ -67,8 +69,6 @@ const ManagementStackedAreaChart: React.FC<ManagementStackedAreaChartProps> = ({
 				</AreaChart>
 			</ResponsiveContainer>
 		</CardContent>
-		<ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
+			<ChartCardFooter cardTitle={cardTitle} chartName={managementStackedAreaChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
 	</Card>);
 };
-
-export default ManagementStackedAreaChart;

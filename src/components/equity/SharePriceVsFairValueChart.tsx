@@ -47,22 +47,24 @@ interface SharePriceVsFairValueChartProps {
   overvaluedThreshold: number;  // Not percent, absolute value
   currencySymbol?: string;
   companyName?: string;
+      onMoreDetailsClick?: (chartKey: string) => void;
 }
 
-const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
+export const sharePriceVsFairValueChartName = "share-price-vs-fair-value";
+
+export const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
   ticker,
   currentPrice,
   fairValue,
   undervaluedThreshold,
   overvaluedThreshold,
   currencySymbol = "$",
-  companyName = "Example Corp"
+      companyName = "Example Corp",
 }) => {
   const actualPercentageDiff = getActualPercentageDiff(currentPrice, fairValue);
   const { status: valuationStatus, color: statusColor } = getValuationStatus(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
   const { currentPriceBarWidth, fairValueBarWidth, undervaluedZoneWidth, aboutRightZoneWidth, overvaluedZoneWidth } = getChartWidths(currentPrice, fairValue, undervaluedThreshold, overvaluedThreshold);
   const cardTitle = "Share Price vs Fair Value";
-  const chartName = "share-price-vs-fair-value";
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Use numeric values for bar height and gap
@@ -138,9 +140,7 @@ const SharePriceVsFairValueChart: React.FC<SharePriceVsFairValueChartProps> = ({
           <span className="text-red-500 text-center" style={{ flexBasis: `${overvaluedZoneWidth > 0 ? overvaluedThreshold : 0}%`}}>{overvaluedThreshold.toFixed(2)} Overvalued</span>
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={sharePriceVsFairValueChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
     </Card>
   );
 };
-
-export default SharePriceVsFairValueChart;

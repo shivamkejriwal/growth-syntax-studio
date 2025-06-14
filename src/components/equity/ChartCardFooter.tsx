@@ -10,9 +10,10 @@ interface ChartCardFooterProps {
   cardTitle: string;
   chartName: string; // A slugified version of the title for the filename
   cardRef: RefObject<HTMLDivElement>; // Pass the ref to the Card element
+  onMoreDetailsClick?: (chartKey: string) => void;
 }
 
-export const ChartCardFooter: React.FC<ChartCardFooterProps> = ({ cardTitle, chartName, cardRef }) => {
+export const ChartCardFooter: React.FC<ChartCardFooterProps> = ({ cardTitle, chartName, cardRef, onMoreDetailsClick }) => {
   const [isSharing, setIsSharing] = useState(false);
   const commonImageOptions = {
     pixelRatio: 2, // Capture at double resolution for clarity
@@ -74,7 +75,11 @@ export const ChartCardFooter: React.FC<ChartCardFooterProps> = ({ cardTitle, cha
 
   return (
     <CardFooter className="flex justify-between pt-6">
-      <Button variant="link" className="text-red-500 hover:text-red-600 p-0 h-auto">
+      <Button
+        variant="link"
+        className="text-red-500 hover:text-red-600 p-0 h-auto"
+        onClick={() => onMoreDetailsClick?.(chartName)}
+      >
         <Newspaper className="mr-2 h-4 w-4" />
         MORE DETAILS
       </Button>

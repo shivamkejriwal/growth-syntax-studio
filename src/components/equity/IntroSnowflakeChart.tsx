@@ -20,9 +20,14 @@ const sampleData: SnowflakeDataPoint[] = [
 
 const MAX_SCORE = 10; // Max possible score for any category
 
-const IntroSnowflakeChart: React.FC = () => {
+interface IntroSnowflakeChartProps {
+  onMoreDetailsClick?: (chartKey: string) => void;
+}
+
+export const introSnowflakeChartName = "overview";
+
+export const IntroSnowflakeChart: React.FC<IntroSnowflakeChartProps> = ({ onMoreDetailsClick }) => {
   const cardTitle = "Overview";
-  const chartName = "overview";
   const cardRef = useRef<HTMLDivElement>(null);
   const chartSize = 440; // Increased size for a much bigger snowflake
   const centerX = chartSize / 2;
@@ -97,9 +102,7 @@ const IntroSnowflakeChart: React.FC = () => {
           </div>
         </div>
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} />
+      <ChartCardFooter cardTitle={cardTitle} chartName={introSnowflakeChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
     </Card>
   );
 };
-
-export default IntroSnowflakeChart;

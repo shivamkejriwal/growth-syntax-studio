@@ -8,13 +8,15 @@ import { ChartCardFooter } from './ChartCardFooter';
 export interface StockPriceHistoryChartProps {
   ticker: string;
   data: Array<{ date: string; price: number }>;
+      onMoreDetailsClick?: (chartKey: string) => void;
 }
 
-export function StockPriceHistoryChart({ ticker, data }: StockPriceHistoryChartProps) {
+export const stockPriceHistoryChartName = "stock-price-history";
+
+export const StockPriceHistoryChart: React.FC<StockPriceHistoryChartProps> = ({ ticker, data, onMoreDetailsClick }) => {
   // Map data to the format expected by SampleLineChart
   const chartData = data.map((d) => ({ date: d.date, value: d.price }));
   const cardTitle = "Stock Price History";
-  const chartName = "stock-price-history";
   const cardRef = useRef<HTMLDivElement>(null); // Added ref
   return (
     <Card className="shadow-lg w-full flex flex-col" ref={cardRef}> {/* Used ref */}
@@ -24,7 +26,7 @@ export function StockPriceHistoryChart({ ticker, data }: StockPriceHistoryChartP
       <CardContent className="flex-1">
         <SampleLineChart title={`${ticker} Stock Price (1Y)`} data={chartData} />
       </CardContent>
-      <ChartCardFooter cardTitle={cardTitle} chartName={chartName} cardRef={cardRef} /> {/* Passed ref */}
+          <ChartCardFooter cardTitle={cardTitle} chartName={stockPriceHistoryChartName} cardRef={cardRef} onMoreDetailsClick={onMoreDetailsClick} />
     </Card>
   );
-}
+};
