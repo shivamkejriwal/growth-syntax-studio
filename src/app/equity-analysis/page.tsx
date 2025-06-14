@@ -15,91 +15,17 @@ import { IntroSnowflakeChart, introSnowflakeChartName } from "@/components/equit
 import { RevenueExpensesBreakdownChart, revenueExpensesBreakdownChartName } from "@/components/equity/RevenueExpensesBreakdownChart";
 import { StockPriceHistoryChart, stockPriceHistoryChartName } from "@/components/equity/StockPriceHistoryChart";
 import { QuarterlyEarningsChart, quarterlyEarningsChartName } from "@/components/equity/QuarterlyEarningsChart";
-import Finance from "@/math/finance"; // Import utility function for cash allocation data
 import { getSampleEquitiesTickers } from "@/services/nasdaqDataLink/sampleDataApi";
-
-// Define an interface for the bar data items (matching bars.json structure)
-interface BarDataItem {
-  symbol: string;
-  date: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-// Define an interface for the data format expected by StockPriceHistoryChart
-interface StockPriceHistoryChartItem {
-  date: string;
-  price: number;
-}
-
-// Define an interface for the raw balance sheet data items (matching balance-sheet.json structure)
-interface BalanceSheetItem {
-  symbol: string;
-  calendardate: string; // e.g., "2021-12-31"
-  debt: number;
-  equity: number;
-  assets: number;
-  reporttype?: string; // Made optional
-  currency?: string;   // Made optional
-  bvps?: number;
-  cashneq?: number;
-  liabilities?: number;
-  investmentsnc?: number;
-  receivables?: number;
-  inventory?: number;
-  ppnenet?: number;
-  intangibles?: number;
-  tangibles?: number;
-}
-
-// Define an interface for the raw income statement data items (matching income-statement.json structure)
-interface IncomeStatementItem {
-  symbol: string;
-  calendardate: string; // e.g., "2024-03-31"
-  revenue: number;
-  cor: number; // Cost of Revenue
-  opinc: number; // Operating Income
-  eps: number | null; // Earnings Per Share
-  ebitda: number | null; // Earnings Before Interest, Taxes, Depreciation, and Amortization
-  ebit: number | null; // Earnings Before Interest and Taxes
-  gp: number; // Gross Profit
-  rnd: number; // Research and Development
-  sgna: number; // Selling, General & Administrative
-  opex: number; // Operating Expenses
-  taxexp: number; // Income Tax Expense
-  netinc: number; // Net Income
-  shareswa: number | null; // Weighted Average Shares Outstanding
-  reporttype?: string; // Made optional as not all entries have it
-  currency?: string;   // Made optional
-}
-
-// Define an interface for the raw cash flow statement data items
-interface CashFlowStatementItem {
-  symbol: string;
-  calendardate: string; // e.g., "2021-12-31"
-  ncfi?: number;         // Net Cash Flow from Investing
-  capex?: number;        // Capital Expenditures (now stored as negative in JSON)
-  reporttype?: string;   // AR, AQ etc.
-  currency?: string;
-  opex?: number;         // Operating Expenses
-  ncff?: number;         // Net Cash Flow from Financing
-  fcf?: number;          // Free Cash Flow
-  ncfo?: number;         // Net Cash Flow from Operations
-  sbcomp?: number;       // Stock-Based Compensation
-  depamor?: number;      // Depreciation and Amortization
-  ncfcommon?: number;    // Net Cash Flow from Common Stock
-  ncfinv?: number;       // Net Change in Investments / Other Investing Activities
-}
-
-interface ManagementChartDataPoint {
-  year: string;
-  research: number;
-  production: number;
-  acquisitions: number;
-}
+import {
+  BarDataItem,
+  StockPriceHistoryChartItem,
+  BalanceSheetItem,
+  IncomeStatementItem,
+  CashFlowStatementItem,
+  ManagementChartDataPoint,
+  InfoCardProps,
+} from "./interfaces";
+import { processFetchedEquityData } from "./utils";
 
 // --- Dividend Analysis Sample Data ---
 const dividendChartData = [
@@ -164,13 +90,13 @@ export default function EquityAnalysisPage() {
   const [quarterlyEarningsData, setQuarterlyEarningsData] = useState<Array<{ quarter: string; revenue: number; netIncome: number }>>([]);
   const [managementChartData, setManagementChartData] = useState<ManagementChartDataPoint[]>([]);
 
-  const getQuarterFromDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const quarter = Math.floor((date.getMonth() + 3) / 3);
-    return `Q${quarter} ${date.getFullYear()}`;
+  // Reset all chart data to empty arrays
+  const resetAllChartData = () => {
+    setStockPriceHistoryData([]);
+    setFinancialHealthData([]);
+    setQuarterlyEarningsData([]);
+    setManagementChartData([]);
   };
-
-
 
   const companyData = {
     name: "Example Corp",
@@ -194,130 +120,47 @@ export default function EquityAnalysisPage() {
   };
 
   useEffect(() => {
-    const fetchStockHistory = async () => {
-      try {
-        const rawBarData: BarDataItem[] = await getSampleEquitiesTickers({
-          ticker: companyData.ticker, // "EXMPL"
-          table: 'BARS',
-          // date and range are optional for getSampleEquitiesTickers if not filtering by date
-        });
-
-        // Transform data for the StockPriceHistoryChart
-        const formattedData = rawBarData.map(item => ({
-          date: item.date,
-          price: item.close, // Using 'close' price for the chart
-        }));
-        setStockPriceHistoryData(formattedData);
-      } catch (error) {
-        console.error("Failed to fetch stock price history:", error);
+    const fetchAllData = async () => {
+      if (!companyData.ticker) {
+        // Reset data if ticker is not available
+        resetAllChartData();
+        return;
       }
-    };
-    fetchStockHistory();
 
-    const fetchFinancialHealth = async () => {
       try {
-        const rawBalanceSheetData: BalanceSheetItem[] = await getSampleEquitiesTickers({
-          ticker: companyData.ticker, // "EXMPL"
-          table: 'BALANCE_SHEET',
-        });
+        // Fetch all required raw data in parallel
+        const [
+          rawBarData,
+          rawBalanceSheetData,
+          rawIncomeStatementData,
+          rawCashFlowData,
+        ] = await Promise.all([
+          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'BARS' }) as Promise<BarDataItem[]>,
+          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'BALANCE_SHEET' }) as Promise<BalanceSheetItem[]>,
+          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'INCOME_STATEMENT' }) as Promise<IncomeStatementItem[]>,
+          getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'CASH_FLOW_STATEMENT' }) as Promise<CashFlowStatementItem[]>,
+        ]);
 
-        // Transform data for the FinancialHealthLineChart
-        // The chart expects { year: string; debt: number; equity: number }
-        const formattedData = rawBalanceSheetData.map(item => ({
-          year: item.calendardate.substring(0, 4), // Extract year from "YYYY-MM-DD"
-          debt: item.debt,
-          equity: item.equity,
-        }));
-        setFinancialHealthData(formattedData);
-      } catch (error) {
-        console.error("Failed to fetch financial health data:", error);
-      }
-    };
-    fetchFinancialHealth();
-
-    const fetchQuarterlyEarnings = async () => {
-      try {
-        const rawIncomeStatementData: IncomeStatementItem[] = await getSampleEquitiesTickers({
-          ticker: companyData.ticker, // "EXMPL"
-          table: 'INCOME_STATEMENT',
-        });
-
-        // Transform data for the QuarterlyEarningsChart
-        // The chart expects { quarter: string; revenue: number; netIncome: number }
-        const formattedData = rawIncomeStatementData.map(item => ({
-          quarter: getQuarterFromDate(item.calendardate),
-          revenue: item.revenue,
-          netIncome: item.netinc,
-        }));
-        // Sort by calendar date to ensure chronological order for the chart
-        formattedData.sort((a, b) => new Date(rawIncomeStatementData.find(item => getQuarterFromDate(item.calendardate) === a.quarter)!.calendardate).getTime() - new Date(rawIncomeStatementData.find(item => getQuarterFromDate(item.calendardate) === b.quarter)!.calendardate).getTime());
-        setQuarterlyEarningsData(formattedData);
-      } catch (error) {
-        console.error("Failed to fetch quarterly earnings data:", error);
-      }
-    };
-    fetchQuarterlyEarnings();
-
-    const fetchManagementAllocationData = async () => {
-      if (!companyData.ticker) return;
-      try {
-        const rawCashFlowData: CashFlowStatementItem[] = await getSampleEquitiesTickers({
-          ticker: companyData.ticker,
-          table: 'CASH_FLOW_STATEMENT',
-        });
-
-        const rawIncomeStatementData: IncomeStatementItem[] = await getSampleEquitiesTickers({
-          ticker: companyData.ticker,
-          table: 'INCOME_STATEMENT',
-        });
-
-        // Filter for annual reports and the specific ticker
-        const annualCashFlow = rawCashFlowData.filter(
-          item => item.symbol === companyData.ticker && item.reporttype === 'AR'
-        );
-        const annualIncome = rawIncomeStatementData.filter(
-          item => item.symbol === companyData.ticker && item.reporttype === 'AR'
+        // Process all fetched data using the common function
+        const processedData = processFetchedEquityData(
+          rawBarData,
+          rawBalanceSheetData,
+          rawIncomeStatementData,
+          rawCashFlowData,
         );
 
-        // Combine data by year
-        const combinedFinancials = annualCashFlow.map(cfItem => {
-          const year = cfItem.calendardate.substring(0, 4);
-          const incomeItem = annualIncome.find(
-            incItem => incItem.calendardate.substring(0, 4) === year
-          );
-          return {
-            year: year,
-            ncfi: cfItem.ncfi || 0, // Default to 0 if undefined
-            // CAPEX is stored as negative in JSON, Finance.getCashAllocationData likely expects positive
-            capexReported: cfItem.capex !== undefined ? Math.abs(cfItem.capex) : 0,
-            // Use RND from income statement, default to 0 if not found for that year
-            rndReported: incomeItem && incomeItem.rnd !== undefined ? incomeItem.rnd : 0,
-          };
-        }).filter(item => item.rndReported !== undefined); // Ensure RND was processed (even if 0)
+        // Update states with processed data
+        setStockPriceHistoryData(processedData.stockPriceHistory);
+        setFinancialHealthData(processedData.financialHealth);
+        setQuarterlyEarningsData(processedData.quarterlyEarnings);
+        setManagementChartData(processedData.managementAllocation);
 
-        // Sort by year for chronological order in the chart
-        combinedFinancials.sort((a, b) => parseInt(a.year) - parseInt(b.year));
-
-        const chartData = combinedFinancials.map(item => {
-          const allocation = Finance.getCashAllocationData({
-            NCFI: item.ncfi,
-            CAPEX: item.capexReported,
-            RND: item.rndReported,
-          });
-          return {
-            year: item.year,
-            research: allocation.rnd,
-            production: allocation.capex,
-            acquisitions: allocation.acquisitions,
-          };
-        });
-        setManagementChartData(chartData);
       } catch (error) {
-        console.error("Failed to fetch management allocation data:", error);
-        setManagementChartData([]); // Reset or handle error appropriately
+        console.error("Failed to fetch equity data:", error);
+        resetAllChartData(); // Reset data on error
       }
     };
-    fetchManagementAllocationData();
+    fetchAllData();
 
   }, [companyData.ticker]); // Dependency array ensures this runs when ticker changes
 
@@ -445,13 +288,6 @@ export default function EquityAnalysisPage() {
       </div>
     </AppShell>
   );
-}
-
-interface InfoCardProps {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-  subValue?: string;
 }
 
 function InfoCard({ icon, title, value, subValue }: InfoCardProps) {
