@@ -46,6 +46,25 @@ interface BalanceSheetItem {
   currency: string;
 }
 
+// Define an interface for the raw income statement data items (matching income-statement.json structure)
+interface IncomeStatementItem {
+  symbol: string;
+  calendardate: string; // e.g., "2024-03-31"
+  revenue: number;
+  cor: number; // Cost of Revenue
+  opinc: number; // Operating Income
+  eps: number | null; // Earnings Per Share
+  ebitda: number | null; // Earnings Before Interest, Taxes, Depreciation, and Amortization
+  ebit: number | null; // Earnings Before Interest and Taxes
+  gp: number; // Gross Profit
+  rnd: number; // Research and Development
+  sgna: number; // Selling, General & Administrative
+  opex: number; // Operating Expenses
+  taxexp: number; // Income Tax Expense
+  netinc: number; // Net Income
+  shareswa: number | null; // Weighted Average Shares Outstanding
+}
+
 
 // --- Management Chart Sample Data ---
 const managementChartData = [
@@ -83,14 +102,6 @@ const dividendMetrics = [
   { label: "Dividend Yield", value: "2.5%", isPercentage: true },
 ];
 
-// --- Quarterly Earnings Sample Data ---
-const quarterlyEarningsData = [
-  { quarter: 'Q1 2024', revenue: 1200, netIncome: 300 },
-  { quarter: 'Q2 2024', revenue: 1350, netIncome: 350 },
-  { quarter: 'Q3 2024', revenue: 1400, netIncome: 370 },
-  { quarter: 'Q4 2024', revenue: 1500, netIncome: 400 },
-  { quarter: 'Q1 2025', revenue: 1550, netIncome: 420 },
-];
 
 // --- Revenue & Expenses Breakdown Sample Data ---
 const revenueExpensesData = {
@@ -129,7 +140,13 @@ export default function EquityAnalysisPage() {
   const [focusedChartKey, setFocusedChartKey] = useState<string | null>(null);
   const [stockPriceHistoryData, setStockPriceHistoryData] = useState<StockPriceHistoryChartItem[]>([]);
   const [financialHealthData, setFinancialHealthData] = useState<Array<{ year: string; debt: number; equity: number }>>([]);
+  const [quarterlyEarningsData, setQuarterlyEarningsData] = useState<Array<{ quarter: string; revenue: number; netIncome: number }>>([]);
 
+  const getQuarterFromDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const quarter = Math.floor((date.getMonth() + 3) / 3);
+    return `Q${quarter} ${date.getFullYear()}`;
+  };
 
 
 
@@ -195,6 +212,29 @@ export default function EquityAnalysisPage() {
       }
     };
     fetchFinancialHealth();
+
+    const fetchQuarterlyEarnings = async () => {
+      try {
+        const rawIncomeStatementData: IncomeStatementItem[] = await getSampleEquitiesTickers({
+          ticker: companyData.ticker, // "EXMPL"
+          table: 'INCOME_STATEMENT',
+        });
+
+        // Transform data for the QuarterlyEarningsChart
+        // The chart expects { quarter: string; revenue: number; netIncome: number }
+        const formattedData = rawIncomeStatementData.map(item => ({
+          quarter: getQuarterFromDate(item.calendardate),
+          revenue: item.revenue,
+          netIncome: item.netinc,
+        }));
+        // Sort by calendar date to ensure chronological order for the chart
+        formattedData.sort((a, b) => new Date(rawIncomeStatementData.find(item => getQuarterFromDate(item.calendardate) === a.quarter)!.calendardate).getTime() - new Date(rawIncomeStatementData.find(item => getQuarterFromDate(item.calendardate) === b.quarter)!.calendardate).getTime());
+        setQuarterlyEarningsData(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch quarterly earnings data:", error);
+      }
+    };
+    fetchQuarterlyEarnings();
 
   }, [companyData.ticker]);
 
