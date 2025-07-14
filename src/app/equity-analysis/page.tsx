@@ -158,17 +158,18 @@ export default function EquityAnalysisPage() {
     }
   };
 
+  // Build companyData from processed state variables and static values
   const companyData = {
     name: "Polaris",
     ticker: "PII",
-    valuation: "$150.7B",
-    peRatio: "25.3",
-    financialHealth: "Stable (B+)",
-    debtToEquity: "0.45",
-    futurePerformance: "Moderate Growth Expected",
-    analystRating: "Buy (4.2/5)",
-    pastDividends: "$1.20/share (Annual)",
-    yield: "2.1%",
+    valuation: sharePriceVsFairValueData.fairValue ? `$${sharePriceVsFairValueData.fairValue}B` : "$150.7B",
+    peRatio: "25.3", // If you have a peRatio in processedData, use it here
+    financialHealth: financialHealthData.length > 0 ? `Stable (${financialHealthData[0].debt < 1 ? 'B+' : 'B'})` : "Stable (B+)",
+    debtToEquity: financialHealthData.length > 0 ? financialHealthData[0].debt.toFixed(2) : "0.45",
+    futurePerformance: "Moderate Growth Expected", // Add from processedData if available
+    analystRating: "Buy (4.2/5)", // Add from processedData if available
+    pastDividends: dividendChartData.length > 0 ? `$${dividendChartData[dividendChartData.length-1].dps}/share (Annual)` : "$1.20/share (Annual)",
+    yield: dividendMetrics.find((m: any) => m.label === "Dividend DPS")?.value ? `${dividendMetrics.find((m: any) => m.label === "Dividend DPS")?.value}%` : "2.1%",
   };
 
   useEffect(() => {
