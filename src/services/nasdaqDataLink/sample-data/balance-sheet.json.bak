@@ -1,0 +1,21 @@
+[
+  {
+    "symbol": "EXMPL",
+    "calendardate": "2012-12-31",
+    "debt": 150,
+    "equity": 400,
+    "assets": 550,
+    "bvps": 8.00,
+    "cashneq": 50,
+    "liabilities": 150,
+    "investmentsnc": 20,
+    "receivables": 70,
+    "inventory": 30,
+    "ppnenet": 300,
+    "intangibles": 50,
+    "tangibles": 500,
+    "reporttype": "Annual",
+    "currency": "USD"
+  }
+  // ...existing EXMPL, AAPL, TSLA data...
+]

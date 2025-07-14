@@ -90,7 +90,9 @@ export async function getSampleEquitiesTickers({
   if (Object.keys(filter).length > 0) {
     data = data.filter(row => {
       let match = true;
-      if (filter.symbol && row.symbol !== filter.symbol) match = false;
+      // Match symbol or ticker
+      if (filter.symbol && !(row.symbol === filter.symbol || row.ticker === filter.symbol)) match = false;
+      // Match date or calendardate
       if (filter.date && !(row.date === filter.date || row.calendardate === filter.date)) match = false;
       return match;
     });

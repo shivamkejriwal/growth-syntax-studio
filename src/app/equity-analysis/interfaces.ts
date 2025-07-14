@@ -17,22 +17,22 @@ export interface StockPriceHistoryChartItem {
 
 // Define an interface for the raw balance sheet data items (matching balance-sheet.json structure)
 export interface BalanceSheetItem {
-  symbol: string;
+  symbol: string; // The stock ticker symbol for the company.
   calendardate: string; // e.g., "2021-12-31"
-  debt: number;
-  equity: number;
-  assets: number;
-  reporttype?: string;
-  currency?: string;
-  bvps?: number;
-  cashneq?: number;
-  liabilities?: number;
-  investmentsnc?: number;
-  receivables?: number;
-  inventory?: number;
-  ppnenet?: number;
-  intangibles?: number;
-  tangibles?: number;
+  debt: number; // Total debt, including both short-term and long-term obligations.
+  equity: number; // Total shareholders' equity.
+  assets: number; // Total assets of the company.
+  reporttype?: string; // The type of report (e.g., 'AR' for Annual Report, 'AQ' for Annual Q-report).
+  currency?: string; // The currency in which the financial figures are reported (e.g., "USD").
+  bvps?: number; // Book Value Per Share.
+  cashneq?: number; // Cash and cash equivalents.
+  liabilities?: number; // Total liabilities of the company.
+  investmentsnc?: number; // Non-current investments.
+  receivables?: number; // Accounts receivable, representing money owed to the company by its customers.
+  inventory?: number; // The value of the company's inventory.
+  ppnenet?: number; // Net Property, Plant, and Equipment.
+  intangibles?: number; // Intangible assets, such as goodwill, patents, and trademarks.
+  tangibles?: number; // Total tangible assets.
 }
 
 // Define an interface for the raw income statement data items (matching income-statement.json structure)
@@ -54,6 +54,7 @@ export interface IncomeStatementItem {
   shareswa: number | null; // Weighted Average Shares Outstanding
   reporttype?: string;
   currency?: string;
+  dps?: number | null; // Dividends Per Share (added for correct dividend chart logic)
 }
 
 // Define an interface for the raw cash flow statement data items
@@ -86,6 +87,15 @@ export interface ProcessedEquityData {
   financialHealth: Array<{ year: string; debt: number; equity: number }>;
   quarterlyEarnings: Array<{ quarter: string; revenue: number; netIncome: number }>;
   managementAllocation: ManagementChartDataPoint[];
+  dividendChartData: Array<{ year: string; dps: number }>;
+  dividendMetrics: Array<{ label: string; value: string; isPercentage?: boolean }>;
+  sharePriceVsFairValueData: {
+    currentPrice: number;
+    fairValue: number;
+    undervaluedThresholdPercent: number;
+    overvaluedThresholdPercent: number;
+    currencySymbol: string;
+  };
 }
 
 export interface InfoCardProps {

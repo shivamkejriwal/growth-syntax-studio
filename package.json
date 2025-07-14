@@ -14,7 +14,9 @@
     "typecheck": "tsc --noEmit",
     "update-companies": "npx ts-node src/services/sharadarData/updateCompanyPrices.ts",
     "import-companies-from-csv": "npx ts-node src/services/sharadarData/importCompaniesFromCsv.ts",
-    "pull-msft-data": "npx ts-node src/services/nasdaqDataLink/pullMsftData.ts"
+    "pull-msft-data": "npx ts-node src/services/nasdaqDataLink/pullMsftData.ts",
+    "pull:zacks-price": "ts-node scripts/zacksPriceDataPuller.ts",
+    "append:zacks-price": "ts-node scripts/appendZacksPriceToBars.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.8.0",
@@ -54,6 +56,7 @@
     "clsx": "^2.1.1",
     "csv-parser": "^3.2.0",
     "d3-sankey": "^0.12.3",
+    "axios": "^1.6.7",
     "date-fns": "^3.6.0",
     "dotenv": "^16.5.0",
     "firebase": "^11.8.1",
@@ -77,6 +80,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+        "@types/axios": "^1.4.11",
     "csv-parse": "^5.5.6",
     "genkit-cli": "^1.8.0",
     "postcss": "^8",
@@ -84,5 +88,6 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5"
+
   }
 }

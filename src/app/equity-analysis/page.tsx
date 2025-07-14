@@ -27,29 +27,6 @@ import {
 } from "./interfaces";
 import { processFetchedEquityData } from "./utils";
 
-// --- Dividend Analysis Sample Data ---
-const dividendChartData = [
-  { year: '2012', dps: 0.50 },
-  { year: '2013', dps: 0.55 },
-  { year: '2014', dps: 0.62 },
-  { year: '2015', dps: 0.68 },
-  { year: '2016', dps: 0.75 },
-  { year: '2017', dps: 0.83 },
-  { year: '2018', dps: 0.90 },
-  { year: '2019', dps: 1.00 },
-  { year: '2020', dps: 1.05 },
-  { year: '2021', dps: 1.12 },
-];
-const dividendMetrics = [
-  { label: "Score", value: "7" },
-  { label: "Safety", value: "8" },
-  { label: "Dividend History", value: "10" },
-  { label: "Increasing Dividends", value: "10" },
-  { label: "Stability", value: "1" },
-  { label: "Dividend Yield", value: "2.5%", isPercentage: true },
-];
-
-
 // --- Revenue & Expenses Breakdown Sample Data ---
 const revenueExpensesData = {
   nodes: [
@@ -89,6 +66,15 @@ export default function EquityAnalysisPage() {
   const [financialHealthData, setFinancialHealthData] = useState<Array<{ year: string; debt: number; equity: number }>>([]);
   const [quarterlyEarningsData, setQuarterlyEarningsData] = useState<Array<{ quarter: string; revenue: number; netIncome: number }>>([]);
   const [managementChartData, setManagementChartData] = useState<ManagementChartDataPoint[]>([]);
+  const [dividendChartData, setDividendChartData] = useState<Array<{ year: string; dps: number }>>([]);
+  const [dividendMetrics, setDividendMetrics] = useState<Array<{ label: string; value: string; isPercentage?: boolean }>>([]);
+  const [sharePriceVsFairValueData, setSharePriceVsFairValueData] = useState({
+    currentPrice: 0,
+    fairValue: 0,
+    undervaluedThresholdPercent: 20,
+    overvaluedThresholdPercent: 20,
+    currencySymbol: "$",
+  });
 
   // Reset all chart data to empty arrays
   const resetAllChartData = () => {
@@ -96,6 +82,8 @@ export default function EquityAnalysisPage() {
     setFinancialHealthData([]);
     setQuarterlyEarningsData([]);
     setManagementChartData([]);
+    setDividendChartData([]);
+    setDividendMetrics([]);
   };
 
   const handleChartFocus = (chartKey: string) => {
@@ -111,6 +99,13 @@ export default function EquityAnalysisPage() {
     if (!companyData.ticker) {
       // Reset data if ticker is not available
       resetAllChartData();
+      setSharePriceVsFairValueData({
+        currentPrice: 0,
+        fairValue: 0,
+        undervaluedThresholdPercent: 20,
+        overvaluedThresholdPercent: 20,
+        currencySymbol: "$",
+      });
       return;
     }
 
@@ -127,13 +122,19 @@ export default function EquityAnalysisPage() {
         getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'INCOME_STATEMENT' }) as Promise<IncomeStatementItem[]>,
         getSampleEquitiesTickers({ ticker: companyData.ticker, table: 'CASH_FLOW_STATEMENT' }) as Promise<CashFlowStatementItem[]>,
       ]);
-
+      console.log("Fetched raw data:", {
+        rawBarData,
+        rawBalanceSheetData,
+        rawIncomeStatementData,
+        rawCashFlowData,
+      });
       // Process all fetched data using the common function
       const processedData = processFetchedEquityData(
         rawBarData,
         rawBalanceSheetData,
         rawIncomeStatementData,
         rawCashFlowData,
+        companyData
       );
 
       // Update states with processed data
@@ -141,16 +142,25 @@ export default function EquityAnalysisPage() {
       setFinancialHealthData(processedData.financialHealth);
       setQuarterlyEarningsData(processedData.quarterlyEarnings);
       setManagementChartData(processedData.managementAllocation);
-
+      setDividendChartData(processedData.dividendChartData);
+      setDividendMetrics(processedData.dividendMetrics);
+      setSharePriceVsFairValueData(processedData.sharePriceVsFairValueData);
     } catch (error) {
       console.error("Failed to fetch equity data:", error);
-      resetAllChartData(); // Reset data on error
+      resetAllChartData();
+      setSharePriceVsFairValueData({
+        currentPrice: 0,
+        fairValue: 0,
+        undervaluedThresholdPercent: 20,
+        overvaluedThresholdPercent: 20,
+        currencySymbol: "$",
+      });
     }
   };
 
   const companyData = {
-    name: "Example Corp",
-    ticker: "EXMPL",
+    name: "Polaris",
+    ticker: "PII",
     valuation: "$150.7B",
     peRatio: "25.3",
     financialHealth: "Stable (B+)",
@@ -159,14 +169,6 @@ export default function EquityAnalysisPage() {
     analystRating: "Buy (4.2/5)",
     pastDividends: "$1.20/share (Annual)",
     yield: "2.1%",
-  };
-
-  const sharePriceVsFairValueData = {
-    currentPrice: 37.96,
-    fairValue: 62.93,
-    undervaluedThresholdPercent: 20,
-    overvaluedThresholdPercent: 20,
-    currencySymbol: "US$",
   };
 
   useEffect(() => {

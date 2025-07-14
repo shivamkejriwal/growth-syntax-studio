@@ -10,13 +10,13 @@ import { ChartCardFooter } from './ChartCardFooter';
 export interface DividendAnalysisChartProps {
   data: Array<{ year: string; dps: number }>;
   metrics: Array<{ label: string; value: string; isPercentage?: boolean }>;
-      onMoreDetailsClick?: (chartKey: string) => void;
+  onMoreDetailsClick?: (chartKey: string) => void;
 }
 
 export const dividendAnalysisChartName = "dividend";
 
 const legendPayload = [
-  { value: 'Dividend Per Share', type: 'line' as const, id: 'dps', color: 'hsl(var(--chart-4))' },
+  { value: 'Dividend Yield (%)', type: 'line' as const, id: 'yield', color: 'hsl(var(--chart-4))' },
 ];
 
 export const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ data, metrics, onMoreDetailsClick }) => {
@@ -49,9 +49,11 @@ export const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ da
               contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}
               itemStyle={{ color: 'hsl(var(--foreground))' }}
               cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 1, fill: 'hsl(var(--primary))', fillOpacity: 0.1 }}
+              formatter={(value) => typeof value === 'number' ? `${value.toFixed(2)}` : value}
+              labelFormatter={(label) => `Year: ${label}`}
             />
             <Legend 
-              payload={legendPayload} 
+              payload={[{ value: 'Dividends Per Share (DPS)', type: 'line', id: 'dps', color: 'hsl(var(--chart-4))' }]} 
               wrapperStyle={{ paddingTop: '20px' }} 
               align="center" 
               verticalAlign="bottom" 
@@ -59,7 +61,7 @@ export const DividendAnalysisChart: React.FC<DividendAnalysisChartProps> = ({ da
             <Line
               type="monotone"
               dataKey="dps"
-              name="Dividend Per Share"
+              name="Dividends Per Share (DPS)"
               stroke="hsl(var(--chart-4))"
               strokeWidth={2.5}
               dot={{ r: 4, fill: 'hsl(var(--chart-4))' }}
